@@ -1,0 +1,25 @@
+{
+  "name": "@vizbox/vizbox",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./transforms": "./src/transforms/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./viz": "./src/viz/index.ts",
+    "./plugins": "./src/plugins/index.ts"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "imports": {
+    "react": "npm:react@^18.3.0",
+    "react/jsx-runtime": "npm:react@^18.3.0/jsx-runtime",
+    "react-dom": "npm:react-dom@^18.3.0"
+  },
+  "tasks": {
+    "typecheck": "deno check src/index.ts src/transforms/index.ts src/theme/index.ts src/viz/index.ts src/plugins/index.ts",
+    "test": "deno test --allow-read src/transforms/__tests__/"
+  }
+}

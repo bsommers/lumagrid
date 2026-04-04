@@ -1,0 +1,63 @@
+{
+  "name": "vizbox",
+  "version": "0.1.0",
+  "description": "Layered React + TypeScript UI library for data visualization widgets",
+  "type": "module",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./transforms": {
+      "import": "./dist/esm/transforms/index.js",
+      "require": "./dist/cjs/transforms/index.cjs",
+      "types": "./dist/esm/transforms/index.d.ts"
+    },
+    "./theme": {
+      "import": "./dist/esm/theme/index.js",
+      "require": "./dist/cjs/theme/index.cjs",
+      "types": "./dist/esm/theme/index.d.ts"
+    },
+    "./viz": {
+      "import": "./dist/esm/viz/index.js",
+      "require": "./dist/cjs/viz/index.cjs",
+      "types": "./dist/esm/viz/index.d.ts"
+    },
+    "./plugins": {
+      "import": "./dist/esm/plugins/index.js",
+      "require": "./dist/cjs/plugins/index.cjs",
+      "types": "./dist/esm/plugins/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "typecheck": "tsc -p tsconfig.esm.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "d3": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/d3": "^7.4.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "@testing-library/react": "^15.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
+  },
+  "keywords": ["react", "visualization", "charts", "dataviz", "ui-library", "deno"],
+  "license": "MIT"
+}
