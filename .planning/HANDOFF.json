@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-04-16T14:36:48.856Z",
+  "phase": "01",
+  "phase_name": "plugin-architecture",
+  "phase_dir": ".planning/phases/01-plugin-architecture",
+  "plan": 1,
+  "task": 16,
+  "total_tasks": 16,
+  "status": "complete",
+  "completed_tasks": [
+    {"id": 1, "name": "Create src/registry/types.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 2, "name": "Create src/registry/index.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 3, "name": "Create src/registry/native-plugin.tsx", "status": "done", "commit": "da94f7a"},
+    {"id": 4, "name": "Update viz components to use theme prop", "status": "done", "commit": "da94f7a"},
+    {"id": 5, "name": "Create src/viz/plugins.ts with pre-built native plugins", "status": "done", "commit": "da94f7a"},
+    {"id": 6, "name": "Rewrite src/core/view-switcher.tsx with plugin registry", "status": "done", "commit": "da94f7a"},
+    {"id": 7, "name": "Update src/core/container.tsx with ResizeObserver", "status": "done", "commit": "da94f7a"},
+    {"id": 8, "name": "Delete src/core/registry.ts and src/viz/registry.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 9, "name": "Update src/core/index.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 10, "name": "Update src/viz/index.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 11, "name": "Rewrite src/plugins/d3-adapter.tsx as createD3Plugin()", "status": "done", "commit": "da94f7a"},
+    {"id": 12, "name": "Create src/plugins/recharts-adapter.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 13, "name": "Update src/plugins/index.ts", "status": "done", "commit": "da94f7a"},
+    {"id": 14, "name": "Update src/index.ts barrel exports", "status": "done", "commit": "da94f7a"},
+    {"id": 15, "name": "tsc --noEmit both ESM and CJS — 0 errors", "status": "done", "commit": "da94f7a"},
+    {"id": 16, "name": "Update README.md with new quickstart + plugin examples", "status": "done", "commit": "da94f7a"}
+  ],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [
+    {
+      "decision": "Identity adapters for native charts via createNativePlugin",
+      "rationale": "Native charts accept TransformedData and ThemeDefinition directly — no reshaping needed",
+      "phase": "01"
+    },
+    {
+      "decision": "Remove useTheme() from all viz components, use explicit theme prop",
+      "rationale": "Makes components pure functions of props, easier to test, no React context dependency",
+      "phase": "01"
+    },
+    {
+      "decision": "Keep deprecated createD3Visualization shim",
+      "rationale": "Backwards compatibility for any consumer who already wrote a D3ChartLifecycle",
+      "phase": "01"
+    },
+    {
+      "decision": "ResizeObserver only activates when width/height are CSS strings",
+      "rationale": "Avoids unnecessary DOM observation overhead on fixed-size widgets",
+      "phase": "01"
+    }
+  ],
+  "uncommitted_files": [],
+  "next_action": "Phase complete. Run npm test, then plan next phase (integration tests, demo app, or Nivo adapter).",
+  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 14 tests passing."
+}
