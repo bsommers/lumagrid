@@ -37,15 +37,18 @@ export type {
   GeoNormalizeOptions,
 } from './transforms/index.js';
 
+// Plugin registry
+export { registerPlugin, getPlugin, listPlugins, registerAndGetId } from './registry/index.js';
+export type { ChartPlugin, ViewSpec, RendererProps } from './registry/types.js';
+export { createNativePlugin } from './registry/native-plugin.js';
+export type { NativeChartProps, NativeConfig } from './registry/native-plugin.js';
+
 // Core layer
 export {
   WidgetContainer,
   ViewSwitcher,
   CollapseManager,
   useCollapse,
-  registerVisualization,
-  getVisualization,
-  listVisualizations,
 } from './core/index.js';
 export type {
   WidgetContainerProps,
@@ -55,7 +58,6 @@ export type {
 } from './core/index.js';
 
 // Viz layer (re-export key symbols — consumers can also import from 'vizbox/viz')
-export type { VisualizationProps } from './viz/index.js';
 export {
   DataTable,
   HorizontalBarChart,
@@ -67,5 +69,5 @@ export {
 } from './viz/index.js';
 
 // Plugin layer
-export { createD3Visualization } from './plugins/index.js';
-export type { D3ChartLifecycle } from './plugins/index.js';
+export { createD3Plugin, createD3Visualization, createRechartsPlugin } from './plugins/index.js';
+export type { D3ChartLifecycle, D3Theme, RechartsTheme, RechartsConfig } from './plugins/index.js';

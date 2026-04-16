@@ -1,7 +1,6 @@
 import React from 'react';
-import { useTheme } from '../theme/provider.js';
 import { categoricalColor } from '../theme/color-scale.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 
 const MARGIN = { top: 24, right: 24, bottom: 40, left: 56 };
 
@@ -13,9 +12,8 @@ export function LineChart({
   yField,
   colorField,
   ariaLabel,
-}: VisualizationProps): React.ReactElement {
-  const theme = useTheme();
-
+  theme,
+}: NativeChartProps): React.ReactElement {
   const numericField = yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
   const categoryField = xField ?? data.fields.find((f) => f.type === 'string' || f.type === 'date')?.key ?? '';
 

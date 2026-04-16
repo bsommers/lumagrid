@@ -1,101 +1,107 @@
 import React, { useEffect, useRef } from 'react';
-import type { VisualizationProps } from '../viz/types.js';
+import type { TransformedData } from '../transforms/types.js';
+import type { ThemeDefinition } from '../theme/types.js';
+import type { ChartPlugin, RendererProps } from '../registry/types.js';
 
 /**
- * Lifecycle interface that a D3 chart module must implement to plug into VizBox.
- *
- * @example
- * ```ts
- * import * as d3 from 'd3';
- * import type { D3ChartLifecycle } from 'vizbox/plugins';
- * import type { TransformedData } from 'vizbox/transforms';
- *
- * export const MyD3Chart: D3ChartLifecycle = {
- *   mount(container, data, width, height) {
- *     const svg = d3.select(container).append('svg').attr('width', width).attr('height', height);
- *     svg.append('text').attr('x', width / 2).attr('y', height / 2)
- *       .attr('text-anchor', 'middle')
- *       .text(`${data.rows.length} rows`);
- *   },
- *   update(container, data, width, height) {
- *     d3.select(container).select('text').text(`${data.rows.length} rows`);
- *   },
- *   destroy(container) {
- *     d3.select(container).selectAll('*').remove();
- *   },
- * };
- * ```
- *
- * Then register and use:
- * ```tsx
- * import { createD3Visualization } from 'vizbox/plugins';
- * registerVisualization('my-d3', createD3Visualization(MyD3Chart));
- * ```
+ * Minimal theme tokens extracted from VizBox ThemeDefinition for D3 charts.
+ * Keeps D3 charts decoupled from VizBox internals.
  */
-export interface D3ChartLifecycle {
-  /**
-   * Called once when the container mounts. Append your SVG / canvas here.
-   * @param container - The host DOM element. Guaranteed non-null at call time.
-   * @param data      - Current TransformedData from the pipeline.
-   * @param width     - Container width in pixels.
-   * @param height    - Container height in pixels.
-   */
-  mount(
-    container: HTMLDivElement,
-    data: VisualizationProps['data'],
-    width: number,
-    height: number,
-  ): void;
+export interface D3Theme {
+  /** Categorical color palette (for grouping/series). */
+  colors: string[];
+  /** Sequential color palette (for choropleth, heatmap, etc.). */
+  sequentialColors: string[];
+  fontFamily: string;
+  fontSize: string;
+  background: string;
+  foreground: string;
+  border: string;
+}
 
-  /**
-   * Called on every re-render (data or size change). Update the existing chart in-place.
-   */
-  update(
-    container: HTMLDivElement,
-    data: VisualizationProps['data'],
-    width: number,
-    height: number,
-  ): void;
+function toD3Theme(theme: ThemeDefinition): D3Theme {
+  return {
+    colors: theme.colors.categorical,
+    sequentialColors: theme.colors.sequential,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSizeSm,
+    background: theme.surface.background,
+    foreground: theme.text.primary,
+    border: theme.surface.border,
+  };
+}
 
-  /**
-   * Called when the container unmounts. Clean up event listeners, timers, and DOM nodes.
-   */
+export interface D3PluginOptions<TData, TConfig = Record<string, unknown>> {
+  id: string;
+  label?: string;
+  /** Reshape TransformedData into whatever structure your D3 code expects. */
+  dataAdapter: (data: TransformedData, config?: TConfig) => TData;
+  /** Called once when the container mounts. Append SVG/canvas here. */
+  mount(container: HTMLDivElement, data: TData, theme: D3Theme, width: number, height: number): void;
+  /** Called on every re-render (data/size/theme change). Update the chart in-place. */
+  update(container: HTMLDivElement, data: TData, theme: D3Theme, width: number, height: number): void;
+  /** Called when the container unmounts. Remove listeners and DOM nodes. */
   destroy(container: HTMLDivElement): void;
 }
 
 /**
- * Wraps a D3ChartLifecycle into a React component that satisfies VisualizationProps.
- * The returned component can be passed directly to registerVisualization().
+ * Creates a ChartPlugin backed by a D3 imperative lifecycle.
+ * The D3Theme is derived automatically from the VizBox ThemeDefinition.
  *
  * @example
- * ```tsx
- * registerVisualization('my-d3-bar', createD3Visualization(MyD3BarChart));
+ * ```ts
+ * import * as d3 from 'd3';
+ * import { createD3Plugin } from 'vizbox/plugins';
+ *
+ * const bubblePlugin = createD3Plugin({
+ *   id: 'bubble',
+ *   dataAdapter: (data) => data.rows,
+ *   mount(el, data, theme, w, h) {
+ *     const svg = d3.select(el).append('svg').attr('width', w).attr('height', h);
+ *     svg.selectAll('circle')
+ *       .data(data)
+ *       .join('circle')
+ *       .attr('cx', (d) => Number(d['x'] ?? 0))
+ *       .attr('cy', (d) => Number(d['y'] ?? 0))
+ *       .attr('r', 6)
+ *       .attr('fill', theme.colors[0] ?? 'steelblue');
+ *   },
+ *   update(el, data, theme, w, h) {
+ *     // d3 update pattern
+ *   },
+ *   destroy(el) {
+ *     d3.select(el).selectAll('*').remove();
+ *   },
+ * });
+ *
+ * registerPlugin(bubblePlugin);
  * ```
  */
-export function createD3Visualization(
-  lifecycle: D3ChartLifecycle,
-): React.ComponentType<VisualizationProps> {
-  function D3Wrapper({ data, width, height }: VisualizationProps): React.ReactElement {
+export function createD3Plugin<TData, TConfig = Record<string, unknown>>(
+  options: D3PluginOptions<TData, TConfig>,
+): ChartPlugin<TData, D3Theme, TConfig> {
+  function D3Renderer({
+    data, theme, width, height,
+  }: RendererProps<TData, D3Theme, TConfig>): React.ReactElement {
     const containerRef = useRef<HTMLDivElement>(null);
     const mountedRef = useRef(false);
 
     useEffect(() => {
       const el = containerRef.current;
       if (!el) return;
-
       if (!mountedRef.current) {
-        lifecycle.mount(el, data, width, height);
+        options.mount(el, data, theme, width, height);
         mountedRef.current = true;
       } else {
-        lifecycle.update(el, data, width, height);
+        options.update(el, data, theme, width, height);
       }
-    }, [data, width, height]);
+    }, [data, theme, width, height]);
 
     useEffect(() => {
       const el = containerRef.current;
       return () => {
         if (el && mountedRef.current) {
-          lifecycle.destroy(el);
+          options.destroy(el);
           mountedRef.current = false;
         }
       };
@@ -105,11 +111,42 @@ export function createD3Visualization(
       <div
         ref={containerRef}
         style={{ width, height, overflow: 'hidden' }}
-        aria-label="D3 visualization"
+        aria-label={`${options.label ?? options.id} chart`}
       />
     );
   }
+  D3Renderer.displayName = `D3Plugin(${options.id})`;
 
-  D3Wrapper.displayName = 'D3Wrapper';
-  return D3Wrapper;
+  return {
+    id: options.id,
+    label: options.label ?? options.id,
+    dataAdapter: options.dataAdapter,
+    themeAdapter: toD3Theme,
+    Renderer: D3Renderer,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Legacy compatibility — keeps old createD3Visualization working.
+// Deprecated: use createD3Plugin instead.
+// ---------------------------------------------------------------------------
+
+/** @deprecated Use createD3Plugin instead. */
+export interface D3ChartLifecycle {
+  mount(container: HTMLDivElement, data: TransformedData, width: number, height: number): void;
+  update(container: HTMLDivElement, data: TransformedData, width: number, height: number): void;
+  destroy(container: HTMLDivElement): void;
+}
+
+/** @deprecated Use createD3Plugin instead. */
+export function createD3Visualization(
+  lifecycle: D3ChartLifecycle,
+): ChartPlugin<TransformedData, D3Theme> {
+  return createD3Plugin<TransformedData>({
+    id: `d3-${Math.random().toString(36).slice(2, 7)}`,
+    dataAdapter: (data) => data,
+    mount: (el, data, _theme, w, h) => lifecycle.mount(el, data, w, h),
+    update: (el, data, _theme, w, h) => lifecycle.update(el, data, w, h),
+    destroy: (el) => lifecycle.destroy(el),
+  });
 }

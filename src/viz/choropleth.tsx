@@ -1,10 +1,9 @@
 import React from 'react';
-import { useTheme } from '../theme/provider.js';
 import { sequentialColor } from '../theme/color-scale.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 import type { GeoFeature } from '../transforms/types.js';
 
-export interface ChoroplethProps extends VisualizationProps {
+export interface ChoroplethProps extends NativeChartProps {
   /** Field in each feature's properties to map to color. */
   valueProperty?: string;
   /**
@@ -21,11 +20,10 @@ export function Choropleth({
   height,
   yField,
   ariaLabel,
+  theme,
   valueProperty,
   projectedPaths,
 }: ChoroplethProps): React.ReactElement {
-  const theme = useTheme();
-
   if (!data.geo) {
     return (
       <div style={{ padding: theme.spacing.md, color: theme.text.secondary }}>

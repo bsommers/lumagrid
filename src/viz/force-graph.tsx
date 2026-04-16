@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from '../theme/provider.js';
 import { categoricalColor } from '../theme/color-scale.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 
 interface Node {
   id: string;
@@ -66,9 +65,7 @@ function runSimulation(nodes: Node[], edges: Edge[], iterations = 60): Node[] {
   return result;
 }
 
-export function ForceGraph({ data, width, height, xField, yField, ariaLabel }: VisualizationProps): React.ReactElement {
-  const theme = useTheme();
-
+export function ForceGraph({ data, width, height, xField, yField, ariaLabel, theme }: NativeChartProps): React.ReactElement {
   // Expect data.rows to have: id, label, [group], and optionally source/target for edges
   const nodeRows = data.rows.filter((r) => r['source'] === undefined || r['source'] === null);
   const edgeRows = data.rows.filter((r) => r['source'] !== undefined && r['source'] !== null);
@@ -80,6 +77,9 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel }: V
     id: String(r[idField] ?? r['id'] ?? ''),
     label: String(r[labelField] ?? r['label'] ?? ''),
     group: r['group'] !== undefined ? String(r['group']) : undefined,
+    // Math.random() is intentional here: used only for visual initial placement,
+    // not for security-sensitive ID generation. If you need unpredictable IDs,
+    // use crypto.randomUUID() or crypto.getRandomValues() instead.
     x: width / 2 + (Math.random() - 0.5) * width * 0.6,
     y: height / 2 + (Math.random() - 0.5) * height * 0.6,
     vx: 0,

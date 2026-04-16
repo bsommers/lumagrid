@@ -1,17 +1,17 @@
 import React from 'react';
-import { useTheme } from '../theme/provider.js';
 import { useCollapse } from '../core/collapse-manager.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
+import type { ThemeDefinition } from '../theme/types.js';
 import type { HierarchyNode } from '../transforms/types.js';
 
 interface TreeNodeProps {
   node: HierarchyNode;
   depth: number;
   onSelect: ((node: HierarchyNode) => void) | undefined;
+  theme: ThemeDefinition;
 }
 
-function TreeNodeRow({ node, depth, onSelect }: TreeNodeProps): React.ReactElement {
-  const theme = useTheme();
+function TreeNodeRow({ node, depth, onSelect, theme }: TreeNodeProps): React.ReactElement {
   const collapse = useCollapse();
   const hasChildren = node.children && node.children.length > 0;
   const expanded = collapse.isExpanded(node.id);
@@ -56,19 +56,17 @@ function TreeNodeRow({ node, depth, onSelect }: TreeNodeProps): React.ReactEleme
         )}
       </div>
       {hasChildren && expanded && node.children?.map((child) => (
-        <TreeNodeRow key={child.id} node={child} depth={depth + 1} onSelect={onSelect} />
+        <TreeNodeRow key={child.id} node={child} depth={depth + 1} onSelect={onSelect} theme={theme} />
       ))}
     </>
   );
 }
 
-export interface TreeViewProps extends VisualizationProps {
+export interface TreeViewProps extends NativeChartProps {
   onSelect?: (node: HierarchyNode) => void;
 }
 
-export function TreeView({ data, height, onSelect }: TreeViewProps): React.ReactElement {
-  const theme = useTheme();
-
+export function TreeView({ data, height, theme, onSelect }: TreeViewProps): React.ReactElement {
   if (!data.hierarchy) {
     return (
       <div style={{ padding: theme.spacing.md, color: theme.text.secondary, fontFamily: theme.typography.fontFamily }}>
@@ -87,7 +85,7 @@ export function TreeView({ data, height, onSelect }: TreeViewProps): React.React
         fontFamily: theme.typography.fontFamily,
       }}
     >
-      <TreeNodeRow node={data.hierarchy} depth={0} onSelect={onSelect} />
+      <TreeNodeRow node={data.hierarchy} depth={0} onSelect={onSelect} theme={theme} />
     </div>
   );
 }

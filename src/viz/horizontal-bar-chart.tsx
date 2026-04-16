@@ -1,7 +1,6 @@
 import React from 'react';
-import { useTheme } from '../theme/provider.js';
 import { categoricalColor } from '../theme/color-scale.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 
 const MARGIN = { top: 16, right: 24, bottom: 16, left: 120 };
 
@@ -12,9 +11,8 @@ export function HorizontalBarChart({
   xField,
   yField,
   ariaLabel,
-}: VisualizationProps): React.ReactElement {
-  const theme = useTheme();
-
+  theme,
+}: NativeChartProps): React.ReactElement {
   // Infer fields
   const numericField = xField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
   const labelField = yField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';

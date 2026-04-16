@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { useTheme } from '../theme/provider.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 import type { DataRow, FieldMeta } from '../transforms/types.js';
 
 const PAGE_SIZE = 25;
 
 type SortDir = 'asc' | 'desc';
 
-export function DataTable({ data, height }: VisualizationProps): React.ReactElement {
-  const theme = useTheme();
+export function DataTable({ data, height, theme }: NativeChartProps): React.ReactElement {
   const [page, setPage] = useState(0);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>('asc');

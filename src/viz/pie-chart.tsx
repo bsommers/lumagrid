@@ -1,7 +1,6 @@
 import React from 'react';
-import { useTheme } from '../theme/provider.js';
 import { categoricalColor } from '../theme/color-scale.js';
-import type { VisualizationProps } from './types.js';
+import type { NativeChartProps } from '../registry/native-plugin.js';
 
 function polarToCartesian(cx: number, cy: number, r: number, angle: number) {
   return {
@@ -25,7 +24,7 @@ function slicePath(cx: number, cy: number, r: number, innerR: number, startAngle
   ].join(' ');
 }
 
-export interface PieChartProps extends VisualizationProps {
+export interface PieChartProps extends NativeChartProps {
   /** If true, renders as a donut chart. Default: false. */
   donut?: boolean;
 }
@@ -37,10 +36,9 @@ export function PieChart({
   xField,
   yField,
   ariaLabel,
+  theme,
   donut = false,
 }: PieChartProps): React.ReactElement {
-  const theme = useTheme();
-
   const valueField = yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
   const labelField = xField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
 

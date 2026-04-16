@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import { useTheme } from '../theme/provider.js';
 import { TransformPipeline } from '../transforms/pipeline.js';
 import type { ChainableTransform, DataTransform, TransformedData } from '../transforms/types.js';
@@ -16,22 +16,30 @@ export interface WidgetContainerProps {
    * If omitted, data must already conform to TransformedData.
    */
   transforms?: AnyTransform[];
-  /** Container width in pixels. Default: 100%. */
+  /** Container width in pixels or CSS string (e.g. '100%'). Default: '100%'. */
   width?: number | string;
-  /** Container height in pixels. Default: 400. */
+  /** Container height in pixels or CSS string. Default: 400. */
   height?: number | string;
   /** Optional title rendered above the content area. */
   title?: string;
-  children: (transformedData: TransformedData) => React.ReactNode;
+  /**
+   * Render prop receives transformed data plus resolved pixel dimensions.
+   * Dimensions are measured via ResizeObserver when width/height are CSS strings.
+   */
+  children: (transformedData: TransformedData, width: number, height: number) => React.ReactNode;
 }
 
 /**
  * WidgetContainer runs data through the transform pipeline and provides
- * the result to its children via a render prop.
+ * the result to its children via a render prop. When width or height are
+ * CSS strings, a ResizeObserver measures the container and passes pixel
+ * dimensions to children.
  *
  * @example
  * <WidgetContainer data={rawRows} transforms={[flatten, groupBy('region')]}>
- *   {(data) => <ViewSwitcher views={['bar', 'table']} vizProps={{ data, width: 600, height: 400 }} />}
+ *   {(data, width, height) => (
+ *     <ViewSwitcher views={[{ id: 'bar' }, { id: 'table' }]} data={data} width={width} height={height} />
+ *   )}
  * </WidgetContainer>
  */
 export function WidgetContainer({
@@ -43,10 +51,27 @@ export function WidgetContainer({
   children,
 }: WidgetContainerProps): React.ReactElement {
   const theme = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [measuredSize, setMeasuredSize] = useState<{ w: number; h: number } | null>(null);
+
+  useEffect(() => {
+    if (typeof width === 'number' && typeof height === 'number') return;
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      setMeasuredSize({ w: entry.contentRect.width, h: entry.contentRect.height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [width, height]);
+
+  const resolvedW = typeof width === 'number' ? width : (measuredSize?.w ?? 0);
+  const resolvedH = typeof height === 'number' ? height : (measuredSize?.h ?? 0);
 
   const transformedData = useMemo<TransformedData>(() => {
     if (!transforms || transforms.length === 0) {
-      // Assume data is already TransformedData
       return data as TransformedData;
     }
     const pipeline = new TransformPipeline(transforms);
@@ -55,6 +80,7 @@ export function WidgetContainer({
 
   return (
     <div
+      ref={containerRef}
       style={{
         width,
         height,
@@ -85,7 +111,7 @@ export function WidgetContainer({
         </div>
       )}
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        {children(transformedData)}
+        {children(transformedData, resolvedW, resolvedH)}
       </div>
     </div>
   );
