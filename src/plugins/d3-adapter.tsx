@@ -125,28 +125,3 @@ export function createD3Plugin<TData, TConfig = Record<string, unknown>>(
     Renderer: D3Renderer,
   };
 }
-
-// ---------------------------------------------------------------------------
-// Legacy compatibility — keeps old createD3Visualization working.
-// Deprecated: use createD3Plugin instead.
-// ---------------------------------------------------------------------------
-
-/** @deprecated Use createD3Plugin instead. */
-export interface D3ChartLifecycle {
-  mount(container: HTMLDivElement, data: TransformedData, width: number, height: number): void;
-  update(container: HTMLDivElement, data: TransformedData, width: number, height: number): void;
-  destroy(container: HTMLDivElement): void;
-}
-
-/** @deprecated Use createD3Plugin instead. */
-export function createD3Visualization(
-  lifecycle: D3ChartLifecycle,
-): ChartPlugin<TransformedData, D3Theme> {
-  return createD3Plugin<TransformedData>({
-    id: `d3-${Math.random().toString(36).slice(2, 7)}`,
-    dataAdapter: (data) => data,
-    mount: (el, data, _theme, w, h) => lifecycle.mount(el, data, w, h),
-    update: (el, data, _theme, w, h) => lifecycle.update(el, data, w, h),
-    destroy: (el) => lifecycle.destroy(el),
-  });
-}
