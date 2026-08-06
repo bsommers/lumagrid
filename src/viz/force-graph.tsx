@@ -99,7 +99,6 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
     if (initialized.current) return;
     initialized.current = true;
     setNodes(runSimulation(initialNodes, edges));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const groups = [...new Set(nodes.map((n) => n.group ?? 'default'))];
