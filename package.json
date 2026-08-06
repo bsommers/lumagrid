@@ -33,7 +33,9 @@
       "types": "./dist/esm/plugins/index.d.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -47,17 +49,28 @@
     "react-dom": ">=18.0.0"
   },
   "peerDependenciesMeta": {
-    "d3": { "optional": true }
+    "d3": {
+      "optional": true
+    }
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^15.0.0",
+    "@types/d3": "^7.4.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "@types/d3": "^7.4.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "jsdom": "^29.1.1",
     "typescript": "^5.4.0",
-    "vitest": "^1.6.0",
-    "@testing-library/react": "^15.0.0",
-    "@vitejs/plugin-react": "^4.0.0"
+    "vitest": "^1.6.0"
   },
-  "keywords": ["react", "visualization", "charts", "dataviz", "ui-library", "deno"],
+  "keywords": [
+    "react",
+    "visualization",
+    "charts",
+    "dataviz",
+    "ui-library",
+    "deno"
+  ],
   "license": "MIT"
 }

@@ -52,6 +52,6 @@
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Phase complete. Run npm test, then plan next phase (integration tests, demo app, or Nivo adapter).",
-  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 14 tests passing."
+  "next_action": "Phase complete. Registry + ViewSwitcher tests added 2026-08-05 (see codebase-review-2026-08-05.md). Remaining review items: CI workflow, LICENSE file, ESLint cleanup.",
+  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 23 tests passing (14 transform tests + 5 registry tests + 4 ViewSwitcher tests added 2026-08-05). jsdom/@testing-library/jest-dom added as devDeps with vitest.config.ts + vitest.setup.ts for component testing."
 }
