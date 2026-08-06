@@ -18,6 +18,11 @@ interface Edge {
   weight: number | undefined;
 }
 
+/**
+ * Force-directed layout via pairwise repulsion + edge attraction.
+ * O(n^2) per iteration x `iterations` — fine at dashboard-widget scale
+ * (tens to low hundreds of nodes), but avoid feeding it thousands of rows.
+ */
 function runSimulation(nodes: Node[], edges: Edge[], iterations = 60): Node[] {
   const result = nodes.map((n) => ({ ...n }));
   const nodeMap = new Map(result.map((n) => [n.id, n]));
