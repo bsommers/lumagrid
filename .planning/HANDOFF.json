@@ -53,5 +53,5 @@
   ],
   "uncommitted_files": [],
   "next_action": "Phase complete. Registry + ViewSwitcher tests added 2026-08-05 (see codebase-review-2026-08-05.md). Remaining review items: CI workflow, LICENSE file, ESLint cleanup.",
-  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 23 tests passing (14 transform tests + 5 registry tests + 4 ViewSwitcher tests added 2026-08-05). jsdom/@testing-library/jest-dom added as devDeps with vitest.config.ts + vitest.setup.ts for component testing. Nivo adapter (createNivoPlugin) added 2026-08-06 as third reference ChartPlugin implementation, with unit tests for nivoThemeAdapter/createNivoPlugin."
+  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 35 tests passing (14 transform tests + 5 registry tests + 4 ViewSwitcher tests added 2026-08-05, plus 12 nivo-adapter tests added 2026-08-06). jsdom/@testing-library/jest-dom added as devDeps with vitest.config.ts + vitest.setup.ts for component testing. Nivo adapter (createNivoPlugin) added 2026-08-06 as third reference ChartPlugin implementation, with unit tests for nivoThemeAdapter/createNivoPlugin."
 }

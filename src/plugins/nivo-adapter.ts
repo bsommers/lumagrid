@@ -69,12 +69,12 @@ export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
  * @example
  * ```tsx
  * import { ResponsiveBar } from '@nivo/bar';
- * import { createNivoPlugin, registerPlugin } from 'vizbox/plugins';
+ * import { createNivoPlugin } from 'vizbox/plugins';
  *
- * registerPlugin(createNivoPlugin({
+ * registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
  *   id: 'nivo-bar',
  *   label: 'Bar (Nivo)',
- *   dataAdapter: (data) => data.rows,
+ *   dataAdapter: (data) => data.rows as { name: string; value: number }[],
  *   Renderer: ({ data, theme, width, height, config }) => (
  *     <div style={{ width, height }}>
  *       <ResponsiveBar

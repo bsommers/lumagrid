@@ -12,6 +12,8 @@ npm install react react-dom
 npm install d3
 # optional: for Recharts-based charts
 npm install recharts
+# optional: for Nivo-based charts
+npm install @nivo/bar
 ```
 
 ## Architecture
@@ -251,10 +253,10 @@ registerPlugin(createRechartsPlugin({
 import { ResponsiveBar } from '@nivo/bar';
 import { createNivoPlugin, registerPlugin } from 'vizbox';
 
-registerPlugin(createNivoPlugin({
+registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
   id: 'nivo-bar',
   label: 'Bar (Nivo)',
-  dataAdapter: (data) => data.rows,
+  dataAdapter: (data) => data.rows as { name: string; value: number }[],
   Renderer: ({ data, theme, width, height, config }) => (
     <div style={{ width, height }}>
       <ResponsiveBar
