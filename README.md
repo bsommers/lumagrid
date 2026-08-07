@@ -245,6 +245,39 @@ registerPlugin(createRechartsPlugin({
 
 ---
 
+## Plugging in a Nivo chart
+
+```tsx
+import { ResponsiveBar } from '@nivo/bar';
+import { createNivoPlugin, registerPlugin } from 'vizbox';
+
+registerPlugin(createNivoPlugin({
+  id: 'nivo-bar',
+  label: 'Bar (Nivo)',
+  dataAdapter: (data) => data.rows,
+  Renderer: ({ data, theme, width, height, config }) => (
+    <div style={{ width, height }}>
+      <ResponsiveBar
+        data={data}
+        keys={[config?.dataKey ?? 'value']}
+        indexBy={config?.nameKey ?? 'name'}
+        theme={theme}
+        colors={theme.colors}
+      />
+    </div>
+  ),
+}));
+```
+
+`createNivoPlugin` requires `dataAdapter` — Nivo chart types disagree too much on
+data shape (bar wants flat rows, pie wants `{id, value}[]`, line wants
+`{id, data: [{x,y}]}[]`) for a safe default. The `NivoTheme` passed to `Renderer`
+mirrors Nivo's own `theme` prop shape (`background`, `text`, `axis`, `grid`,
+`tooltip`), plus a `colors` array for Nivo's separate `colors` prop — pass both
+straight through with no reshaping.
+
+---
+
 ## Writing a custom plugin from scratch
 
 ```tsx
