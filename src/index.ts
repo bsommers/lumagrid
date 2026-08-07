@@ -69,5 +69,5 @@ export {
 } from './viz/index.js';
 
 // Plugin layer
-export { createD3Plugin, createRechartsPlugin } from './plugins/index.js';
-export type { D3Theme, RechartsTheme, RechartsConfig } from './plugins/index.js';
+export { createD3Plugin, createRechartsPlugin, createNivoPlugin } from './plugins/index.js';
+export type { D3Theme, RechartsTheme, RechartsConfig, NivoTheme } from './plugins/index.js';

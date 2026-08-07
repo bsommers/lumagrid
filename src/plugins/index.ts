@@ -3,3 +3,6 @@ export type { D3Theme, D3PluginOptions } from './d3-adapter.js';
 
 export { createRechartsPlugin, rechartsThemeAdapter } from './recharts-adapter.js';
 export type { RechartsTheme, RechartsRow, RechartsConfig } from './recharts-adapter.js';
+
+export { createNivoPlugin, nivoThemeAdapter } from './nivo-adapter.js';
+export type { NivoTheme, NivoPluginOptions } from './nivo-adapter.js';
