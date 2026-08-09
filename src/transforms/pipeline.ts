@@ -2,11 +2,13 @@ import type { TransformedData } from './types.js';
 
 /**
  * A step in a TransformPipeline. The first step receives raw unknown input;
- * subsequent steps receive TransformedData.
+ * subsequent steps receive TransformedData. TransformPipeline.run never
+ * passes per-step options — a step that needs configuration should close
+ * over it (see the `flatten → aggregate` example in the pipeline tests).
  */
 export interface PipelineStep {
   readonly name: string;
-  transform(data: TransformedData, options?: Record<string, unknown>): TransformedData;
+  transform(data: TransformedData): TransformedData;
 }
 
 /**

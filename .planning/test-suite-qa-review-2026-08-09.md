@@ -160,24 +160,33 @@ don't cover, in files the suite claims to test:
 
 ## Improvement plan
 
-Ordered by risk × cheapness. This is a plan, not yet executed — nothing below has been
-implemented as part of writing this review.
+Ordered by risk × cheapness.
 
-### P0 — fix or test the silent-failure bugs found above
-1. `flatten.ts`: decide the intended behavior for `Date`/array/`undefined` values (stringify?
-   ISO-format dates? drop with a warning?), fix `flattenObject` accordingly, add tests for
-   all three. This is the highest-severity item — data silently disappearing is worse than
-   an error.
-2. `flatten.ts`: fix or scope down `inferType`'s date detection (e.g. require an explicit
-   date-like pattern instead of delegating to `Date.parse`'s permissiveness) and add a test
-   that proves a numeric-string-that-looks-like-a-year is *not* misclassified as `'date'`.
-3. `recharts-adapter.ts`: either throw/warn when `defaultDataAdapter` can't find a
-   string/number field instead of silently defaulting to `''`, or add a test that documents
-   the current empty-chart fallback as intentional. Silent + untested is the wrong
-   combination regardless of which behavior is correct.
-4. `pipeline.ts`: resolve the dead `options` parameter — either implement per-step options
-   forwarding (e.g. `run(input, stepOptions?: Record<string, Record<string,unknown>>)`) or
-   remove the unusable parameter from `PipelineStep`. Add a test for whichever is chosen.
+### P0 — fix or test the silent-failure bugs found above — done 2026-08-09
+1. ~~`flatten.ts`: decide the intended behavior for `Date`/array/`undefined` values~~ — **done.**
+   `Date` values now convert via `.toISOString()` instead of being silently dropped
+   (`flatten.ts` — explicit `instanceof Date` check before the recursion branch). Arrays and
+   `undefined` were already handled correctly (stringified via the existing fallback branch)
+   and now have regression tests locking that in. See `flatten.test.ts`.
+2. ~~`flatten.ts`: fix or scope down `inferType`'s date detection~~ — **done.** A string is
+   now only date-candidate if `isNaN(Number(v))` — i.e. it must fail to parse as a plain
+   number before `Date.parse` is even tried. `"2020"`/`"1999"` now correctly infer as
+   `'string'`; real date strings still infer as `'date'`.
+3. ~~`recharts-adapter.ts`: either throw/warn ... or add a test~~ — **done, warn chosen.**
+   `defaultDataAdapter` now calls `console.warn` (naming which key — `nameKey` or `dataKey`
+   — and why) when it falls back to auto-detection failure, and still renders rather than
+   throwing (a throw here would break the whole `ViewSwitcher` tree over one tab's data
+   quirk). New test file `src/plugins/__tests__/recharts-adapter.test.ts` — first tests this
+   file has ever had.
+4. ~~`pipeline.ts`: resolve the dead `options` parameter~~ — **done, removed.** YAGNI: the
+   closure-based workaround already demonstrated in the pipeline tests is the actual pattern
+   in use, and is arguably clearer than a separate options-forwarding mechanism would be.
+   `PipelineStep.transform` no longer accepts an `options` argument; `TransformPipeline.run`
+   was already never passing one, so this is a type-only change with no runtime behavior
+   difference — verified by the full suite staying green throughout.
+
+All four verified via `npm run typecheck` (both `tsconfig.esm.json` and `tsconfig.cjs.json`),
+`npm test` (45/45 passing, up from 35), and `npm run build`.
 
 ### P1 — close coverage on the untested-but-load-bearing modules
 5. `core/container.tsx`: test the `ResizeObserver` wiring (mock `ResizeObserver`, assert the

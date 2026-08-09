@@ -39,8 +39,28 @@ export function rechartsThemeAdapter(theme: ThemeDefinition): RechartsTheme {
 }
 
 function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): RechartsRow[] {
-  const nameKey = config?.nameKey ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
-  const dataKey = config?.dataKey ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
+  let nameKey = config?.nameKey;
+  if (nameKey === undefined) {
+    nameKey = data.fields.find((f) => f.type === 'string')?.key;
+    if (nameKey === undefined) {
+      nameKey = '';
+      console.warn(
+        '[vizbox] recharts-adapter: no string field found for nameKey auto-detection; ' +
+        'defaulting to an empty name for every row. Pass config.nameKey explicitly to silence this warning.',
+      );
+    }
+  }
+  let dataKey = config?.dataKey;
+  if (dataKey === undefined) {
+    dataKey = data.fields.find((f) => f.type === 'number')?.key;
+    if (dataKey === undefined) {
+      dataKey = '';
+      console.warn(
+        '[vizbox] recharts-adapter: no number field found for dataKey auto-detection; ' +
+        'defaulting to a zero value for every row. Pass config.dataKey explicitly to silence this warning.',
+      );
+    }
+  }
   return data.rows.map((r) => ({
     name: String(r[nameKey] ?? ''),
     value: Number(r[dataKey] ?? 0),

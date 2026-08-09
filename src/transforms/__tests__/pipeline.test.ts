@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { TransformPipeline } from '../pipeline.js';
 import { flatten } from '../flatten.js';
 import { aggregate } from '../aggregate.js';
@@ -38,5 +38,16 @@ describe('TransformPipeline', () => {
 
   it('throws when constructed with zero steps', () => {
     expect(() => new TransformPipeline([])).toThrow();
+  });
+
+  it('invokes steps after the first with only the data argument', () => {
+    const second = vi.fn((data) => data);
+    const pipeline = new TransformPipeline([
+      flatten,
+      { name: 'second', transform: second },
+    ]);
+    pipeline.run([{ a: 1 }]);
+    expect(second).toHaveBeenCalledTimes(1);
+    expect(second.mock.calls[0]).toHaveLength(1);
   });
 });

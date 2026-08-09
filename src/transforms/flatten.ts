@@ -13,7 +13,9 @@ function flattenObject(
 ): void {
   for (const [key, value] of Object.entries(obj)) {
     const fullKey = prefix ? `${prefix}${separator}${key}` : key;
-    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+    if (value instanceof Date) {
+      result[fullKey] = value.toISOString();
+    } else if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
       flattenObject(value as Record<string, unknown>, fullKey, separator, result);
     } else if (
       value === null ||
@@ -34,7 +36,7 @@ function inferType(values: Array<string | number | boolean | null>): FieldMeta['
   if (nonNull.every((v) => typeof v === 'boolean')) return 'boolean';
   if (
     nonNull.every(
-      (v) => typeof v === 'string' && !isNaN(Date.parse(v as string)),
+      (v) => typeof v === 'string' && isNaN(Number(v)) && !isNaN(Date.parse(v)),
     )
   )
     return 'date';
