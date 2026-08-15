@@ -24,3 +24,15 @@ export function registerAndGetId<TData, TTheme, TConfig>(
   registerPlugin(plugin);
   return plugin.id;
 }
+
+/**
+ * Test-only: clears every registered plugin. Not re-exported from
+ * `src/core/index.ts` or the top-level `src/index.ts` barrel — the plugin
+ * registry is shared, mutable module state, and a way to wipe it has no
+ * place in the public API. Import it directly from this module in test
+ * setup (`beforeEach`) instead of relying on hand-picked unique plugin ids
+ * for cross-test isolation.
+ */
+export function __resetRegistryForTests(): void {
+  plugins.clear();
+}

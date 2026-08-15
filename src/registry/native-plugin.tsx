@@ -35,7 +35,9 @@ export function createNativePlugin(
   function NativeRenderer({
     data, theme, width, height, config,
   }: RendererProps<TransformedData, ThemeDefinition, NativeConfig>): React.ReactElement {
-    return <Component data={data} theme={theme} width={width} height={height} {...config} />;
+    // config spreads first so a colliding key (e.g. a stray `data`/`width` in
+    // config) can never clobber the real chart props.
+    return <Component {...config} data={data} theme={theme} width={width} height={height} />;
   }
   NativeRenderer.displayName = `NativePlugin(${id})`;
 

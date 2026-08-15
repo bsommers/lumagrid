@@ -1,9 +1,11 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import {
+  describe, it, expect, vi, beforeEach,
+} from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ViewSwitcher } from '../view-switcher.js';
 import { ThemeProvider } from '../../theme/provider.js';
-import { registerPlugin } from '../../registry/index.js';
+import { registerPlugin, __resetRegistryForTests } from '../../registry/index.js';
 import type { ChartPlugin } from '../../registry/types.js';
 import type { TransformedData } from '../../transforms/types.js';
 
@@ -35,6 +37,10 @@ function renderSwitcher(props: Partial<React.ComponentProps<typeof ViewSwitcher>
 }
 
 describe('ViewSwitcher', () => {
+  beforeEach(() => {
+    __resetRegistryForTests();
+  });
+
   it('passes dataAdapter/themeAdapter output and dimensions through to the plugin Renderer', () => {
     registerPlugin(fakePlugin('vs-test-basic'));
     renderSwitcher({ views: [{ id: 'vs-test-basic', config: { scale: 2 } }] });

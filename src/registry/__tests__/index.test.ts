@@ -1,5 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { registerPlugin, getPlugin, listPlugins, registerAndGetId } from '../index.js';
+import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  registerPlugin, getPlugin, listPlugins, registerAndGetId, __resetRegistryForTests,
+} from '../index.js';
 import type { ChartPlugin } from '../types.js';
 
 function fakePlugin(id: string): ChartPlugin<{ n: number }, { c: string }> {
@@ -12,6 +14,20 @@ function fakePlugin(id: string): ChartPlugin<{ n: number }, { c: string }> {
 }
 
 describe('registry', () => {
+  beforeEach(() => {
+    __resetRegistryForTests();
+  });
+
+  it('clears all registered plugins on reset', () => {
+    registerPlugin(fakePlugin('registry-test-reset'));
+    expect(getPlugin('registry-test-reset')).toBeDefined();
+
+    __resetRegistryForTests();
+
+    expect(getPlugin('registry-test-reset')).toBeUndefined();
+    expect(listPlugins()).toEqual([]);
+  });
+
   it('returns undefined for an id that was never registered', () => {
     expect(getPlugin('never-registered-plugin')).toBeUndefined();
   });
@@ -32,7 +48,7 @@ describe('registry', () => {
 
   it('lists ids of registered plugins', () => {
     registerPlugin(fakePlugin('registry-test-c'));
-    expect(listPlugins()).toContain('registry-test-c');
+    expect(listPlugins()).toEqual(['registry-test-c']);
   });
 
   it('registerAndGetId registers the plugin and returns its id', () => {

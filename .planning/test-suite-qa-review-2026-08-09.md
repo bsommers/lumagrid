@@ -188,25 +188,41 @@ Ordered by risk × cheapness.
 All four verified via `npm run typecheck` (both `tsconfig.esm.json` and `tsconfig.cjs.json`),
 `npm test` (45/45 passing, up from 35), and `npm run build`.
 
-### P1 — close coverage on the untested-but-load-bearing modules
-5. `core/container.tsx`: test the `ResizeObserver` wiring (mock `ResizeObserver`, assert the
-   0×0-then-measured render sequence, assert cleanup on unmount, assert the numeric-width/
-   height short-circuit skips the observer entirely).
-6. `plugins/d3-adapter.tsx`: test `toD3Theme` mapping directly (same pattern as
-   `nivo-adapter.test.ts`), and test `createD3Plugin`'s `Renderer` lifecycle — `mount` called
-   once, `update` called on subsequent prop changes, `destroy` called on unmount — using a
-   fake `options.mount/update/destroy` the way `nivo-adapter.test.ts` uses a fake `Renderer`.
-7. `plugins/recharts-adapter.ts`: test `defaultDataAdapter`'s auto-detection directly,
-   including the field-not-found fallback from item 3.
-8. `registry/native-plugin.tsx`: test that `createNativePlugin` wires `dataAdapter`/
-   `themeAdapter` as true identity functions and that `config` spreads onto the wrapped
-   component — including what happens if `config` contains a key that collides with `data`/
-   `theme`/`width`/`height` (spread order in `native-plugin.tsx:38` means a colliding config
-   key silently overrides the real prop; confirm this is intended and test it either way).
-9. Add a registry test-reset mechanism (an exported test-only `__resetRegistry()` or a
-   `beforeEach` pattern documented in a shared test helper) so future tests aren't relying on
-   hand-picked-unique-id discipline. Retrofit the two existing files that call
-   `registerPlugin` to use it.
+### P1 — close coverage on the untested-but-load-bearing modules — done 2026-08-15
+5. ~~`core/container.tsx`: test the `ResizeObserver` wiring~~ — **done, no bug found.** New
+   `src/core/__tests__/container.test.tsx` installs a fake `ResizeObserver` (jsdom has none —
+   `new ResizeObserver(...)` would throw in this test environment without it) and verifies:
+   no observer is created when both `width`/`height` are numbers; a CSS-string dimension
+   renders `0×0` before the observer fires, then updates once it does; the observer
+   disconnects on unmount. All 4 pass against the existing implementation unchanged.
+6. ~~`plugins/d3-adapter.tsx`: test `toD3Theme` mapping and `createD3Plugin`'s lifecycle~~ —
+   **done, no bug found.** New `src/plugins/__tests__/d3-adapter.test.tsx` — theme mapping,
+   `mount` called once and not `update` on first render, `update` (not `mount` again) on
+   prop change, neither called on an identical re-render, `destroy` called with the container
+   element on unmount. This was the largest untested file in the plugin layer; all 5 tests
+   pass unchanged.
+7. ~~`plugins/recharts-adapter.ts`: test `defaultDataAdapter`'s auto-detection~~ — **done.**
+   The fallback-warning behavior was already covered by the P0-3 fix; added the remaining
+   gaps: `rechartsThemeAdapter` mapping (previously untested, like #6), `createRechartsPlugin`
+   wiring (label default/override, `themeAdapter` identity, custom `dataAdapter` override),
+   and row-value coercion (boolean/null extra fields, multiple rows). 11 tests total in that
+   file now (was 4 after P0).
+8. ~~`registry/native-plugin.tsx`: test identity adapters and config spreading~~ — **done, and
+   this one found a real bug.** A test proving a colliding `config` key (e.g. `{ data: ... }`)
+   can never override the real `data`/`theme`/`width`/`height` props failed RED against the
+   unmodified code — `native-plugin.tsx:38` spread `{...config}` *after* the explicit props,
+   so a colliding key silently won. Fixed by moving the config spread first
+   (`<Component {...config} data={data} theme={theme} width={width} height={height} />`).
+   New `src/registry/__tests__/native-plugin.test.tsx`, 6 tests.
+9. ~~Add a registry test-reset mechanism~~ — **done.** `__resetRegistryForTests()` added to
+   `src/registry/index.ts` (deliberately not re-exported from `core/index.ts` or the
+   top-level barrel — wiping shared plugin state has no place in the public API). Both files
+   that call `registerPlugin` (`registry/index.test.ts`, `view-switcher.test.tsx`) now call it
+   in `beforeEach`; existing unique test ids were left as-is rather than renamed, since the
+   reset — not the naming — is what removes the fragility.
+
+All nine verified via `npm run typecheck` (both configs), `npm test` (68/68 passing, up from
+45), and `npm run build`.
 
 ### P2 — round out edge cases in already-tested modules
 10. `aggregate.ts`: add tests for `min`/`max`/`first`/`last`, multi-key `groupBy`, multiple
