@@ -78,4 +78,78 @@ describe('ViewSwitcher', () => {
 
     expect(screen.getByRole('tab', { name: 'View Label' })).toBeInTheDocument();
   });
+
+  it('lets the controlled activeView prop drive the rendered view, ignoring internal state', () => {
+    registerPlugin(fakePlugin('vs-test-controlled-a'));
+    registerPlugin(fakePlugin('vs-test-controlled-b'));
+    const { rerender } = render(
+      <ThemeProvider theme="light">
+        <ViewSwitcher
+          views={[{ id: 'vs-test-controlled-a' }, { id: 'vs-test-controlled-b' }]}
+          data={data}
+          width={400}
+          height={300}
+          activeView="vs-test-controlled-b"
+        />
+      </ThemeProvider>,
+    );
+
+    expect(screen.getByTestId('renderer-vs-test-controlled-b')).toBeInTheDocument();
+    expect(screen.queryByTestId('renderer-vs-test-controlled-a')).not.toBeInTheDocument();
+
+    rerender(
+      <ThemeProvider theme="light">
+        <ViewSwitcher
+          views={[{ id: 'vs-test-controlled-a' }, { id: 'vs-test-controlled-b' }]}
+          data={data}
+          width={400}
+          height={300}
+          activeView="vs-test-controlled-a"
+        />
+      </ThemeProvider>,
+    );
+
+    expect(screen.getByTestId('renderer-vs-test-controlled-a')).toBeInTheDocument();
+  });
+
+  it('falls back to the first view when activeView points at an id absent from views', () => {
+    registerPlugin(fakePlugin('vs-test-fallback-a'));
+    renderSwitcher({
+      views: [{ id: 'vs-test-fallback-a' }],
+      activeView: 'vs-test-does-not-exist',
+    });
+
+    expect(screen.getByTestId('renderer-vs-test-fallback-a')).toBeInTheDocument();
+  });
+
+  it('renders the tab strip after the chart when tabPosition is "bottom"', () => {
+    registerPlugin(fakePlugin('vs-test-bottom'));
+    const { container } = renderSwitcher({
+      views: [{ id: 'vs-test-bottom' }],
+      tabPosition: 'bottom',
+    });
+
+    const root = container.firstElementChild;
+    expect(root?.children).toHaveLength(2);
+    expect(root?.children[0]?.querySelector('[data-testid="renderer-vs-test-bottom"]')).toBeTruthy();
+    expect(root?.children[1]?.getAttribute('role')).toBe('tablist');
+  });
+
+  it('renders the tab strip before the chart when tabPosition is "top" (default)', () => {
+    registerPlugin(fakePlugin('vs-test-top'));
+    const { container } = renderSwitcher({
+      views: [{ id: 'vs-test-top' }],
+    });
+
+    const root = container.firstElementChild;
+    expect(root?.children[0]?.getAttribute('role')).toBe('tablist');
+    expect(root?.children[1]?.querySelector('[data-testid="renderer-vs-test-top"]')).toBeTruthy();
+  });
+
+  it('shows the fallback message with no tabs for an empty views array', () => {
+    renderSwitcher({ views: [] });
+
+    expect(screen.getByText('No plugin registered for "". Call registerPlugin(...) first.')).toBeInTheDocument();
+    expect(screen.queryAllByRole('tab')).toHaveLength(0);
+  });
 });

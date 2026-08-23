@@ -224,15 +224,35 @@ All four verified via `npm run typecheck` (both `tsconfig.esm.json` and `tsconfi
 All nine verified via `npm run typecheck` (both configs), `npm test` (68/68 passing, up from
 45), and `npm run build`.
 
-### P2 — round out edge cases in already-tested modules
-10. `aggregate.ts`: add tests for `min`/`max`/`first`/`last`, multi-key `groupBy`, multiple
-    simultaneous aggregations, and the empty-bucket-values silent-zero case.
-11. `view-switcher.tsx`: add tests for the controlled `activeView` prop actually driving the
-    rendered view, `activeView` pointing at a nonexistent id, `tabPosition="bottom"`, and an
-    empty `views` array.
-12. Add one end-to-end test per adapter (D3, Recharts, Nivo, native) that goes
-    `registerPlugin` → `<ViewSwitcher>` → asserts the right `Renderer` mounted, not just the
-    factory functions in isolation.
+### P2 — round out edge cases in already-tested modules — done 2026-08-23
+10. ~~`aggregate.ts`: add tests for `min`/`max`/`first`/`last`, multi-key `groupBy`, multiple
+    simultaneous aggregations, and the empty-bucket-values silent-zero case~~ — **done, no bug
+    found.** All behave as the implementation already had it; the silent-zero case is now
+    documented by a test rather than just described in this review. 9 tests total (was 4).
+11. ~~`view-switcher.tsx`: add tests for the controlled `activeView` prop, a nonexistent
+    `activeView` id, `tabPosition="bottom"`, and an empty `views` array~~ — **done.** All four
+    behave as the implementation already had it (controlled prop works, unknown id falls back
+    to `views[0]`, bottom tab strip renders after the chart, empty `views` shows the fallback
+    message with zero tabs). 9 tests total (was 4).
+
+    **Found and fixed a real testing-infrastructure bug while writing #11's empty-`views`
+    test**, not a defect in `view-switcher.tsx` itself: `vitest.config.ts` never sets
+    `test.globals`, so `@testing-library/react` couldn't auto-detect a global `afterEach` to
+    clean up after itself, and no `vitest.setup.ts` code called `cleanup()` manually. Every
+    test in every `.tsx` test file was leaking its rendered DOM into the next test in the same
+    file — the empty-`views` test's `queryAllByRole('tab')` found 10 leftover tabs from every
+    earlier test in the file instead of the expected 0. Prior tests happened not to notice
+    because they only ever queried for a specific test's own unique `data-testid`. Fixed by
+    adding `afterEach(() => cleanup())` to `vitest.setup.ts`. This affects every component test
+    file in the suite, not just this one.
+12. ~~Add one end-to-end test per adapter (D3, Recharts, Nivo, native) through
+    `registerPlugin` → `<ViewSwitcher>`~~ — **done.** New
+    `src/core/__tests__/view-switcher-adapters.test.tsx`, 4 tests — one per adapter, each
+    proving the real `Renderer`/lifecycle callbacks actually fire when driven through the
+    full dispatch path, not just the factory function in isolation.
+
+All three verified via `npm run typecheck` (both configs), `npm test` (82/82 passing, up from
+68), and `npm run build`.
 
 ### P3 — process
 13. Add `@vitest/coverage-v8` and a `test:coverage` script; wire a coverage step into
