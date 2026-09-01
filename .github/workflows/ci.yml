@@ -16,5 +16,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      - run: npm test
+      # Runs the full suite with coverage. No threshold is configured (see
+      # vitest.config.ts) — this reports the number in CI logs, it does not
+      # gate the build. Revisit once the P0/P1/P2 coverage gaps are closed.
+      - run: npm run test:coverage
       - run: npm run build

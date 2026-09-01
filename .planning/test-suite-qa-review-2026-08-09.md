@@ -255,12 +255,20 @@ All three verified via `npm run typecheck` (both configs), `npm test` (82/82 pas
 68), and `npm run build`.
 
 ### P3 — process
-13. Add `@vitest/coverage-v8` and a `test:coverage` script; wire a coverage step into
-    `.github/workflows/ci.yml`. Start by reporting the number, not gating on a threshold —
-    agree on a realistic floor once the P0/P1 gaps above are closed, then gate.
-14. Add a one-paragraph testing convention note (e.g. in `CONTRIBUTING.md` or a comment in
-    a shared test-utils file) covering the registry-id-collision hazard from item 9, so it's
-    documented once rather than re-discovered per contributor.
+13. ~~Add `@vitest/coverage-v8` and a `test:coverage` script; wire a coverage step into
+    `.github/workflows/ci.yml`~~ — **done.** `@vitest/coverage-v8` added, `test:coverage` runs
+    `vitest run --coverage`, `vitest.config.ts` configures the v8 provider with `text`+`lcov`
+    reporters and no threshold. CI's `npm test` step was replaced with `npm run test:coverage`
+    so the number is reported in every CI run without a second full test invocation. Not
+    gating — current per-file numbers (e.g. `src/viz/*` at 0%, matching the known coverage
+    gap called out throughout REBUILD.md) make a threshold meaningless until those gaps close.
+14. ~~Add a one-paragraph testing convention note ... covering the registry-id-collision
+    hazard~~ — **done.** New `CONTRIBUTING.md` documents that `registerPlugin`'s backing `Map`
+    is shared module-level state, that `__resetRegistryForTests()` (not unique ids) is what
+    makes tests safe, and points at the three test files that already follow the pattern.
+
+All P3 items verified via `npm run typecheck`, `npm test` (82/82 passing, unchanged), and
+`npm run build` — coverage tooling is additive and changes no source behavior.
 
 ## What this review deliberately did not do
 

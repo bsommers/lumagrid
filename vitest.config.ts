@@ -6,5 +6,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      // Reporting only, not gating — see .planning/test-suite-qa-review-2026-08-09.md
+      // P3 item 13. No thresholds until a realistic floor is agreed on.
+    },
   },
 });
