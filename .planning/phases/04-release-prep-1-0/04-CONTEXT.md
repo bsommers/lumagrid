@@ -46,6 +46,9 @@ Out of scope for this context:
 - **D-13:** Create `CHANGELOG.md` now in Keep a Changelog format, with a 0.1.0 baseline and an Unreleased section backfilled with the work since 0.1.0 (Apache-2.0 relicense, ForceGraph relayout/seed/aspect fit, LineChart NaN fix, pie and choropleth fixes, examples app, ESLint, local CI gate) plus this phase's renames and deprecations.
 - **D-14:** The stability policy lives in a new `docs/STABILITY.md`: what `@public`/`@experimental`/`@deprecated` promise, the deprecation window, and the registry test convention. The README gets a short "Stability" section linking to it, and `docs/RELEASE-PLAN.md` points to it rather than duplicating it.
 
+### Found during coverage work (2026-11-07)
+- **D-15:** `groupBy` in `src/transforms/group-by.ts` is declared as `ChainableTransform<GroupByOptions> | ((field, valueField?) => ChainableTransform<GroupByOptions>)` but is only ever a factory. As a result `groupBy.transform(...)` doesn't typecheck, and callers have to cast (see `src/transforms/__tests__/group-by.test.ts`). Before freezing, fix the type to the factory signature, or make it a plain `ChainableTransform` like `pivot`/`geoNormalize` and keep the factory as a deprecated alias. Planner decides which; the transforms should end up with consistent shapes.
+
 ### Claude's Discretion
 - Whether the typedoc output in `docs/api/` is committed or gitignored. Default: gitignored and generated on demand.
 - When an old and a new field name are both passed, the new name wins (and the dev warning stays quiet).
