@@ -28,7 +28,9 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 ## Remaining (Phase 04)
 
 - REL-03: freeze and document public API (next)
-- Coverage gaps: barrels src/index.ts, src/viz/plugins.ts at 0%; data-table branches
+- Test-coverage chores (barrels, viz/plugins.ts, pivot/groupBy/geoNormalize, data-table done in 18ffd5a; now 97.8/91.8/94.5):
+  - [ ] src/theme/color-scale.ts: branches ~36%, lines 75% (uncovered 23-26, 50, 61-73)
+  - [ ] Lower spots: pie-chart branches 83%, container.tsx branches 77%, tree-view funcs 60%, theme/provider.tsx 20-21
 - REL-02: npm publish - deferred by owner, do not start until requested
 
 ## Decisions (carried forward)
@@ -46,7 +48,7 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 ## Notes
 
 - Onboarded 2026-11-07 (non-interactive).
-- All commits pushed; origin/main at 379954d as of 2026-11-07.
+- origin/main at 379954d; 5 local commits unpushed (3d20836..312e6ba) as of 2026-11-07.
 - Gates (scripts/ci.sh): typecheck, lint, test:coverage, build, examples:build.
 
 ## Session Continuity

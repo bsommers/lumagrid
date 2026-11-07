@@ -14,7 +14,7 @@ Status at 0.1.0: four layers (theme, transforms, registry/core, viz/plugins), se
 - ~~`ForceGraph` only simulates on mount~~ — done 2026-11-07: relayouts when nodes/edges change (warm-started), `relayout={false}` opt-out, seeded deterministic placement (`seed`), aspect-preserving fit so resizes don't relayout.
 - `LineChart` `toPath` sorts input in place; copy first. Treat dates on the x-axis as a real scale rather than an index.
 - Resolve the `registerPlugin` global registry behaviour (duplicate ids silently overwrite): decide on warn/throw, document the registry-reset convention for tests.
-- Raise coverage thresholds as gaps close (`line-chart` branches raised to ~98% on 2026-11-07; still `data-table`; `src/index.ts` and `viz/plugins.ts` barrel files are excluded or smoke-tested).
+- Raise coverage thresholds as gaps close (2026-11-07: 97.8/91.8/94.5 lines/branches/funcs, barrels and transforms covered; remaining: `theme/color-scale.ts` branches ~36%, then pie-chart, container, tree-view).
 - Decide on the Deno story (`deno.json` exists): either test in CI or drop.
 
 ## 0.3 - API freeze candidates
