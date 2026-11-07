@@ -1,30 +1,35 @@
+# Hosted CI is a backstop only. The primary gate is local: scripts/ci.sh, run by
+# the .githooks/pre-push hook. This workflow is currently disabled in GitHub
+# (Actions > CI) to save minutes; it is kept minimal for when it is re-enabled.
+#
+# Minute-saving choices: no push trigger (main is gated locally before push),
+# PRs only for code changes, drafts skipped, one Linux job, npm cache,
+# superseded runs cancelled, hard 10-minute cap.
 name: CI
 
 on:
-  push:
-    paths-ignore: ['**.md', 'docs/**']
-    branches: [main]
   pull_request:
-    paths-ignore: ['**.md', 'docs/**']
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore: ['**.md', 'docs/**', '.planning/**', 'plans/**', '.ontology/**', '.security-reports/**', 'LICENSE', 'NOTICE']
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
-  test:
+  ci:
+    if: github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run typecheck
-      # Runs the full suite with coverage. No threshold is configured (see
-      # vitest.config.ts) — this reports the number in CI logs, it does not
-      # gate the build. Revisit once the P0/P1/P2 coverage gaps are closed.
-      - run: npm run test:coverage
-      - run: npm run build
+      - run: npm ci --no-audit --no-fund
+      - run: scripts/ci.sh

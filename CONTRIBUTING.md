@@ -15,3 +15,16 @@ beforeEach(() => {
 ```
 
 This is why plugin `id`s across the test suite don't need to be globally unique — the reset, not the naming, is what removes the fragility. See `src/registry/__tests__/index.test.ts`, `src/core/__tests__/view-switcher.test.tsx`, and `src/core/__tests__/view-switcher-adapters.test.tsx` for the pattern in practice.
+
+## Local CI (primary gate)
+
+Hosted GitHub Actions CI is disabled for this repo to save minutes; checks run locally.
+
+```bash
+git config core.hooksPath .githooks   # once per clone: runs scripts/ci.sh before every push
+scripts/ci.sh                         # typecheck, lint, tests + coverage gate, build, examples build (~10s)
+scripts/ci.sh --fast                  # typecheck, lint, tests only
+git push --no-verify                  # skip the hook once (avoid)
+```
+
+`.github/workflows/ci.yml` is a minimal backstop (PRs and manual dispatch only, one job, 10-minute cap) that just runs `scripts/ci.sh`. Keep the two in step.
