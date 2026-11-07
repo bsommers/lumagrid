@@ -6,6 +6,7 @@ export type { PieChartProps } from './pie-chart.js';
 export { Choropleth } from './choropleth.js';
 export type { ChoroplethProps } from './choropleth.js';
 export { ForceGraph } from './force-graph.js';
+export type { ForceGraphProps } from './force-graph.js';
 export { TreeView } from './tree-view.js';
 export type { TreeViewProps } from './tree-view.js';
 

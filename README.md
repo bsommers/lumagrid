@@ -189,6 +189,14 @@ registerPlugin(nativeForceGraphPlugin); // id: 'force-graph'
 | `tree` | TreeView | `TransformedData` with `.hierarchy` from `groupBy` |
 | `table` | DataTable | any rows |
 
+`ForceGraph` re-runs its layout when the set of nodes or edges changes (warm-started from the previous positions, so the graph evolves rather than jumps). Resizing never re-runs it. Options, passed via the view's `config`:
+
+| Option | Default | Effect |
+|--------|---------|--------|
+| `relayout` | `true` | `false` keeps existing node positions on data changes; new nodes get their seeded start position, removed nodes are dropped |
+| `seed` | `1` | Deterministic initial placement |
+| `iterations` | `60` | Simulation steps per layout run |
+
 ---
 
 ## Plugging in a D3 chart

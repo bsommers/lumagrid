@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { categoricalColor } from '../theme/color-scale.js';
 import type { NativeChartProps } from '../registry/native-plugin.js';
 
@@ -70,7 +70,43 @@ function runSimulation(nodes: Node[], edges: Edge[], iterations = 60): Node[] {
   return result;
 }
 
-export function ForceGraph({ data, width, height, xField, yField, ariaLabel, theme }: NativeChartProps): React.ReactElement {
+/** Deterministic 32-bit string hash (FNV-1a). */
+function hashString(str: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+/** Deterministic pseudo-random number in [0, 1) for a given seed + key (mulberry32 step). */
+function seededUnit(seed: number, key: string): number {
+  let t = (hashString(key) ^ Math.imul(seed | 0, 0x9e3779b1)) + 0x6d2b79f5;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+
+export interface ForceGraphProps extends NativeChartProps {
+  /**
+   * Re-run the layout simulation when the graph's nodes or edges change.
+   * Default `true`. When `false`, the layout is computed once; on later data
+   * changes existing nodes keep their positions, new nodes are placed at their
+   * seeded initial position, and removed nodes are dropped — no re-simulation.
+   * Resizing never triggers a relayout (positions are rescaled to fit).
+   */
+  relayout?: boolean;
+  /** Seed for the deterministic initial node placement. Default `1`. */
+  seed?: number;
+  /** Simulation iterations per layout run. Default `60`. */
+  iterations?: number;
+}
+
+export function ForceGraph({
+  data, width, height, xField, yField, ariaLabel, theme,
+  relayout = true, seed = 1, iterations = 60,
+}: ForceGraphProps): React.ReactElement {
   // Expect data.rows to have: id, label, [group], and optionally source/target for edges
   const nodeRows = data.rows.filter((r) => r['source'] === undefined || r['source'] === null);
   const edgeRows = data.rows.filter((r) => r['source'] !== undefined && r['source'] !== null);
@@ -78,17 +114,10 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
   const idField = xField ?? 'id';
   const labelField = yField ?? 'label';
 
-  const initialNodes: Node[] = nodeRows.map((r) => ({
+  const baseNodes = nodeRows.map((r) => ({
     id: String(r[idField] ?? r['id'] ?? ''),
     label: String(r[labelField] ?? r['label'] ?? ''),
     group: r['group'] !== undefined ? String(r['group']) : undefined,
-    // Math.random() is intentional here: used only for visual initial placement,
-    // not for security-sensitive ID generation. If you need unpredictable IDs,
-    // use crypto.randomUUID() or crypto.getRandomValues() instead.
-    x: width / 2 + (Math.random() - 0.5) * width * 0.6,
-    y: height / 2 + (Math.random() - 0.5) * height * 0.6,
-    vx: 0,
-    vy: 0,
   }));
 
   const edges: Edge[] = edgeRows.map((r) => ({
@@ -97,29 +126,69 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
     weight: typeof r['weight'] === 'number' ? r['weight'] : undefined,
   }));
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const initialized = useRef(false);
+  // Content key: only a change in graph structure (or seed/iterations) triggers a
+  // new layout. Width/height are excluded on purpose — the render step rescales
+  // positions to fit, so a resize must not reshuffle the graph.
+  const layoutKey = JSON.stringify([
+    baseNodes.map((n) => n.id),
+    edges.map((e) => [e.source, e.target]),
+    seed,
+    iterations,
+  ]);
+
+  // Positions from the previous layout, keyed by node id. Used to warm-start a
+  // relayout (so the graph evolves instead of jumping) and to hold positions
+  // when relayout is disabled.
+  const prevPositions = useRef<Map<string, { x: number; y: number }> | null>(null);
+
+  const positioned = useMemo(() => {
+    const prev = prevPositions.current;
+    const initial: Node[] = baseNodes.map((n) => {
+      const p = prev?.get(n.id);
+      return {
+        ...n,
+        x: p ? p.x : width / 2 + (seededUnit(seed, `${n.id}:x`) - 0.5) * width * 0.6,
+        y: p ? p.y : height / 2 + (seededUnit(seed, `${n.id}:y`) - 0.5) * height * 0.6,
+        vx: 0,
+        vy: 0,
+      };
+    });
+    if (prev && !relayout) return initial;
+    return runSimulation(initial, edges, iterations);
+    // Recompute only when graph structure changes (layoutKey), not on every new
+    // rows array identity or resize; labels/groups are applied below without relayout.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layoutKey]);
 
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-    setNodes(runSimulation(initialNodes, edges));
-    // Layout is computed once on mount by design; later data changes are not re-simulated.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    prevPositions.current = new Map(positioned.map((n) => [n.id, { x: n.x, y: n.y }]));
+  }, [positioned]);
+
+  // Labels/groups may change without a structural change; take them from current data.
+  const meta = new Map(baseNodes.map((n) => [n.id, n]));
+  const nodes: Node[] = positioned.map((n) => ({ ...n, ...meta.get(n.id) }));
 
   const groups = [...new Set(nodes.map((n) => n.group ?? 'default'))];
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
+  // Fit the layout into the viewport with a uniform scale (aspect ratio preserved)
+  // and centre it. The fit depends only on the nodes' own extent, so a resize
+  // rescales the same layout instead of distorting or cornering it.
   const pad = 24;
   const xs = nodes.map((n) => n.x);
   const ys = nodes.map((n) => n.y);
-  const minX = Math.min(...xs, 0);
-  const maxX = Math.max(...xs, width);
-  const minY = Math.min(...ys, 0);
-  const maxY = Math.max(...ys, height);
-  const scaleX = (x: number) => pad + ((x - minX) / (maxX - minX || 1)) * (width - pad * 2);
-  const scaleY = (y: number) => pad + ((y - minY) / (maxY - minY || 1)) * (height - pad * 2);
+  const minX = xs.length ? Math.min(...xs) : 0;
+  const minY = ys.length ? Math.min(...ys) : 0;
+  const spanX = xs.length ? Math.max(...xs) - minX : 0;
+  const spanY = ys.length ? Math.max(...ys) - minY : 0;
+  const availW = Math.max(width - pad * 2, 0);
+  const availH = Math.max(height - pad * 2, 0);
+  const fit = Math.min(spanX > 0 ? availW / spanX : Infinity, spanY > 0 ? availH / spanY : Infinity);
+  const k = Number.isFinite(fit) ? fit : 0;
+  const offX = pad + (availW - spanX * k) / 2;
+  const offY = pad + (availH - spanY * k) / 2;
+  const scaleX = (x: number) => offX + (x - minX) * k;
+  const scaleY = (y: number) => offY + (y - minY) * k;
 
   return (
     <svg width={width} height={height} aria-label={ariaLabel ?? 'Force-directed graph'} role="img"
