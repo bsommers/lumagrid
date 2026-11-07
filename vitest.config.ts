@@ -12,7 +12,7 @@ export default defineConfig({
       // Regression gate, set just below measured coverage (81.5/84.5/80.3/81.5
       // lines/branches/functions/statements at time of writing). Ratchet upward.
       include: ['src/**'],
-      thresholds: { lines: 80, statements: 80, branches: 83, functions: 79 },
+      thresholds: { lines: 81, statements: 81, branches: 87, functions: 80 },
     },
   },
 });
