@@ -4,21 +4,29 @@ import type { NativeChartProps } from '../registry/native-plugin.js';
 
 const MARGIN = { top: 16, right: 24, bottom: 16, left: 120 };
 
+/**
+ * Horizontal bar chart: one bar per row, length from `valueField`, label from `labelField`.
+ * Legacy `xField` (value) and `yField` (label) are accepted; role names win when both are given.
+ *
+ * @public
+ */
 export function HorizontalBarChart({
   data,
   width,
   height,
+  valueField,
+  labelField,
   xField,
   yField,
   ariaLabel,
   theme,
 }: NativeChartProps): React.ReactElement {
-  // Infer fields
-  const numericField = xField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
-  const labelField = yField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
+  // Role name, then legacy alias, then inference from data.fields
+  const valueKey = valueField ?? xField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
+  const labelKey = labelField ?? yField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
 
   const rows = data.rows
-    .map((r) => ({ label: String(r[labelField] ?? ''), value: Number(r[numericField] ?? 0) }))
+    .map((r) => ({ label: String(r[labelKey] ?? ''), value: Number(r[valueKey] ?? 0) }))
     .filter((r) => isFinite(r.value));
 
   const innerW = width - MARGIN.left - MARGIN.right;
@@ -30,7 +38,7 @@ export function HorizontalBarChart({
     <svg
       width={width}
       height={Math.max(height, innerH + MARGIN.top + MARGIN.bottom)}
-      aria-label={ariaLabel ?? `Horizontal bar chart of ${numericField}`}
+      aria-label={ariaLabel ?? `Horizontal bar chart of ${valueKey}`}
       role="img"
       style={{ fontFamily: theme.typography.fontFamily }}
     >

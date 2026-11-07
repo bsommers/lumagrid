@@ -4,16 +4,34 @@ import type { TransformedData } from '../transforms/types.js';
 import type { ThemeDefinition } from '../theme/types.js';
 import type { ChartPlugin, RendererProps } from './types.js';
 
-/** Props that built-in SVG charts accept. */
+/**
+ * Props that built-in SVG charts accept.
+ *
+ * @public
+ */
 export interface NativeChartProps {
   data: TransformedData;
   width: number;
   height: number;
   theme: ThemeDefinition;
+  /**
+   * @deprecated Use `valueField`, `labelField` or `idField` (the mapping depends
+   * on the chart, see CHANGELOG.md). Removed in 2.0.
+   */
   xField?: string;
+  /**
+   * @deprecated Use `valueField`, `labelField` or `idField` (the mapping depends
+   * on the chart, see CHANGELOG.md). Removed in 2.0.
+   */
   yField?: string;
+  /** Groups rows into colored series (LineChart). */
   colorField?: string;
+  /** Category or display label: bar label, line x category, pie slice label, force-graph node label. */
   labelField?: string;
+  /** Numeric measure: bar length, line y value, pie slice size, choropleth color value. */
+  valueField?: string;
+  /** Identifies a node (ForceGraph). */
+  idField?: string;
   ariaLabel?: string;
   [key: string]: unknown;
 }
