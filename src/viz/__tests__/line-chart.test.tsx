@@ -217,3 +217,48 @@ describe('LineChart non-finite values', () => {
     });
   });
 });
+
+describe('LineChart role-named fields', () => {
+  const multi: TransformedData = {
+    rows: [
+      { day: 'Mon', alt: 'X1', value: 1, other: 50 },
+      { day: 'Tue', alt: 'X2', value: 2, other: 60 },
+    ],
+    fields: [
+      { key: 'day', type: 'string' },
+      { key: 'alt', type: 'string' },
+      { key: 'value', type: 'number' },
+      { key: 'other', type: 'number' },
+    ],
+  };
+  const labels = (c: HTMLElement) => Array.from(c.querySelectorAll('text')).map((t) => t.textContent);
+  const ariaOf = (c: HTMLElement) => c.querySelector('svg')!.getAttribute('aria-label');
+
+  it('selects columns with valueField/labelField', () => {
+    const { container } = renderChart(multi, { valueField: 'other', labelField: 'alt' });
+    expect(ariaOf(container)).toBe('Line chart of other');
+    expect(labels(container)).toContain('X1');
+    expect(labels(container)).not.toContain('Mon');
+  });
+
+  it('selects the same columns through the legacy yField/xField aliases', () => {
+    const { container } = renderChart(multi, { yField: 'other', xField: 'alt' });
+    expect(ariaOf(container)).toBe('Line chart of other');
+    expect(labels(container)).toContain('X1');
+  });
+
+  it('lets role names win over legacy aliases', () => {
+    const { container } = renderChart(multi, {
+      valueField: 'other', labelField: 'alt', yField: 'value', xField: 'day',
+    });
+    expect(ariaOf(container)).toBe('Line chart of other');
+    expect(labels(container)).toContain('X1');
+    expect(labels(container)).not.toContain('Mon');
+  });
+
+  it('infers the first number and string columns when no field props are given', () => {
+    const { container } = renderChart(multi);
+    expect(ariaOf(container)).toBe('Line chart of value');
+    expect(labels(container)).toContain('Mon');
+  });
+});

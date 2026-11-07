@@ -24,27 +24,41 @@ function slicePath(cx: number, cy: number, r: number, innerR: number, startAngle
   ].join(' ');
 }
 
+/**
+ * Props for {@link PieChart}.
+ *
+ * @public
+ */
 export interface PieChartProps extends NativeChartProps {
-  /** If true, renders as a donut chart. Default: false. */
+  /** If true, renders the pie as a donut with the total in the center. Default: false. */
   donut?: boolean;
 }
 
+/**
+ * Pie or donut chart: slice size from `valueField`, slice label from `labelField`.
+ * Legacy `yField` (value) and `xField` (label) are accepted; role names win when both are given.
+ *
+ * @public
+ */
 export function PieChart({
   data,
   width,
   height,
+  valueField,
+  labelField,
   xField,
   yField,
   ariaLabel,
   theme,
   donut = false,
 }: PieChartProps): React.ReactElement {
-  const valueField = yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
-  const labelField = xField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
+  // Role name, then legacy alias, then inference from data.fields
+  const valueKey = valueField ?? yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
+  const labelKey = labelField ?? xField ?? data.fields.find((f) => f.type === 'string')?.key ?? '';
 
   const slices = data.rows.map((r) => ({
-    label: String(r[labelField] ?? ''),
-    value: Math.max(0, Number(r[valueField] ?? 0)),
+    label: String(r[labelKey] ?? ''),
+    value: Math.max(0, Number(r[valueKey] ?? 0)),
   })).filter((s) => Number.isFinite(s.value) && s.value > 0);
 
   const total = slices.reduce((sum, s) => sum + s.value, 0);
@@ -69,7 +83,7 @@ export function PieChart({
   });
 
   return (
-    <svg width={width} height={height} aria-label={ariaLabel ?? `Pie chart of ${valueField}`} role="img"
+    <svg width={width} height={height} aria-label={ariaLabel ?? `Pie chart of ${valueKey}`} role="img"
       style={{ fontFamily: theme.typography.fontFamily }}>
       {paths.map(({ slice, i, lp, pct, path }) => (
         <g key={i}>

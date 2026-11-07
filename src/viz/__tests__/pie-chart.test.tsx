@@ -74,3 +74,43 @@ describe('PieChart', () => {
     expect(container.querySelector('title')?.textContent).toContain('x: 4');
   });
 });
+
+describe('PieChart role-named fields', () => {
+  const data: TransformedData = {
+    rows: [
+      { name: 'a', alt: 'p', amt: 1, other: 4 },
+      { name: 'b', alt: 'q', amt: 1, other: 12 },
+    ],
+    fields: [
+      { key: 'name', type: 'string' },
+      { key: 'alt', type: 'string' },
+      { key: 'amt', type: 'number' },
+      { key: 'other', type: 'number' },
+    ],
+  };
+  const titles = (c: HTMLElement) => [...c.querySelectorAll('title')].map((t) => t.textContent);
+
+  it('selects columns with valueField/labelField', () => {
+    const { container } = draw(data, { valueField: 'other', labelField: 'alt' });
+    expect(titles(container)).toEqual(['p: 4 (25.0%)', 'q: 12 (75.0%)']);
+    expect(container.querySelector('svg')?.getAttribute('aria-label')).toBe('Pie chart of other');
+  });
+
+  it('selects the same columns through the legacy yField/xField aliases', () => {
+    const { container } = draw(data, { yField: 'other', xField: 'alt' });
+    expect(titles(container)).toEqual(['p: 4 (25.0%)', 'q: 12 (75.0%)']);
+  });
+
+  it('lets role names win over legacy aliases', () => {
+    const { container } = draw(data, {
+      valueField: 'other', labelField: 'alt', yField: 'amt', xField: 'name',
+    });
+    expect(titles(container)).toEqual(['p: 4 (25.0%)', 'q: 12 (75.0%)']);
+  });
+
+  it('infers the first number and string columns when no field props are given', () => {
+    const { container } = draw(data);
+    expect(titles(container)).toEqual(['a: 1 (50.0%)', 'b: 1 (50.0%)']);
+    expect(container.querySelector('svg')?.getAttribute('aria-label')).toBe('Pie chart of amt');
+  });
+});

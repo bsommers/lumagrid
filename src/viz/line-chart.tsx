@@ -4,18 +4,28 @@ import type { NativeChartProps } from '../registry/native-plugin.js';
 
 const MARGIN = { top: 24, right: 24, bottom: 40, left: 56 };
 
+/**
+ * Line chart: y values from `valueField`, x categories from `labelField`, one series
+ * per distinct `colorField` value. Legacy `yField` (value) and `xField` (category) are
+ * accepted; role names win when both are given.
+ *
+ * @public
+ */
 export function LineChart({
   data,
   width,
   height,
+  valueField,
+  labelField,
   xField,
   yField,
   colorField,
   ariaLabel,
   theme,
 }: NativeChartProps): React.ReactElement {
-  const numericField = yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
-  const categoryField = xField ?? data.fields.find((f) => f.type === 'string' || f.type === 'date')?.key ?? '';
+  // Role name, then legacy alias, then inference from data.fields
+  const numericField = valueField ?? yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
+  const categoryField = labelField ?? xField ?? data.fields.find((f) => f.type === 'string' || f.type === 'date')?.key ?? '';
 
   // Group rows by colorField if provided
   type Series = { key: string; points: Array<{ x: number; y: number; label: string }> };
