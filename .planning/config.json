@@ -1,0 +1,8 @@
+{
+  "mode": "yolo",
+  "granularity": "coarse",
+  "workflow": {"research": false, "plan_check": true, "verifier": true, "auto_advance": false, "nyquist_validation": true},
+  "planning": {"commit_docs": true, "search_gitignored": false, "sub_repos": []},
+  "git": {"create_tag": false},
+  "parallelization": {"enabled": true, "plan_level": true, "task_level": false, "max_concurrent_agents": 3}
+}
