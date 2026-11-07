@@ -9,7 +9,7 @@
 
 ## 1. What VizBox Is
 
-VizBox is a layered React + TypeScript library for data-visualization widgets. It works with tabular, hierarchical, geographic, and time-series data, and it can render that data through built-in SVG chart components or through a plugin adapter for any external chart library (D3, Recharts, Nivo, or a hand-written one). Version `0.1.0`, MIT licensed, published as `vizbox` on npm (package scope in some historical config was `@vizbox/vizbox`, but the shipped `package.json` name is `vizbox`).
+VizBox is a layered React + TypeScript library for data-visualization widgets. It works with tabular, hierarchical, geographic, and time-series data, and it can render that data through built-in SVG chart components or through a plugin adapter for any external chart library (D3, Recharts, Nivo, or a hand-written one). Version `0.1.0`, Apache-2.0 licensed (see `LICENSE` and `NOTICE`), published as `vizbox` on npm (package scope in some historical config was `@vizbox/vizbox`, but the shipped `package.json` name is `vizbox`).
 
 The core idea: a small, framework-agnostic **plugin contract** (`ChartPlugin<TData, TTheme, TConfig>`) sits between VizBox's normalized data/theme representation and whatever a specific chart library needs. A dispatcher component (`ViewSwitcher`) knows nothing about D3, Recharts, or SVG internals — it only calls three things on the active plugin: `dataAdapter`, `themeAdapter`, and `Renderer`. Adding a new chart library is: write one adapter file, call `registerPlugin` once.
 
@@ -240,7 +240,7 @@ Build in this order; each step produces something independently typecheckable an
     "ui-library",
     "deno"
   ],
-  "license": "MIT"
+  "license": "Apache-2.0"
 }
 ```
 
@@ -402,27 +402,8 @@ jobs:
 ### `LICENSE`
 
 ```
-MIT License
-
-Copyright (c) 2026 Bill Sommers
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Apache License, Version 2.0 (full verbatim text in the repo-root LICENSE file;
+copyright notice in NOTICE: "VizBox, Copyright 2026 Bill Sommers").
 ```
 
 Additional devDependencies installed but not yet reflected above if starting from an older snapshot: run `npm install -D jsdom @testing-library/jest-dom` if `vitest.config.ts`'s `jsdom` environment or `vitest.setup.ts`'s `@testing-library/jest-dom/vitest` import fail to resolve.
@@ -4807,7 +4788,7 @@ const brandTheme: ThemeDefinition = {
 
 ## License
 
-MIT
+Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ````
 
