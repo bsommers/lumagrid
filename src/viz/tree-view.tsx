@@ -62,10 +62,21 @@ function TreeNodeRow({ node, depth, onSelect, theme }: TreeNodeProps): React.Rea
   );
 }
 
+/**
+ * Props for {@link TreeView}.
+ *
+ * @public
+ */
 export interface TreeViewProps extends NativeChartProps {
+  /** Called with the node when a tree row is selected. */
   onSelect?: (node: HierarchyNode) => void;
 }
 
+/**
+ * Collapsible tree of `data.hierarchy`. Ignores the field props.
+ *
+ * @public
+ */
 export function TreeView({ data, height, theme, onSelect }: TreeViewProps): React.ReactElement {
   if (!data.hierarchy) {
     return (

@@ -6,6 +6,11 @@ const PAGE_SIZE = 25;
 
 type SortDir = 'asc' | 'desc';
 
+/**
+ * Sortable, paginated table of all rows and fields. Ignores the field props.
+ *
+ * @public
+ */
 export function DataTable({ data, height, theme }: NativeChartProps): React.ReactElement {
   const [page, setPage] = useState(0);
   const [sortField, setSortField] = useState<string | null>(null);
