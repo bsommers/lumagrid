@@ -30,11 +30,11 @@
 **Goal**: Apache-2.0 relicense (done, 6660dda), npm publish, API freeze. See docs/RELEASE-PLAN.md.
 **Requirements**: REL-01, REL-02, REL-03
 **Depends on**: Phase 03
-**Plans:** 7 plans (REL-03 only; REL-01 done, REL-02 deferred by owner)
+**Plans:** 1/7 plans executed (REL-03 only; REL-01 done, REL-02 deferred by owner)
 
 Plans:
 **Wave 1**
-- [ ] 04-01-PLAN.md — Wave 1 tracer: role-based fields end to end on HorizontalBarChart, `@public`/`@deprecated` convention, CHANGELOG seed
+- [x] 04-01-PLAN.md — Wave 1 tracer: role-based fields end to end on HorizontalBarChart, `@public`/`@deprecated` convention, CHANGELOG seed
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 04-02-PLAN.md — Wave 2: role names + aliases on LineChart/PieChart/ForceGraph/Choropleth, tags on all viz exports
