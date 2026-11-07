@@ -3,21 +3,36 @@ import { sequentialColor } from '../theme/color-scale.js';
 import type { NativeChartProps } from '../registry/native-plugin.js';
 import type { GeoFeature } from '../transforms/types.js';
 
+/**
+ * Props for {@link Choropleth}.
+ *
+ * @public
+ */
 export interface ChoroplethProps extends NativeChartProps {
-  /** Field in each feature's properties to map to color. */
+  /** Property in each feature's properties to map to color. Takes precedence over `valueField`. */
   valueProperty?: string;
   /**
    * Optional pre-projected path strings. If provided, the component skips
    * projection and uses these strings directly (useful with D3 projection).
    * Keys must match feature IDs.
+   *
+   * @beta
+   * @experimental
    */
   projectedPaths?: Record<string, string>;
 }
 
+/**
+ * Choropleth map: colors each feature by a numeric property, resolved as `valueProperty`,
+ * then `valueField`, then legacy `yField`, then `'value'`. Needs `data.geo`.
+ *
+ * @public
+ */
 export function Choropleth({
   data,
   width,
   height,
+  valueField,
   yField,
   ariaLabel,
   theme,
@@ -32,7 +47,7 @@ export function Choropleth({
     );
   }
 
-  const prop = valueProperty ?? yField ?? 'value';
+  const prop = valueProperty ?? valueField ?? yField ?? 'value';
   const features: GeoFeature[] = data.geo.features;
 
   const values = features

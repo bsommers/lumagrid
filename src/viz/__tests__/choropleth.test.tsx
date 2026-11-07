@@ -74,4 +74,41 @@ describe('Choropleth', () => {
     const [a, b] = container.querySelectorAll('path');
     expect(a!.getAttribute('fill')).not.toBe(b!.getAttribute('fill'));
   });
+
+  describe('color property precedence', () => {
+    const features = geo([
+      feat('a', { pop: 1, area: 5, val: 5 }),
+      feat('b', { pop: 9, area: 5, val: 6 }),
+    ]);
+    const paths = { a: 'M0,0Z', b: 'M1,1Z' };
+    const fills = (c: HTMLElement) => [...c.querySelectorAll('path')].map((p) => p.getAttribute('fill'));
+
+    it('colors by valueField', () => {
+      const { container } = draw(features, { valueField: 'pop', projectedPaths: paths });
+      const [a, b] = fills(container);
+      expect(a).not.toBe(b);
+    });
+
+    it('lets valueProperty win over valueField', () => {
+      // area is constant, so a constant color pair proves valueProperty (not pop) was used
+      const { container } = draw(features, { valueProperty: 'area', valueField: 'pop', projectedPaths: paths });
+      const [a, b] = fills(container);
+      expect(a).toBe(b);
+    });
+
+    it('lets valueField win over yField', () => {
+      const { container } = draw(features, { valueField: 'area', yField: 'pop', projectedPaths: paths });
+      const [a, b] = fills(container);
+      expect(a).toBe(b);
+    });
+
+    it('falls back to yField, then to value', () => {
+      const viaY = draw(features, { yField: 'pop', projectedPaths: paths });
+      const [ya, yb] = fills(viaY.container);
+      expect(ya).not.toBe(yb);
+      const viaValue = draw(geo([feat('a', { value: 1 }), feat('b', { value: 9 })]), { projectedPaths: paths });
+      const [va, vb] = fills(viaValue.container);
+      expect(va).not.toBe(vb);
+    });
+  });
 });

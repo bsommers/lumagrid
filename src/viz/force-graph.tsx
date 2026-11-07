@@ -88,6 +88,11 @@ function seededUnit(seed: number, key: string): number {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 }
 
+/**
+ * Props for {@link ForceGraph}.
+ *
+ * @public
+ */
 export interface ForceGraphProps extends NativeChartProps {
   /**
    * Re-run the layout simulation when the graph's nodes or edges change.
@@ -95,28 +100,49 @@ export interface ForceGraphProps extends NativeChartProps {
    * changes existing nodes keep their positions, new nodes are placed at their
    * seeded initial position, and removed nodes are dropped — no re-simulation.
    * Resizing never triggers a relayout (positions are rescaled to fit).
+   *
+   * @beta
+   * @experimental
    */
   relayout?: boolean;
-  /** Seed for the deterministic initial node placement. Default `1`. */
+  /**
+   * Seed for the deterministic initial node placement. Default `1`.
+   *
+   * @beta
+   * @experimental
+   */
   seed?: number;
-  /** Simulation iterations per layout run. Default `60`. */
+  /**
+   * Simulation iterations per layout run. Default `60`.
+   *
+   * @beta
+   * @experimental
+   */
   iterations?: number;
 }
 
+/**
+ * Force-directed graph: node rows carry an id (`idField`) and a label (`labelField`);
+ * rows with a `source` column are edges. Legacy `xField` (id) and `yField` (label) are
+ * accepted; role names win when both are given.
+ *
+ * @public
+ */
 export function ForceGraph({
-  data, width, height, xField, yField, ariaLabel, theme,
+  data, width, height, idField, labelField, xField, yField, ariaLabel, theme,
   relayout = true, seed = 1, iterations = 60,
 }: ForceGraphProps): React.ReactElement {
   // Expect data.rows to have: id, label, [group], and optionally source/target for edges
   const nodeRows = data.rows.filter((r) => r['source'] === undefined || r['source'] === null);
   const edgeRows = data.rows.filter((r) => r['source'] !== undefined && r['source'] !== null);
 
-  const idField = xField ?? 'id';
-  const labelField = yField ?? 'label';
+  // Role name, then legacy alias, then the literal column name
+  const idKey = idField ?? xField ?? 'id';
+  const labelKey = labelField ?? yField ?? 'label';
 
   const baseNodes = nodeRows.map((r) => ({
-    id: String(r[idField] ?? r['id'] ?? ''),
-    label: String(r[labelField] ?? r['label'] ?? ''),
+    id: String(r[idKey] ?? r['id'] ?? ''),
+    label: String(r[labelKey] ?? r['label'] ?? ''),
     group: r['group'] !== undefined ? String(r['group']) : undefined,
   }));
 

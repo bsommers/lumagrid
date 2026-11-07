@@ -66,6 +66,22 @@ describe('ForceGraph', () => {
     expect(container.textContent).toContain('Named');
   });
 
+  it('honours idField/labelField for id/label', async () => {
+    const { container } = draw(mk([{ key: 'k1', name: 'Named' }]), { idField: 'key', labelField: 'name' });
+    await waitFor(() => expect(container.querySelectorAll('circle')).toHaveLength(1));
+    expect(container.textContent).toContain('Named');
+  });
+
+  it('lets idField/labelField win over xField/yField', async () => {
+    const { container } = draw(
+      mk([{ key: 'k1', name: 'Named', other: 'Other' }]),
+      { idField: 'key', labelField: 'name', xField: 'key', yField: 'other' },
+    );
+    await waitFor(() => expect(container.querySelectorAll('circle')).toHaveLength(1));
+    expect(container.textContent).toContain('Named');
+    expect(container.textContent).not.toContain('Other');
+  });
+
   describe('layout lifecycle', () => {
     const base = [
       { id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' },
