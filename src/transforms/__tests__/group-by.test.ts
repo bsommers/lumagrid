@@ -1,11 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { groupBy } from '../group-by.js';
-import type { ChainableTransform, TransformedData } from '../types.js';
-import type { GroupByOptions } from '../group-by.js';
-
-// groupBy is exported as a factory; its declared type is a union with
-// ChainableTransform, so narrow it to the callable form for tests.
-const makeGroupBy = groupBy as (field: string, valueField?: string) => ChainableTransform<GroupByOptions>;
+import type { TransformedData } from '../types.js';
 
 const data: TransformedData = {
   rows: [
@@ -20,8 +15,12 @@ const data: TransformedData = {
 };
 
 describe('groupBy', () => {
+  it('returns a transform named groupBy', () => {
+    expect(groupBy('team').name).toBe('groupBy');
+  });
+
   it('counts rows per group, bucketing missing keys as "(blank)", in first-seen order', () => {
-    const out = makeGroupBy('team').transform(data);
+    const out = groupBy('team').transform(data);
     expect(out.rows).toEqual([
       { team: 'red', count: 3 },
       { team: 'blue', count: 1 },
@@ -35,13 +34,13 @@ describe('groupBy', () => {
   });
 
   it('sums only numeric values of the value field', () => {
-    const out = makeGroupBy('team', 'score').transform(data);
+    const out = groupBy('team', 'score').transform(data);
     expect(out.rows[0]).toEqual({ team: 'red', count: 3, score: 5 });
     expect(out.fields).toContainEqual({ key: 'score', type: 'number' });
   });
 
   it('builds a two-level hierarchy whose node values are counts without a value field', () => {
-    const { hierarchy } = makeGroupBy('team').transform(data);
+    const { hierarchy } = groupBy('team').transform(data);
     expect(hierarchy?.id).toBe('root');
     expect(hierarchy?.label).toBe('team');
     expect(hierarchy?.children?.map((c) => [c.id, c.value])).toEqual([
@@ -51,19 +50,19 @@ describe('groupBy', () => {
   });
 
   it('uses summed values in the hierarchy when a value field is set', () => {
-    const { hierarchy } = makeGroupBy('team', 'score').transform(data);
+    const { hierarchy } = groupBy('team', 'score').transform(data);
     expect(hierarchy?.children?.map((c) => c.value)).toEqual([5, 4, 1]);
   });
 
   it('lets transform options override the factory field, value field and root label', () => {
-    const out = makeGroupBy('team').transform(data, { field: 'name', valueField: 'score', rootLabel: 'All' });
+    const out = groupBy('team').transform(data, { field: 'name', valueField: 'score', rootLabel: 'All' });
     expect(out.rows).toHaveLength(5);
     expect(out.rows[1]).toEqual({ name: 'b', count: 1, score: 4 });
     expect(out.hierarchy?.label).toBe('All');
   });
 
   it('produces an empty hierarchy for empty input', () => {
-    const out = makeGroupBy('team').transform({ rows: [], fields: [] });
+    const out = groupBy('team').transform({ rows: [], fields: [] });
     expect(out.rows).toEqual([]);
     expect(out.hierarchy?.children).toEqual([]);
   });

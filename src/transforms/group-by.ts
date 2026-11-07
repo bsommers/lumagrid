@@ -1,5 +1,10 @@
 import type { ChainableTransform, DataRow, FieldMeta, HierarchyNode, TransformedData } from './types.js';
 
+/**
+ * Options accepted by a `groupBy` transform at call time.
+ *
+ * @public
+ */
 export interface GroupByOptions {
   /** Field to group by. */
   field: string;
@@ -12,8 +17,18 @@ export interface GroupByOptions {
 /**
  * Groups rows by a field and produces both a flat grouped representation
  * and a two-level hierarchy (root → group children).
+ *
+ * `groupBy` is a factory: call it, then use the returned transform.
+ * Options passed at transform time override the factory arguments.
+ *
+ * @example
+ * ```ts
+ * const out = groupBy('category').transform(data);
+ * ```
+ *
+ * @public
  */
-export const groupBy: ChainableTransform<GroupByOptions> | ((field: string, valueField?: string) => ChainableTransform<GroupByOptions>) = (
+export const groupBy: (field: string, valueField?: string) => ChainableTransform<GroupByOptions> = (
   field: string,
   valueField?: string,
 ): ChainableTransform<GroupByOptions> => ({
