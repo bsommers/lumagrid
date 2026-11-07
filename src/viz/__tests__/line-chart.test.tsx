@@ -117,4 +117,103 @@ describe('LineChart non-finite values', () => {
     const { container } = renderChart(data);
     expect(container.innerHTML).not.toContain('NaN');
   });
+
+  describe('field inference and missing values', () => {
+    const paths = (c: HTMLElement) => Array.from(c.querySelectorAll('path')).map((e) => e.getAttribute('d') ?? '');
+
+    it('falls back to empty field names when no number/string fields are declared', () => {
+      const { container } = renderChart({ rows: [{ a: 1 }, { a: 2 }], fields: [] });
+      const svg = container.querySelector('svg')!;
+      expect(svg.getAttribute('aria-label')).toBe('Line chart of ');
+      expect(container.innerHTML).not.toContain('NaN');
+    });
+
+    it('uses a date field as the category axis when there is no string field', () => {
+      const { container } = renderChart({
+        rows: [{ when: '2026-01', v: 1 }, { when: '2026-02', v: 2 }],
+        fields: [{ key: 'when', type: 'date' }, { key: 'v', type: 'number' }],
+      });
+      const labels = Array.from(container.querySelectorAll('text')).map((t) => t.textContent);
+      expect(labels).toContain('2026-01');
+      expect(labels).toContain('2026-02');
+    });
+
+    it('honours explicit xField/yField over inferred fields', () => {
+      const { container } = renderChart(
+        {
+          rows: [{ day: 'Mon', alt: 'X1', value: 1, other: 50 }, { day: 'Tue', alt: 'X2', value: 2, other: 60 }],
+          fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+        },
+        { xField: 'alt', yField: 'other' },
+      );
+      expect(container.querySelector('svg')!.getAttribute('aria-label')).toBe('Line chart of other');
+      const labels = Array.from(container.querySelectorAll('text')).map((t) => t.textContent);
+      expect(labels).toContain('X1');
+      expect(labels).not.toContain('Mon');
+    });
+
+    it('treats a missing y value as 0 and a missing category as an empty label (no colorField)', () => {
+      const { container } = renderChart({
+        rows: [{ day: 'Mon', value: 5 }, { value: 3 }, { day: 'Wed' }],
+        fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+      });
+      const [d] = paths(container);
+      expect(d!.split(/[ML]/).filter(Boolean)).toHaveLength(3);
+      expect(container.innerHTML).not.toContain('NaN');
+    });
+
+    it('skips non-numeric y values instead of drawing NaN segments', () => {
+      const { container } = renderChart({
+        rows: [{ day: 'Mon', value: 5 }, { day: 'Tue', value: 'oops' }, { day: 'Wed', value: 7 }],
+        fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+      });
+      const [d] = paths(container);
+      expect(d!.split(/[ML]/).filter(Boolean)).toHaveLength(2);
+      expect(container.innerHTML).not.toContain('NaN');
+    });
+
+    it('groups rows missing the colorField value into a "default" series and handles missing x/y', () => {
+      const { container } = renderChart(
+        {
+          rows: [
+            { day: 'Mon', value: 1, s: 'a' },
+            { day: 'Tue', value: 2, s: 'a' },
+            { day: 'Mon', value: 3 },
+            { value: 4, s: 'b' },
+            { day: 'Tue', s: 'b' },
+          ],
+          fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+        },
+        { colorField: 's' },
+      );
+      expect(paths(container)).toHaveLength(3);
+      expect(container.innerHTML).not.toContain('NaN');
+    });
+
+    it('renders no x-tick labels and no NaN for empty rows', () => {
+      const { container } = renderChart({ rows: [], fields: [{ key: 'v', type: 'number' }] });
+      const texts = Array.from(container.querySelectorAll('text'));
+      expect(texts).toHaveLength(5); // y-axis ticks only
+      expect(container.innerHTML).not.toContain('NaN');
+    });
+
+    it('caps x-ticks at 5 for many categories, including first and last', () => {
+      const rows = Array.from({ length: 12 }, (_, i) => ({ day: `D${i}`, value: i }));
+      const { container } = renderChart({ rows, fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }] });
+      const xLabels = Array.from(container.querySelectorAll('text')).map((t) => t.textContent).filter((t) => t?.startsWith('D'));
+      expect(xLabels).toHaveLength(5);
+      expect(xLabels[0]).toBe('D0');
+      expect(xLabels[4]).toBe('D11');
+    });
+
+    it('extends the y domain below zero for negative values', () => {
+      const { container } = renderChart({
+        rows: [{ day: 'Mon', value: -10 }, { day: 'Tue', value: 10 }],
+        fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+      });
+      const yLabels = Array.from(container.querySelectorAll('text')).map((t) => t.textContent);
+      expect(yLabels).toContain('-10');
+      expect(yLabels).toContain('10');
+    });
+  });
 });
