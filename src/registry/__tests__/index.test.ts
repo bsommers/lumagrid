@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   registerPlugin, getPlugin, listPlugins, registerAndGetId, __resetRegistryForTests,
 } from '../index.js';
@@ -14,8 +14,17 @@ function fakePlugin(id: string): ChartPlugin<{ n: number }, { c: string }> {
 }
 
 describe('registry', () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     __resetRegistryForTests();
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warn.mockRestore();
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   it('clears all registered plugins on reset', () => {
@@ -44,6 +53,47 @@ describe('registry', () => {
     registerPlugin(first);
     registerPlugin(second);
     expect(getPlugin('registry-test-b')).toBe(second);
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not warn on the first registration of an id', () => {
+    registerPlugin(fakePlugin('registry-test-first'));
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('warns once with the id on a duplicate registration and keeps the newer plugin', () => {
+    registerPlugin(fakePlugin('registry-test-dup'));
+    const newer = fakePlugin('registry-test-dup');
+    registerPlugin(newer);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(String(warn.mock.calls[0]?.[0])).toContain('registry-test-dup');
+    expect(getPlugin('registry-test-dup')).toBe(newer);
+  });
+
+  it('stays silent but still overwrites in production', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const second = fakePlugin('registry-test-prod');
+    registerPlugin(fakePlugin('registry-test-prod'));
+    registerPlugin(second);
+    expect(warn).not.toHaveBeenCalled();
+    expect(getPlugin('registry-test-prod')).toBe(second);
+  });
+
+  it('neither throws nor warns when process is undefined, and still overwrites', () => {
+    const second = fakePlugin('registry-test-noproc');
+    registerPlugin(fakePlugin('registry-test-noproc'));
+    try {
+      vi.stubGlobal('process', undefined);
+      expect(() => registerPlugin(second)).not.toThrow();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect(warn).not.toHaveBeenCalled();
+    expect(getPlugin('registry-test-noproc')).toBe(second);
+  });
+
+  it('registerPlugin returns the plugin id', () => {
+    expect(registerPlugin(fakePlugin('registry-test-ret'))).toBe('registry-test-ret');
   });
 
   it('lists ids of registered plugins', () => {
