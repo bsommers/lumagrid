@@ -40,6 +40,7 @@
     "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
+    "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -57,6 +58,7 @@
     }
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^15.0.0",
     "@types/d3": "^7.4.0",
@@ -64,8 +66,12 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.0.0",
     "@vitest/coverage-v8": "^1.6.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
     "jsdom": "^29.1.1",
     "typescript": "^5.4.0",
+    "typescript-eslint": "^8.72.1",
     "vitest": "^1.6.0"
   },
   "keywords": [

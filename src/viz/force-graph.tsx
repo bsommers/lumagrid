@@ -104,6 +104,8 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
     if (initialized.current) return;
     initialized.current = true;
     setNodes(runSimulation(initialNodes, edges));
+    // Layout is computed once on mount by design; later data changes are not re-simulated.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const groups = [...new Set(nodes.map((n) => n.group ?? 'default'))];
@@ -134,7 +136,7 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
             opacity={0.6} />
         );
       })}
-      {nodes.map((node, i) => {
+      {nodes.map((node) => {
         const gIdx = groups.indexOf(node.group ?? 'default');
         return (
           <g key={node.id} transform={`translate(${scaleX(node.x)},${scaleY(node.y)})`}>
