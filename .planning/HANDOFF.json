@@ -1,57 +1,46 @@
 {
   "version": "1.0",
-  "timestamp": "2026-04-16T14:36:48.856Z",
-  "phase": "01",
-  "phase_name": "plugin-architecture",
-  "phase_dir": ".planning/phases/01-plugin-architecture",
-  "plan": 1,
-  "task": 16,
-  "total_tasks": 16,
-  "status": "complete",
-  "completed_tasks": [
-    {"id": 1, "name": "Create src/registry/types.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 2, "name": "Create src/registry/index.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 3, "name": "Create src/registry/native-plugin.tsx", "status": "done", "commit": "da94f7a"},
-    {"id": 4, "name": "Update viz components to use theme prop", "status": "done", "commit": "da94f7a"},
-    {"id": 5, "name": "Create src/viz/plugins.ts with pre-built native plugins", "status": "done", "commit": "da94f7a"},
-    {"id": 6, "name": "Rewrite src/core/view-switcher.tsx with plugin registry", "status": "done", "commit": "da94f7a"},
-    {"id": 7, "name": "Update src/core/container.tsx with ResizeObserver", "status": "done", "commit": "da94f7a"},
-    {"id": 8, "name": "Delete src/core/registry.ts and src/viz/registry.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 9, "name": "Update src/core/index.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 10, "name": "Update src/viz/index.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 11, "name": "Rewrite src/plugins/d3-adapter.tsx as createD3Plugin()", "status": "done", "commit": "da94f7a"},
-    {"id": 12, "name": "Create src/plugins/recharts-adapter.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 13, "name": "Update src/plugins/index.ts", "status": "done", "commit": "da94f7a"},
-    {"id": 14, "name": "Update src/index.ts barrel exports", "status": "done", "commit": "da94f7a"},
-    {"id": 15, "name": "tsc --noEmit both ESM and CJS — 0 errors", "status": "done", "commit": "da94f7a"},
-    {"id": 16, "name": "Update README.md with new quickstart + plugin examples", "status": "done", "commit": "da94f7a"}
+  "timestamp": "2026-11-07T00:00:00.000Z",
+  "phase": "04",
+  "phase_name": "release-prep",
+  "phase_dir": ".planning/phases",
+  "status": "ready",
+  "completed_phases": [
+    {"id": "01", "name": "plugin-architecture", "status": "complete", "commit": "da94f7a"},
+    {"id": "02", "name": "viz-robustness-and-tests", "status": "complete", "commits": ["f6eef36", "b765864", "9f74aee", "33ebf1b"]},
+    {"id": "03", "name": "examples-and-eslint", "status": "complete", "commits": ["cf089dc", "a6aaa35"]}
   ],
-  "remaining_tasks": [],
+  "completed_tasks": [
+    {"name": "Fix LineChart NaN x-tick (tickCount=1 -> 0/0) and audit other charts", "commit": "f6eef36"},
+    {"name": "Tests for pie, tree-view, force-graph, choropleth; fix pie single-slice + choropleth NaN/Infinity", "commit": "b765864"},
+    {"name": "Coverage thresholds in vitest.config.ts (lines/stmts 80, branches 83, funcs 79; include src/**)", "commit": "9f74aee, 33ebf1b"},
+    {"name": "Vite + React examples/ app, npm run examples:build", "commit": "cf089dc"},
+    {"name": "Flat ESLint config (typescript-eslint, react-hooks), npm run lint", "commit": "a6aaa35"},
+    {"name": "docs/RELEASE-PLAN.md (0.1.0 -> 1.0)", "commit": "41892a8"},
+    {"name": "Relicense MIT -> Apache-2.0 (LICENSE, NOTICE, package.json, README, REBUILD)", "commit": "6660dda"},
+    {"name": "Onboard to GSD (PROJECT, REQUIREMENTS, ROADMAP, STATE, config.json)", "commit": "7e7f76a"},
+    {"name": "Verified no HiveMQ mentions in tree or full git history; history secret scan clean", "commit": null}
+  ],
+  "remaining_tasks": [
+    "REL-02: publish to npm",
+    "REL-03: freeze and document public API",
+    "Raise line-chart branch coverage (~68%); barrels src/index.ts, viz/plugins.ts at 0%",
+    "ForceGraph: re-simulate on data change; seedable layout instead of Math.random",
+    "Push local commits / re-enable GitHub CI when user is ready",
+    "Approve or ignore esbuild install script (npm allowScripts warning)"
+  ],
   "blockers": [],
-  "human_actions_pending": [],
+  "human_actions_pending": ["Decide when to push to origin (GitHub CI held by user request)"],
   "decisions": [
-    {
-      "decision": "Identity adapters for native charts via createNativePlugin",
-      "rationale": "Native charts accept TransformedData and ThemeDefinition directly — no reshaping needed",
-      "phase": "01"
-    },
-    {
-      "decision": "Remove useTheme() from all viz components, use explicit theme prop",
-      "rationale": "Makes components pure functions of props, easier to test, no React context dependency",
-      "phase": "01"
-    },
-    {
-      "decision": "Keep deprecated createD3Visualization shim",
-      "rationale": "Backwards compatibility for any consumer who already wrote a D3ChartLifecycle",
-      "phase": "01"
-    },
-    {
-      "decision": "ResizeObserver only activates when width/height are CSS strings",
-      "rationale": "Avoids unnecessary DOM observation overhead on fixed-size widgets",
-      "phase": "01"
-    }
+    {"decision": "Identity adapters for native charts via createNativePlugin", "phase": "01"},
+    {"decision": "Explicit theme prop instead of useTheme() in viz components", "phase": "01"},
+    {"decision": "ResizeObserver only when width/height are CSS strings", "phase": "01"},
+    {"decision": "Coverage thresholds set just below measured values to gate regressions, scoped to src/**", "phase": "02"},
+    {"decision": "examples/ uses root vite with alias to src; excluded from root typecheck", "phase": "03"},
+    {"decision": "License is Apache-2.0", "phase": "04"},
+    {"decision": "CI runs locally only until user re-enables GitHub CI", "phase": "04"}
   ],
   "uncommitted_files": [],
-  "next_action": "Phase complete. Registry + ViewSwitcher tests added 2026-08-05 (see codebase-review-2026-08-05.md). Remaining review items: CI workflow, LICENSE file, ESLint cleanup.",
-  "context_notes": "Full plugin architecture refactor executed from plans/refactor-plugin-architecture.md. All 16 steps complete. Commit da94f7a pushed to origin/main. Zero type errors, 35 tests passing (14 transform tests + 5 registry tests + 4 ViewSwitcher tests added 2026-08-05, plus 12 nivo-adapter tests added 2026-08-06). jsdom/@testing-library/jest-dom added as devDeps with vitest.config.ts + vitest.setup.ts for component testing. Nivo adapter (createNivoPlugin) added 2026-08-06 as third reference ChartPlugin implementation, with unit tests for nivoThemeAdapter/createNivoPlugin."
+  "next_action": "Phase 04 release prep: work through docs/RELEASE-PLAN.md (API freeze, changelog, npm publish).",
+  "context_notes": "All gates green locally on 2026-11-07: typecheck, lint (0 warnings), 18 test files / 139 tests, coverage 81.56% lines, 84.49% branches, 80.26% funcs; build ESM+CJS; examples:build. Deprecated createD3Visualization shim was already removed before this session."
 }
