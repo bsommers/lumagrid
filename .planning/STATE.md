@@ -5,15 +5,15 @@ milestone_name: Release readiness
 current_phase: 4
 current_phase_name: Release prep (1.0)
 status: ready
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-11-07T23:57:40.807Z"
-state_head: 132c0856c486e998a7f3f0c6fdf48e0c52362319
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-11-07T23:59:51.537Z"
+state_head: 5bbdf3c7c477395c72fcba44b871fbbc6ef2c151
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 7
-  completed_plans: 2
-  percent: 29
+  completed_plans: 3
+  percent: 43
 ---
 
 # Project State
@@ -54,8 +54,8 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-07T23:57:40.790Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-11-07T23:59:51.520Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None
 
 ## Performance Metrics
@@ -63,7 +63,9 @@ Resume file: None
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 4 P04-02 | 10min | 3 tasks | 12 files |
+| Phase 4 P04-03 | 10min | 3 tasks | 13 files |
 
 ## Decisions
 
 - [Phase 4]: Choropleth color property resolves valueProperty, valueField, yField, then 'value'
+- [Phase 4]: groupBy stays a factory (D-15 option 1); registerPlugin warns on duplicate ids in dev only
