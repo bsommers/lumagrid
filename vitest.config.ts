@@ -9,8 +9,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      // Reporting only, not gating — see .planning/test-suite-qa-review-2026-08-09.md
-      // P3 item 13. No thresholds until a realistic floor is agreed on.
+      // Regression gate, set just below measured coverage (81.5/84.5/80.3/81.5
+      // lines/branches/functions/statements at time of writing). Ratchet upward.
+      thresholds: { lines: 80, statements: 80, branches: 83, functions: 79 },
     },
   },
 });
