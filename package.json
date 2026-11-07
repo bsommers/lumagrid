@@ -43,7 +43,9 @@
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "examples:build": "vite build --config examples/vite.config.ts",
+    "examples:dev": "vite --config examples/vite.config.ts"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
