@@ -61,7 +61,7 @@ export function Choropleth({
           return (
             <path key={feature.id} d={d} fill={getColor(feature)}
               stroke={theme.surface.background} strokeWidth={0.5}>
-              <title>{label}: {typeof val === 'number' ? val.toLocaleString() : '—'}</title>
+              <title>{label}: {typeof val === 'number' && Number.isFinite(val) ? val.toLocaleString() : '—'}</title>
             </path>
           );
         })}
