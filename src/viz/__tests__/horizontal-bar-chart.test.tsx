@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { HorizontalBarChart } from '../horizontal-bar-chart.js';
+import { nativeBarPlugin } from '../plugins.js';
 import { lightTheme } from '../../theme/light.js';
 import { categoricalColor } from '../../theme/color-scale.js';
 import type { TransformedData } from '../../transforms/types.js';
@@ -82,5 +83,80 @@ describe('HorizontalBarChart', () => {
   it('uses a custom aria-label when provided', () => {
     const { container } = renderChart({ ariaLabel: 'Sales by region' });
     expect(container.querySelector('svg')!.getAttribute('aria-label')).toBe('Sales by region');
+  });
+
+  describe('field selection', () => {
+    // Two numeric and two string columns so inference and explicit choice differ.
+    // Inferred: label=region, value=sales. Explicit: label=team, value=cost.
+    const wide: TransformedData = {
+      rows: [
+        { region: 'North', team: 'Alpha', sales: 50, cost: 10 },
+        { region: 'South', team: 'Beta', sales: 100, cost: 40 },
+      ],
+      fields: [
+        { key: 'region', type: 'string' },
+        { key: 'team', type: 'string' },
+        { key: 'sales', type: 'number' },
+        { key: 'cost', type: 'number' },
+      ],
+    };
+
+    function bars(container: HTMLElement) {
+      const rects = Array.from(container.querySelectorAll('rect'));
+      const widths = rects.map((r) => Number(r.getAttribute('width')));
+      const titles = rects.map((r) => r.querySelector('title')!.textContent);
+      return { widths, titles };
+    }
+
+    function expectCostByTeam(container: HTMLElement) {
+      const { widths, titles } = bars(container);
+      expect(widths).toHaveLength(2);
+      expect(titles).toEqual(['Alpha: 10', 'Beta: 40']);
+      // cost 10 is a quarter of cost 40
+      expect(widths[0]).toBeCloseTo(widths[1]! / 4, 0);
+    }
+
+    it('draws bars from valueField and labelField', () => {
+      const { container } = renderChart({ data: wide, valueField: 'cost', labelField: 'team' });
+      expectCostByTeam(container);
+      expect(container.querySelector('svg')!.getAttribute('aria-label')).toBe('Horizontal bar chart of cost');
+    });
+
+    it('still honors legacy xField (value) and yField (label)', () => {
+      const { container } = renderChart({ data: wide, xField: 'cost', yField: 'team' });
+      expectCostByTeam(container);
+    });
+
+    it('prefers the role name over its legacy alias when both are passed', () => {
+      const { container } = renderChart({
+        data: wide,
+        valueField: 'cost',
+        labelField: 'team',
+        xField: 'sales',
+        yField: 'region',
+      });
+      expectCostByTeam(container);
+    });
+
+    it('falls back to inferred columns when no field props are passed', () => {
+      const { container } = renderChart({ data: wide });
+      const { widths, titles } = bars(container);
+      expect(titles).toEqual(['North: 50', 'South: 100']);
+      expect(widths[0]).toBeCloseTo(widths[1]! / 2, 0);
+    });
+
+    it('receives valueField and labelField through nativeBarPlugin config', () => {
+      const { Renderer } = nativeBarPlugin;
+      const { container } = render(
+        <Renderer
+          data={wide}
+          theme={lightTheme}
+          width={400}
+          height={200}
+          config={{ valueField: 'cost', labelField: 'team' }}
+        />,
+      );
+      expectCostByTeam(container);
+    });
   });
 });
