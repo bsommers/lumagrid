@@ -6,41 +6,132 @@
   "phase_dir": ".planning/phases",
   "status": "ready",
   "completed_phases": [
-    {"id": "01", "name": "plugin-architecture", "status": "complete", "commit": "da94f7a"},
-    {"id": "02", "name": "viz-robustness-and-tests", "status": "complete", "commits": ["f6eef36", "b765864", "9f74aee", "33ebf1b"]},
-    {"id": "03", "name": "examples-and-eslint", "status": "complete", "commits": ["cf089dc", "a6aaa35"]}
+    {
+      "id": "01",
+      "name": "plugin-architecture",
+      "status": "complete",
+      "commit": "da94f7a"
+    },
+    {
+      "id": "02",
+      "name": "viz-robustness-and-tests",
+      "status": "complete",
+      "commits": [
+        "f6eef36",
+        "b765864",
+        "9f74aee",
+        "33ebf1b"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "examples-and-eslint",
+      "status": "complete",
+      "commits": [
+        "cf089dc",
+        "a6aaa35"
+      ]
+    }
   ],
   "completed_tasks": [
-    {"name": "Fix LineChart NaN x-tick (tickCount=1 -> 0/0) and audit other charts", "commit": "f6eef36"},
-    {"name": "Tests for pie, tree-view, force-graph, choropleth; fix pie single-slice + choropleth NaN/Infinity", "commit": "b765864"},
-    {"name": "Coverage thresholds in vitest.config.ts (lines/stmts 80, branches 83, funcs 79; include src/**)", "commit": "9f74aee, 33ebf1b"},
-    {"name": "Vite + React examples/ app, npm run examples:build", "commit": "cf089dc"},
-    {"name": "Flat ESLint config (typescript-eslint, react-hooks), npm run lint", "commit": "a6aaa35"},
-    {"name": "docs/RELEASE-PLAN.md (0.1.0 -> 1.0)", "commit": "41892a8"},
-    {"name": "Relicense MIT -> Apache-2.0 (LICENSE, NOTICE, package.json, README, REBUILD)", "commit": "6660dda"},
-    {"name": "Onboard to GSD (PROJECT, REQUIREMENTS, ROADMAP, STATE, config.json)", "commit": "7e7f76a"},
-    {"name": "Verified no HiveMQ mentions in tree or full git history; history secret scan clean", "commit": null}
+    {
+      "name": "Fix LineChart NaN x-tick (tickCount=1 -> 0/0) and audit other charts",
+      "commit": "f6eef36"
+    },
+    {
+      "name": "Tests for pie, tree-view, force-graph, choropleth; fix pie single-slice + choropleth NaN/Infinity",
+      "commit": "b765864"
+    },
+    {
+      "name": "Coverage thresholds in vitest.config.ts (lines/stmts 80, branches 83, funcs 79; include src/**)",
+      "commit": "9f74aee, 33ebf1b"
+    },
+    {
+      "name": "Vite + React examples/ app, npm run examples:build",
+      "commit": "cf089dc"
+    },
+    {
+      "name": "Flat ESLint config (typescript-eslint, react-hooks), npm run lint",
+      "commit": "a6aaa35"
+    },
+    {
+      "name": "docs/RELEASE-PLAN.md (0.1.0 -> 1.0)",
+      "commit": "41892a8"
+    },
+    {
+      "name": "Relicense MIT -> Apache-2.0 (LICENSE, NOTICE, package.json, README, REBUILD)",
+      "commit": "6660dda"
+    },
+    {
+      "name": "Onboard to GSD (PROJECT, REQUIREMENTS, ROADMAP, STATE, config.json)",
+      "commit": "7e7f76a"
+    },
+    {
+      "name": "Verified no HiveMQ mentions in tree or full git history; history secret scan clean",
+      "commit": null
+    },
+    {
+      "name": "LineChart branch coverage 68% -> 98% (field inference, missing/non-numeric values, tick capping, negatives)",
+      "commit": "see git log"
+    },
+    {
+      "name": "ForceGraph: relayout on node/edge change (warm start), relayout={false} opt-out, seeded placement, aspect-preserving fit (fixes cornering on resize)",
+      "commit": "see git log"
+    },
+    {
+      "name": "Approve esbuild@0.21.5 install script via package.json allowScripts",
+      "commit": "see git log"
+    }
   ],
   "remaining_tasks": [
-    "REL-02: publish to npm",
+    "TODO (deferred by owner): REL-02 publish to npm \u2014 do not start until requested",
     "REL-03: freeze and document public API",
-    "Raise line-chart branch coverage (~68%); barrels src/index.ts, viz/plugins.ts at 0%",
-    "ForceGraph: re-simulate on data change; seedable layout instead of Math.random",
-    "Push local commits / re-enable GitHub CI when user is ready",
-    "Approve or ignore esbuild install script (npm allowScripts warning)"
+    "Coverage: barrels src/index.ts, viz/plugins.ts at 0%; data-table branches",
+    "Push local commits / re-enable GitHub CI when user is ready"
   ],
   "blockers": [],
-  "human_actions_pending": ["Decide when to push to origin (GitHub CI held by user request)"],
+  "human_actions_pending": [
+    "Decide when to push to origin (GitHub CI held by user request)"
+  ],
   "decisions": [
-    {"decision": "Identity adapters for native charts via createNativePlugin", "phase": "01"},
-    {"decision": "Explicit theme prop instead of useTheme() in viz components", "phase": "01"},
-    {"decision": "ResizeObserver only when width/height are CSS strings", "phase": "01"},
-    {"decision": "Coverage thresholds set just below measured values to gate regressions, scoped to src/**", "phase": "02"},
-    {"decision": "examples/ uses root vite with alias to src; excluded from root typecheck", "phase": "03"},
-    {"decision": "License is Apache-2.0", "phase": "04"},
-    {"decision": "CI runs locally only until user re-enables GitHub CI", "phase": "04"}
+    {
+      "decision": "Identity adapters for native charts via createNativePlugin",
+      "phase": "01"
+    },
+    {
+      "decision": "Explicit theme prop instead of useTheme() in viz components",
+      "phase": "01"
+    },
+    {
+      "decision": "ResizeObserver only when width/height are CSS strings",
+      "phase": "01"
+    },
+    {
+      "decision": "Coverage thresholds set just below measured values to gate regressions, scoped to src/**",
+      "phase": "02"
+    },
+    {
+      "decision": "examples/ uses root vite with alias to src; excluded from root typecheck",
+      "phase": "03"
+    },
+    {
+      "decision": "License is Apache-2.0",
+      "phase": "04"
+    },
+    {
+      "decision": "CI runs locally only until user re-enables GitHub CI",
+      "phase": "04"
+    },
+    {
+      "decision": "ForceGraph layout keyed on node ids + edges + seed + iterations; width/height excluded so resize never relayouts",
+      "phase": "04"
+    },
+    {
+      "decision": "allowScripts pins exact esbuild version so upgrades re-prompt",
+      "phase": "04"
+    }
   ],
   "uncommitted_files": [],
   "next_action": "Phase 04 release prep: work through docs/RELEASE-PLAN.md (API freeze, changelog, npm publish).",
-  "context_notes": "All gates green locally on 2026-11-07: typecheck, lint (0 warnings), 18 test files / 139 tests, coverage 81.56% lines, 84.49% branches, 80.26% funcs; build ESM+CJS; examples:build. Deprecated createD3Visualization shim was already removed before this session."
+  "context_notes": "All gates green locally 2026-11-07: typecheck, lint, 18 files / 155 tests, coverage 82.07% lines, 88.17% branches, 80.76% funcs (thresholds 81/81/87/80); build; examples:build. Repo is public on GitHub; local commits not pushed (CI held)."
 }

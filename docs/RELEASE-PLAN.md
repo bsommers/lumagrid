@@ -11,10 +11,10 @@ Status at 0.1.0: four layers (theme, transforms, registry/core, viz/plugins), se
 ## 0.2 - correctness and hygiene
 
 - Add a `ViewSpec` and `NativeChartProps` audit: every native chart honours `xField`/`yField`/`colorField`/`ariaLabel` consistently (field meaning currently differs: bar uses `xField` for the value, pie uses `yField`).
-- `ForceGraph` only simulates on mount; re-run layout when `data` changes, and make initial placement deterministic (seeded) so tests and SSR are stable.
+- ~~`ForceGraph` only simulates on mount~~ — done 2026-11-07: relayouts when nodes/edges change (warm-started), `relayout={false}` opt-out, seeded deterministic placement (`seed`), aspect-preserving fit so resizes don't relayout.
 - `LineChart` `toPath` sorts input in place; copy first. Treat dates on the x-axis as a real scale rather than an index.
 - Resolve the `registerPlugin` global registry behaviour (duplicate ids silently overwrite): decide on warn/throw, document the registry-reset convention for tests.
-- Raise coverage thresholds as gaps close (branches in `line-chart`, `data-table`; `src/index.ts` and `viz/plugins.ts` barrel files are excluded or smoke-tested).
+- Raise coverage thresholds as gaps close (`line-chart` branches raised to ~98% on 2026-11-07; still `data-table`; `src/index.ts` and `viz/plugins.ts` barrel files are excluded or smoke-tested).
 - Decide on the Deno story (`deno.json` exists): either test in CI or drop.
 
 ## 0.3 - API freeze candidates
@@ -35,6 +35,8 @@ Likely to change before freeze: `NativeChartProps` field naming, adapter config 
 - Document each deprecation in the changelog under "Deprecated".
 
 ## Publishing to npm
+
+> **TODO — deferred by owner (2026-11-07).** Not started; do not publish until explicitly requested.
 
 1. Confirm package name availability (`vizbox`) or move to a scope.
 2. Finalise `package.json`: `repository`, `bugs`, `homepage`, `sideEffects: false`, `engines`, `peerDependencies` (react, react-dom; d3/recharts/nivo optional), `files`.
