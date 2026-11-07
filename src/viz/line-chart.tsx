@@ -41,7 +41,7 @@ export function LineChart({
   }
 
   const allSeries = [...seriesMap.values()];
-  const allYValues = allSeries.flatMap((s) => s.points.map((p) => p.y));
+  const allYValues = allSeries.flatMap((s) => s.points.map((p) => p.y)).filter(Number.isFinite);
   const minY = Math.min(...allYValues, 0);
   const maxY = Math.max(...allYValues, 1);
   const innerW = width - MARGIN.left - MARGIN.right;
@@ -53,14 +53,17 @@ export function LineChart({
 
   const toPath = (points: Series['points']) =>
     points
+      .filter((p) => Number.isFinite(p.y))
       .sort((a, b) => a.x - b.x)
       .map((p, i) => `${i === 0 ? 'M' : 'L'}${scaleX(p.x).toFixed(1)},${scaleY(p.y).toFixed(1)}`)
       .join(' ');
 
   const tickCount = Math.min(5, allXLabels.length);
-  const xTicks = Array.from({ length: tickCount }, (_, i) =>
-    Math.round((i / (tickCount - 1)) * (allXLabels.length - 1)),
-  );
+  const xTicks = tickCount <= 1
+    ? (tickCount === 1 ? [0] : [])
+    : Array.from({ length: tickCount }, (_, i) =>
+        Math.round((i / (tickCount - 1)) * (allXLabels.length - 1)),
+      );
   const yTicks = 5;
 
   return (

@@ -45,7 +45,7 @@ export function PieChart({
   const slices = data.rows.map((r) => ({
     label: String(r[labelField] ?? ''),
     value: Math.max(0, Number(r[valueField] ?? 0)),
-  })).filter((s) => s.value > 0);
+  })).filter((s) => Number.isFinite(s.value) && s.value > 0);
 
   const total = slices.reduce((sum, s) => sum + s.value, 0);
   const cx = width / 2;
@@ -55,7 +55,9 @@ export function PieChart({
 
   let cursor = -Math.PI / 2;
   const paths = slices.map((slice, i) => {
-    const angle = (slice.value / total) * (2 * Math.PI);
+    // A lone 100% slice would have identical start/end points and render as an
+    // empty arc; stop just short of a full turn so it stays visible.
+    const angle = Math.min((slice.value / total) * (2 * Math.PI), 2 * Math.PI - 1e-4);
     const start = cursor;
     const end = cursor + angle;
     cursor = end;

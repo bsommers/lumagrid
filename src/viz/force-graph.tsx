@@ -116,8 +116,8 @@ export function ForceGraph({ data, width, height, xField, yField, ariaLabel, the
   const maxX = Math.max(...xs, width);
   const minY = Math.min(...ys, 0);
   const maxY = Math.max(...ys, height);
-  const scaleX = (x: number) => pad + ((x - minX) / (maxX - minX)) * (width - pad * 2);
-  const scaleY = (y: number) => pad + ((y - minY) / (maxY - minY)) * (height - pad * 2);
+  const scaleX = (x: number) => pad + ((x - minX) / (maxX - minX || 1)) * (width - pad * 2);
+  const scaleY = (y: number) => pad + ((y - minY) / (maxY - minY || 1)) * (height - pad * 2);
 
   return (
     <svg width={width} height={height} aria-label={ariaLabel ?? 'Force-directed graph'} role="img"

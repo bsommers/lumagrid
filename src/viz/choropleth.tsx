@@ -37,14 +37,14 @@ export function Choropleth({
 
   const values = features
     .map((f) => f.properties[prop])
-    .filter((v): v is number => typeof v === 'number');
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
 
-  const minVal = Math.min(...values);
-  const maxVal = Math.max(...values, minVal + 1);
+  const minVal = values.length > 0 ? Math.min(...values) : 0;
+  const maxVal = values.length > 0 ? Math.max(...values, minVal + 1) : 1;
 
   const getColor = (feature: GeoFeature) => {
     const val = feature.properties[prop];
-    if (typeof val !== 'number') return theme.surface.border;
+    if (typeof val !== 'number' || !Number.isFinite(val)) return theme.surface.border;
     const t = (val - minVal) / (maxVal - minVal);
     return sequentialColor(theme, t);
   };

@@ -107,3 +107,14 @@ describe('LineChart', () => {
     expect(tickText!.getAttribute('x')).not.toBe('NaN');
   });
 });
+
+describe('LineChart non-finite values', () => {
+  it('ignores NaN y values without producing NaN in the path or ticks', () => {
+    const data: TransformedData = {
+      rows: [{ day: 'Mon', value: 'abc' }, { day: 'Tue', value: 5 }, { day: 'Wed', value: 7 }],
+      fields: [{ key: 'day', type: 'string' }, { key: 'value', type: 'number' }],
+    };
+    const { container } = renderChart(data);
+    expect(container.innerHTML).not.toContain('NaN');
+  });
+});
