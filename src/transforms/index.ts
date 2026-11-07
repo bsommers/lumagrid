@@ -25,3 +25,4 @@ export { geoNormalize } from './geo-normalize.js';
 export type { GeoNormalizeOptions } from './geo-normalize.js';
 
 export { TransformPipeline } from './pipeline.js';
+export type { PipelineStep } from './pipeline.js';

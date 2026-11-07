@@ -5,6 +5,8 @@ import type { TransformedData } from './types.js';
  * subsequent steps receive TransformedData. TransformPipeline.run never
  * passes per-step options — a step that needs configuration should close
  * over it (see the `flatten → aggregate` example in the pipeline tests).
+ *
+ * @public
  */
 export interface PipelineStep {
   readonly name: string;
@@ -22,6 +24,8 @@ export interface PipelineStep {
  * const pipeline = new TransformPipeline([flatten, groupBy('category')]);
  * const result = pipeline.run(rawData);
  * ```
+ *
+ * @public
  */
 export class TransformPipeline {
   private readonly steps: PipelineStep[];

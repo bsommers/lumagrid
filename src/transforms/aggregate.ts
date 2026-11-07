@@ -1,7 +1,17 @@
 import type { ChainableTransform, DataRow, FieldMeta, TransformedData } from './types.js';
 
+/**
+ * Aggregation functions supported by `aggregate`.
+ *
+ * @public
+ */
 export type AggregationFn = 'sum' | 'avg' | 'min' | 'max' | 'count' | 'first' | 'last';
 
+/**
+ * Options for the `aggregate` transform.
+ *
+ * @public
+ */
 export interface AggregateOptions {
   groupBy: string[];
   aggregations: Record<string, AggregationFn>;
@@ -33,6 +43,8 @@ function groupKey(row: DataRow, keys: string[]): string {
 
 /**
  * Groups rows and applies aggregation functions to numeric fields.
+ *
+ * @public
  */
 export const aggregate: ChainableTransform<AggregateOptions> = {
   name: 'aggregate',

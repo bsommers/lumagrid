@@ -1,5 +1,10 @@
 import type { DataRow, DataTransform, FieldMeta, TransformedData } from './types.js';
 
+/**
+ * Options for the `flatten` transform.
+ *
+ * @public
+ */
 export interface FlattenOptions {
   /** Separator used when joining nested key paths. Default: '.' */
   separator?: string;
@@ -54,6 +59,8 @@ function deriveFields(rows: DataRow[]): FieldMeta[] {
 
 /**
  * Flattens an array of nested objects into a flat array of DataRows.
+ *
+ * @public
  */
 export const flatten: DataTransform<unknown[], FlattenOptions> = {
   name: 'flatten',

@@ -2,6 +2,11 @@ import type React from 'react';
 import type { TransformedData } from '../transforms/types.js';
 import type { ThemeDefinition } from '../theme/types.js';
 
+/**
+ * Props passed to a plugin's `Renderer` component.
+ *
+ * @public
+ */
 export interface RendererProps<TData, TTheme, TConfig = Record<string, unknown>> {
   data: TData;
   theme: TTheme;
@@ -10,6 +15,12 @@ export interface RendererProps<TData, TTheme, TConfig = Record<string, unknown>>
   config?: TConfig;
 }
 
+/**
+ * A chart integration: adapters from VizBox data and theme plus the `Renderer` component that draws the chart.
+ * The renderer field is named `Renderer` (not `component`).
+ *
+ * @public
+ */
 export interface ChartPlugin<
   TData = unknown,
   TTheme = unknown,
@@ -33,7 +44,11 @@ export interface ChartPlugin<
   label?: string;
 }
 
-/** Per-view config stored in ViewSwitcher's views prop. */
+/**
+ * Per-view config stored in ViewSwitcher's views prop.
+ *
+ * @public
+ */
 export interface ViewSpec<TConfig = Record<string, unknown>> {
   /** Registered plugin id. */
   id: string;

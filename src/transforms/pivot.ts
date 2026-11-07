@@ -1,5 +1,10 @@
 import type { ChainableTransform, DataRow, FieldMeta, TransformedData } from './types.js';
 
+/**
+ * Options for the `pivot` transform.
+ *
+ * @public
+ */
 export interface PivotOptions {
   /** Field whose values become new column headers. */
   columnField: string;
@@ -17,6 +22,8 @@ function rowKey(row: DataRow, keys: string[]): string {
 
 /**
  * Pivots a tall/long dataset into a wide format.
+ *
+ * @public
  */
 export const pivot: ChainableTransform<PivotOptions> = {
   name: 'pivot',

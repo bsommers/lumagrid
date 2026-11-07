@@ -36,6 +36,11 @@ export interface NativeChartProps {
   [key: string]: unknown;
 }
 
+/**
+ * Per-view config for native plugins: the native chart props minus `data`, `width`, `height` and `theme`.
+ *
+ * @public
+ */
 export type NativeConfig = Omit<NativeChartProps, 'data' | 'width' | 'height' | 'theme'>;
 
 /**
@@ -44,6 +49,8 @@ export type NativeConfig = Omit<NativeChartProps, 'data' | 'width' | 'height' | 
  *
  * @example
  * registerPlugin(createNativePlugin('bar', HorizontalBarChart));
+ *
+ * @public
  */
 export function createNativePlugin(
   id: string,

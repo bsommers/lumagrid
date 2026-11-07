@@ -1,5 +1,10 @@
 import type { ChainableTransform, GeoData, GeoFeature, TransformedData } from './types.js';
 
+/**
+ * Options for the `geoNormalize` transform.
+ *
+ * @public
+ */
 export interface GeoNormalizeOptions {
   /**
    * Field in each row that matches a feature ID in the GeoJSON.
@@ -13,6 +18,8 @@ export interface GeoNormalizeOptions {
 /**
  * Joins tabular rows to GeoJSON features by a shared ID field,
  * copying all row properties into each feature's `properties`.
+ *
+ * @public
  */
 export const geoNormalize: ChainableTransform<GeoNormalizeOptions> = {
   name: 'geoNormalize',
