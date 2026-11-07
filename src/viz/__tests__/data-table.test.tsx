@@ -21,6 +21,47 @@ const basicData: TransformedData = {
   ],
 };
 
+describe('DataTable edge cases', () => {
+  it('renders an empty table without crashing when there are no rows and no fields', () => {
+    const { container } = renderTable({ rows: [], fields: [] });
+    expect(container.querySelectorAll('th')).toHaveLength(0);
+    expect(container.querySelectorAll('tbody tr')).toHaveLength(0);
+  });
+
+  it('sorts rows with missing values first when ascending', () => {
+    renderTable({
+      rows: [{ name: 'b' }, { name: null }, { name: 'a' }],
+      fields: [{ key: 'name', type: 'string' }],
+    });
+    fireEvent.click(screen.getByText('name'));
+    const cells = screen.getAllByRole('cell').map((c) => c.textContent);
+    expect(cells).toEqual(['—', 'a', 'b']);
+  });
+
+  it('cycles desc back to asc on a third click and resets to asc when switching columns', () => {
+    renderTable(basicData);
+    const region = screen.getByText('region');
+    fireEvent.click(region);
+    fireEvent.click(region);
+    fireEvent.click(region);
+    expect(screen.getByText(/region ↑/)).toBeInTheDocument();
+    fireEvent.click(screen.getByText('sales'));
+    expect(screen.getByText(/sales ↑/)).toBeInTheDocument();
+    expect(screen.queryByText(/region [↑↓]/)).not.toBeInTheDocument();
+  });
+
+  it('goes back a page with the previous-page button and disables next on the last page', () => {
+    const rows = Array.from({ length: 30 }, (_, i) => ({ n: i }));
+    renderTable({ rows, fields: [{ key: 'n', type: 'number' }] });
+    const [prev, next] = screen.getAllByRole('button');
+    fireEvent.click(next!);
+    expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
+    expect(next).toBeDisabled();
+    fireEvent.click(prev!);
+    expect(screen.getByText('Page 1 of 2')).toBeInTheDocument();
+  });
+});
+
 describe('DataTable rendering', () => {
   it('renders one header cell per field, using label when provided and key otherwise', () => {
     renderTable({

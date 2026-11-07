@@ -9,10 +9,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      // Regression gate, set just below measured coverage (81.5/84.5/80.3/81.5
-      // lines/branches/functions/statements at time of writing). Ratchet upward.
+      // Regression gate, set just below measured coverage (97.8/91.8/94.5/97.8
+      // lines/branches/functions/statements on 2026-11-07). Ratchet upward.
       include: ['src/**'],
-      thresholds: { lines: 81, statements: 81, branches: 87, functions: 80 },
+      thresholds: { lines: 97, statements: 97, branches: 91, functions: 94 },
     },
   },
 });
