@@ -46,7 +46,10 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "examples:build": "vite build --config examples/vite.config.ts",
-    "examples:dev": "vite --config examples/vite.config.ts"
+    "examples:dev": "vite --config examples/vite.config.ts",
+    "docs:api": "typedoc",
+    "api:check": "bash scripts/api.sh check",
+    "api:update": "npm run build:esm && bash scripts/api.sh update"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -59,6 +62,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@microsoft/api-extractor": "7.60.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^15.0.0",
     "@types/d3": "^7.4.0",
@@ -70,6 +74,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "jsdom": "^29.1.1",
+    "typedoc": "0.28.20",
     "typescript": "^5.4.0",
     "typescript-eslint": "^8.72.1",
     "vitest": "^1.6.0"

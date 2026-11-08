@@ -5,3 +5,5 @@ coverage/
 
 graphify-out/
 examples/dist/
+docs/api/
+temp/
