@@ -61,3 +61,60 @@ describe('Gallery bar card', () => {
     expect(surface()).toBe(neon);
   });
 });
+
+describe('Gallery native cards', () => {
+  const NATIVE = [
+    ['Horizontal bar chart', 'HorizontalBarChart', ['valueField', 'labelField']],
+    ['Line chart', 'LineChart', ['valueField', 'labelField', 'colorField']],
+    ['Pie chart', 'PieChart', ['valueField', 'labelField']],
+    ['Force graph', 'ForceGraph', ['idField', 'labelField']],
+    ['Choropleth', 'Choropleth', []],
+    ['Data table', 'DataTable', []],
+    ['Tree view', 'TreeView', []],
+  ] as const;
+
+  it('lists the seven native cards in catalog order', () => {
+    render(<Gallery />);
+    const titles = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
+    expect(titles.slice(0, 7)).toEqual(NATIVE.map((n) => n[0]));
+  });
+
+  it.each(NATIVE)('%s: code panel opens and names %s with role fields', (title, component, fields) => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: title });
+    fireEvent.click(within(card).getByRole('button', { name: 'Show code' }));
+    const text = card.querySelector('pre code')?.textContent ?? '';
+    expect(text).toContain(component);
+    for (const f of fields) expect(text).toContain(f);
+    expect(text).not.toMatch(/\b[xy]Field\b/);
+  });
+
+  it('sorts the table when a column header is clicked', () => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: 'Data table' });
+    const firstCell = () => card.querySelector('tbody tr td')?.textContent;
+    expect(firstCell()).toBe('North');
+    fireEvent.click(within(card).getByText('Revenue'));
+    expect(firstCell()).toBe('East');
+    fireEvent.click(within(card).getByText(/Revenue/));
+    expect(firstCell()).toBe('South');
+  });
+
+  it('relayouts the force graph with a new seed', () => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: 'Force graph' });
+    const positions = () => [...card.querySelectorAll('svg g[transform]')].map((g) => g.getAttribute('transform')).join('|');
+    const before = positions();
+    expect(before).not.toBe('');
+    fireEvent.click(within(card).getByRole('button', { name: 'New layout' }));
+    expect(positions()).not.toBe(before);
+  });
+
+  it('shows the label of the selected tree node', () => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: 'Tree view' });
+    expect(within(card).getByText('nothing yet')).toBeInTheDocument();
+    fireEvent.click(within(card).getByText('South'));
+    expect(within(card).getByText('South', { selector: 'strong' })).toBeInTheDocument();
+  });
+});
