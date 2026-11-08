@@ -1,0 +1,2 @@
+/* Single source of the palette and font stacks: the brand tokens (D-07). Do not redefine colors here. */
+@import '../../../brand/tokens.css';

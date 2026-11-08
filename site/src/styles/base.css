@@ -1,0 +1,79 @@
+/* Global base styles. Colors and fonts come from the brand tokens (D-07). */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--lg-bg-black, #000000);
+  color: var(--lg-text-body, #C9D1D9);
+  font-family: var(--lg-font-body, ui-sans-serif, system-ui, sans-serif);
+  line-height: 1.6;
+  /* Never scroll horizontally (D-13); clip is preferred where supported. */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--lg-font-display, ui-sans-serif, system-ui, sans-serif);
+  color: var(--lg-text, #E6EDF3);
+  line-height: 1.2;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--lg-font-mono, ui-monospace, monospace);
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Wide code scrolls inside its own box instead of widening the page. */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+a {
+  color: var(--lg-cyan-light, #7DF9FF);
+}
+
+a:hover {
+  color: var(--lg-cyan, #00E5FF);
+}
+
+:focus-visible {
+  outline: 2px solid var(--lg-cyan-light, #7DF9FF);
+  outline-offset: 2px;
+}
+
+/* Content sits above the fixed grid background. */
+main {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(12px, 4vw, 32px);
+}
+
+main section {
+  scroll-margin-top: 16px;
+}
