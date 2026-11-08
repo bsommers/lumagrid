@@ -58,6 +58,55 @@
       "width": 1280,
       "height": 320,
       "background": null
+    },
+    {
+      "src": "brand/icons/chart-bar.svg",
+      "out": "docs/assets/chart-icons/chart-bar.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-line.svg",
+      "out": "docs/assets/chart-icons/chart-line.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-pie.svg",
+      "out": "docs/assets/chart-icons/chart-pie.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-force-graph.svg",
+      "out": "docs/assets/chart-icons/chart-force-graph.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-choropleth.svg",
+      "out": "docs/assets/chart-icons/chart-choropleth.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-table.svg",
+      "out": "docs/assets/chart-icons/chart-table.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-tree.svg",
+      "out": "docs/assets/chart-icons/chart-tree.png",
+      "width": 128,
+      "height": 128,
+      "background": null
     }
   ],
   "ico": {

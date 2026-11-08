@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Force graph</title>
+  <g stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="32" y1="32" x2="12" y2="12"/>
+    <line x1="32" y1="32" x2="52" y2="16"/>
+    <line x1="32" y1="32" x2="12" y2="48"/>
+    <line x1="32" y1="32" x2="52" y2="52"/>
+    <line x1="12" y1="12" x2="52" y2="16"/>
+    <line x1="12" y1="48" x2="52" y2="52"/>
+  </g>
+  <g fill="#00E5FF" stroke="#7DF9FF" stroke-width="2">
+    <circle cx="12" cy="12" r="4"/>
+    <circle cx="52" cy="16" r="4"/>
+    <circle cx="12" cy="48" r="4"/>
+    <circle cx="52" cy="52" r="4"/>
+  </g>
+  <circle cx="32" cy="32" r="7" fill="#FF2BD6"/>
+</svg>

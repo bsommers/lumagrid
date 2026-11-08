@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Choropleth</title>
+  <g stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="24,12 32,16 32,24 24,28 16,24 16,16" fill="#00E5FF" fill-opacity="0.2"/>
+    <polygon points="40,12 48,16 48,24 40,28 32,24 32,16" fill="#00E5FF" fill-opacity="0.6"/>
+    <polygon points="16,24 24,28 24,36 16,40 8,36 8,28" fill="#00E5FF" fill-opacity="0.45"/>
+    <polygon points="32,24 40,28 40,36 32,40 24,36 24,28" fill="#FF2BD6" fill-opacity="0.5"/>
+    <polygon points="48,24 56,28 56,36 48,40 40,36 40,28" fill="#00E5FF" fill-opacity="0.2"/>
+    <polygon points="24,36 32,40 32,48 24,52 16,48 16,40" fill="#00E5FF" fill-opacity="0.2"/>
+    <polygon points="40,36 48,40 48,48 40,52 32,48 32,40" fill="#00E5FF" fill-opacity="0.2"/>
+  </g>
+</svg>

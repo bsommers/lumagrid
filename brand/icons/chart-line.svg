@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Line chart</title>
+  <g fill="none" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="8,8 8,56 56,56"/>
+  </g>
+  <polyline points="12,48 24,32 36,40 48,16 56,24" fill="none" stroke="#7DF9FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#00E5FF">
+    <circle cx="12" cy="48" r="3"/>
+    <circle cx="24" cy="32" r="3"/>
+    <circle cx="36" cy="40" r="3"/>
+    <circle cx="48" cy="16" r="3" fill="#FF2BD6"/>
+    <circle cx="56" cy="24" r="3"/>
+  </g>
+</svg>
