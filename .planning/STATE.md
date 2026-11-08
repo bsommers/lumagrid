@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: Release readiness
 current_phase: 05
 current_phase_name: Brand, docs & showcase
-current_plan: 15
+current_plan: 16
 status: ready
-stopped_at: Completed 05-14-PLAN.md
-last_updated: "2026-11-08T18:14:55.456Z"
-state_head: 198f537ef5d2b6fbbad252f74f06df79148fe829
+stopped_at: Completed 05-15-PLAN.md
+last_updated: "2026-11-08T22:49:44.064Z"
+state_head: c9a3c98573926351254ce7f01831a22f8c531096
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 23
-  completed_plans: 21
+  completed_plans: 22
   percent: 60
 ---
 
@@ -25,7 +25,7 @@ progress:
 ## Current Position
 
 Phase: 05 (Brand, docs & showcase) — EXECUTING
-Current Plan: 15
+Current Plan: 16
 Total Plans in Phase: 16
 Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
@@ -57,8 +57,8 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-08T18:14:55.405Z
-Stopped at: Completed 05-14-PLAN.md
+Last session: 2026-11-08T22:49:44.014Z
+Stopped at: Completed 05-15-PLAN.md
 Resume file: None
 
 ## Performance Metrics
@@ -81,6 +81,7 @@ Resume file: None
 | Phase 05 P10 | 12 min | 3 tasks | 24 files |
 | Phase 05 P11 | 8 min | 2 tasks | 11 files |
 | Phase 05 P12 | 14min | 2 tasks | 33 files |
+| Phase 05 P15 | ~25m | 3 tasks | 2 files |
 
 ## Decisions
 
@@ -98,6 +99,7 @@ Resume file: None
 - [Phase 05]: Brand art tagline path serialized locally; opentype toPathData emits NaN at some sizes
 - [Phase 05]: 05-10: force and tree demos hold state inside the displayed code region; force graph keyed by seed so a new seed relayouts from scratch
 - [Phase 05]: 05-11: grid-bg at z-index 0 with main at z-index 1 (opaque body background would hide a z-index -1 grid)
+- [Phase 05]: 05-15: Pages workflow uses Node 22 and copies docs/api into site/dist/api after the Vite build; repo renamed to bsommers/lumagrid with user approval
 
 ## Accumulated Context
 

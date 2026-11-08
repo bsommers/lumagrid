@@ -53,7 +53,7 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 14/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
+**Plans:** 15/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
 **Wave 1**
@@ -87,7 +87,7 @@ Plans:
 - [x] 05-14-PLAN.md — Wave 8: short README quickstart, docs hub, CHANGELOG and CONTRIBUTING updates
 
 **Wave 9** *(blocked on Wave 8 completion)*
-- [ ] 05-15-PLAN.md — Wave 9: hardened Pages workflow with local dry-run; human checkpoints: `gh repo rename`, `git remote set-url`
+- [x] 05-15-PLAN.md — Wave 9: hardened Pages workflow with local dry-run; human checkpoints: `gh repo rename`, `git remote set-url`
 
 **Wave 10** *(blocked on Wave 9 completion)*
 - [ ] 05-16-PLAN.md — Wave 10: human checkpoints: enable Pages, push; verify the live site
