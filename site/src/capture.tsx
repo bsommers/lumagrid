@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider, useTheme, lightTheme, darkTheme } from 'lumagrid';
-import { HorizontalBarChart } from 'lumagrid/viz';
-import { sales, salesFields } from '../../examples/shared/demos';
+import { CollapseManager, ThemeProvider, useTheme, lightTheme, darkTheme } from 'lumagrid';
+import {
+  HorizontalBarChart, LineChart, PieChart, ForceGraph, Choropleth, DataTable, TreeView,
+} from 'lumagrid/viz';
+import { demoViews, hexProjectedPaths } from '../../examples/shared/demos';
 
 /** Charts the capture page can render, in display order. */
-export const CAPTURE_CHARTS = ['bar'] as const;
+export const CAPTURE_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree'] as const;
 export type CaptureChart = (typeof CAPTURE_CHARTS)[number];
 
 const CAPTURE_THEMES = ['light', 'dark'] as const;
@@ -53,11 +55,31 @@ function useCaptureReady(): boolean {
   return ready;
 }
 
-function Chart({ chart, width, height }: { chart: CaptureChart; width: number; height: number }): React.ReactElement {
+function Chart(
+  { chart, seed, width, height }: { chart: CaptureChart; seed: number; width: number; height: number },
+): React.ReactElement {
   const theme = useTheme();
+  const { data, config } = demoViews[chart];
+  const common = { data, width, height, theme, ...config };
   switch (chart) {
     case 'bar':
-      return <HorizontalBarChart data={sales} width={width} height={height} theme={theme} {...salesFields} />;
+      return <HorizontalBarChart {...common} />;
+    case 'line':
+      return <LineChart {...common} />;
+    case 'pie':
+      return <PieChart {...common} />;
+    case 'force':
+      return <ForceGraph {...common} seed={seed} />;
+    case 'choropleth':
+      return <Choropleth {...common} projectedPaths={hexProjectedPaths(width, height)} />;
+    case 'table':
+      return <DataTable {...common} />;
+    case 'tree':
+      return (
+        <CollapseManager defaultExpanded={['all']}>
+          <TreeView {...common} />
+        </CollapseManager>
+      );
   }
 }
 
@@ -81,7 +103,7 @@ export function CaptureApp({ search }: { search: string }): React.ReactElement {
           background: theme.surface.background,
         }}
       >
-        <Chart chart={params.chart} width={CAPTURE_WIDTH} height={CAPTURE_HEIGHT} />
+        <Chart chart={params.chart} seed={params.seed} width={CAPTURE_WIDTH} height={CAPTURE_HEIGHT} />
       </div>
     </ThemeProvider>
   );
