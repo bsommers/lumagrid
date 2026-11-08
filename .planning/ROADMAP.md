@@ -5,7 +5,7 @@
 - [x] **Phase 01: Plugin architecture** - ChartPlugin registry, adapters, ResizeObserver, tests (complete; commit da94f7a + follow-ups)
 - [x] **Phase 02: Viz robustness + test completion** (complete 2026-11-07)
 - [x] **Phase 03: Examples app + ESLint** (complete 2026-11-07)
-- [ ] **Phase 04: Release prep (1.0)**
+- [x] **Phase 04: Release prep (1.0)** (completed 2026-11-07)
 
 ### Phase 01: Plugin architecture
 
@@ -30,7 +30,7 @@
 **Goal**: Apache-2.0 relicense (done, 6660dda), npm publish, API freeze. See docs/RELEASE-PLAN.md.
 **Requirements**: REL-01, REL-02, REL-03
 **Depends on**: Phase 03
-**Plans:** 7/7 plans executed (REL-03 only; REL-01 done, REL-02 deferred by owner)
+**Plans:** 7/7 plans complete (REL-03 only; REL-01 done, REL-02 deferred by owner)
 
 Plans:
 **Wave 1**
