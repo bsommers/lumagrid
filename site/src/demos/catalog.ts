@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import type { ComponentType, LazyExoticComponent } from 'react';
 import BarDemo from './BarDemo';
 import barSource from './BarDemo.tsx?raw';
@@ -13,20 +14,38 @@ import TableDemo from './TableDemo';
 import tableSource from './TableDemo.tsx?raw';
 import TreeDemo from './TreeDemo';
 import treeSource from './TreeDemo.tsx?raw';
+import d3Source from './D3Demo.tsx?raw';
+import rechartsSource from './RechartsDemo.tsx?raw';
+import nivoSource from './NivoDemo.tsx?raw';
 import { extractRegion } from '../lib/region';
 import type { DemoProps } from './types';
 
 export type DemoComponent = ComponentType<DemoProps> | LazyExoticComponent<ComponentType<DemoProps>>;
 
-export interface CatalogEntry {
+interface BaseEntry {
   id: string;
   title: string;
   description: string;
-  kind: 'native' | 'adapter';
   Component: DemoComponent;
   /** Usage region of the very file that renders the chart (single source). */
   code: string;
 }
+
+export interface NativeEntry extends BaseEntry {
+  kind: 'native';
+}
+
+/** Adapter demos load on demand: the dynamic import puts d3, recharts and nivo in their own chunks. */
+export interface AdapterEntry extends BaseEntry {
+  kind: 'adapter';
+  load: () => Promise<{ default: ComponentType<DemoProps> }>;
+}
+
+export type CatalogEntry = NativeEntry | AdapterEntry;
+
+const loadD3 = () => import('./D3Demo');
+const loadRecharts = () => import('./RechartsDemo');
+const loadNivo = () => import('./NivoDemo');
 
 /** Gallery entries in display order. */
 export const catalog: CatalogEntry[] = [
@@ -85,5 +104,32 @@ export const catalog: CatalogEntry[] = [
     kind: 'native',
     Component: TreeDemo,
     code: extractRegion(treeSource, 'code'),
+  },
+  {
+    id: 'd3',
+    title: 'D3 bars',
+    description: 'A D3 plugin: hover a bar to highlight it.',
+    kind: 'adapter',
+    load: loadD3,
+    Component: lazy(loadD3),
+    code: extractRegion(d3Source, 'code'),
+  },
+  {
+    id: 'recharts',
+    title: 'Recharts bars',
+    description: 'A Recharts plugin with the library tooltip.',
+    kind: 'adapter',
+    load: loadRecharts,
+    Component: lazy(loadRecharts),
+    code: extractRegion(rechartsSource, 'code'),
+  },
+  {
+    id: 'nivo',
+    title: 'Nivo bars',
+    description: 'A Nivo plugin with the library tooltip.',
+    kind: 'adapter',
+    load: loadNivo,
+    Component: lazy(loadNivo),
+    code: extractRegion(nivoSource, 'code'),
   },
 ];

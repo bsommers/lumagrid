@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { extractRegion } from '../lib/region';
 import { Gallery } from '../sections/Gallery';
 
@@ -116,5 +116,43 @@ describe('Gallery native cards', () => {
     expect(within(card).getByText('nothing yet')).toBeInTheDocument();
     fireEvent.click(within(card).getByText('South'));
     expect(within(card).getByText('South', { selector: 'strong' })).toBeInTheDocument();
+  });
+});
+
+describe('Gallery adapter cards', () => {
+  it('lists ten cards: seven native then three adapters', () => {
+    render(<Gallery />);
+    const titles = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
+    expect(titles).toHaveLength(10);
+    expect(titles.slice(7)).toEqual(['D3 bars', 'Recharts bars', 'Nivo bars']);
+  });
+
+  it('marks exactly three catalog entries as lazy adapters whose loaders resolve to function components', async () => {
+    const { catalog } = await import('../demos/catalog');
+    const adapters = catalog.filter((e) => e.kind === 'adapter');
+    expect(adapters.map((a) => a.id)).toEqual(['d3', 'recharts', 'nivo']);
+    for (const entry of adapters) {
+      if (entry.kind !== 'adapter') continue;
+      const mod = await entry.load();
+      expect(typeof mod.default).toBe('function');
+    }
+  });
+
+  it('draws the adapter charts once their lazy chunks load', async () => {
+    const { container } = render(<Gallery />);
+    for (const id of ['d3', 'recharts', 'nivo']) {
+      await waitFor(() => {
+        expect(container.querySelector(`[data-lg-surface="${id}"] svg`)).not.toBeNull();
+      });
+    }
+  });
+
+  it('shows the adapter source in the code panel', async () => {
+    render(<Gallery />);
+    for (const [title, needle] of [['D3 bars', 'createD3Plugin'], ['Recharts bars', 'createRechartsPlugin'], ['Nivo bars', 'createNivoPlugin']] as const) {
+      const card = screen.getByRole('article', { name: title });
+      fireEvent.click(within(card).getByRole('button', { name: 'Show code' }));
+      expect(card.querySelector('pre code')?.textContent).toContain(needle);
+    }
   });
 });

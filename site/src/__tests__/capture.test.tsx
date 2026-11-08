@@ -78,7 +78,7 @@ describe('CaptureApp', () => {
       expect(getByRole('alert').textContent).toBe('Invalid capture request.');
       expect(container.querySelector('#capture')).toBeNull();
       expect(container.querySelector('img, script, b')).toBeNull();
-      expect(container.innerHTML).not.toContain('onerror');
+      expect(container.outerHTML).not.toContain('onerror');
     });
   }
 

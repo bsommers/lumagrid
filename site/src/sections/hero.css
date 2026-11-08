@@ -1,0 +1,78 @@
+/* Hero section. Colors come from the brand tokens (brand/tokens.css) with literal fallbacks. */
+.lg-hero {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 64px 16px 48px;
+  text-align: center;
+  color: var(--lg-text-body, #C9D1D9);
+  font-family: var(--lg-font-body, ui-sans-serif, system-ui, sans-serif);
+}
+.lg-hero *, .lg-hero *::before, .lg-hero *::after { box-sizing: border-box; }
+
+.lg-hero-logo { margin: 0; width: 100%; line-height: 0; }
+.lg-hero-lockup { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; }
+
+.lg-hero-tagline {
+  margin: 0;
+  font-family: var(--lg-font-display, ui-sans-serif, system-ui, sans-serif);
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  color: var(--lg-text, #E6EDF3);
+}
+
+.lg-hero-install {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 8px 8px 8px 16px;
+  border: 1px solid var(--lg-border, #1F2A37);
+  border-radius: 8px;
+  background: var(--lg-bg-card, #0B0F14);
+}
+.lg-hero-command {
+  font-family: var(--lg-font-mono, ui-monospace, monospace);
+  color: var(--lg-cyan-light, #7DF9FF);
+  overflow-wrap: anywhere;
+}
+.lg-hero-copy, .lg-hero-btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: 1px solid var(--lg-cyan, #00E5FF);
+  border-radius: 8px;
+  background: var(--lg-cyan, #00E5FF);
+  color: #000000;
+  cursor: pointer;
+  text-decoration: none;
+}
+.lg-hero-copy:focus-visible, .lg-hero-btn:focus-visible, .lg-hero-code:focus-visible {
+  outline: 2px solid var(--lg-cyan-light, #7DF9FF);
+  outline-offset: 2px;
+}
+
+.lg-hero-code {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  text-align: left;
+  border: 1px solid var(--lg-border, #1F2A37);
+  border-radius: 12px;
+  background: var(--lg-bg-card, #0B0F14);
+  color: var(--lg-text-body, #C9D1D9);
+  font-family: var(--lg-font-mono, ui-monospace, monospace);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.lg-hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.lg-hero-btn-secondary {
+  background: transparent;
+  color: var(--lg-cyan, #00E5FF);
+}
