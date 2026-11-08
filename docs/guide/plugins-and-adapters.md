@@ -11,6 +11,9 @@ Every chart in Lumagrid is a plugin. This chapter explains the plugin contract, 
 - [The seven native plugins](#the-seven-native-plugins)
 - [Writing your own plugin](#writing-your-own-plugin)
 - [Adapters](#adapters)
+  - [D3](#d3)
+  - [Recharts](#recharts)
+  - [Nivo](#nivo)
 
 ## The ChartPlugin contract
 
@@ -173,3 +176,232 @@ export function Example() {
 Because the same typed `config` reaches `dataAdapter`, `themeAdapter` and `Renderer`, a view can steer all three with one object, for example `{ id: 'stripe-bars', config: { valueKey: 'revenue' } }`.
 
 ## Adapters
+
+Three factories turn an existing chart library into a plugin, so you write only the library-specific drawing code. Each factory supplies the theme adapter for you.
+
+| Factory | Library | You supply | Install in your app |
+|---------|---------|------------|---------------------|
+| `createD3Plugin` | D3 | `dataAdapter`, and the `mount`, `update` and `destroy` callbacks | `npm install d3` |
+| `createRechartsPlugin` | Recharts | a `Renderer` component (the `dataAdapter` is optional) | `npm install recharts` |
+| `createNivoPlugin` | Nivo | a `dataAdapter` and a `Renderer` component | `npm install @nivo/bar` (or another Nivo chart package) |
+
+The factories live in `lumagrid/plugins`. Lumagrid does not bundle d3, recharts or Nivo: install the ones you use in your own project. The examples below were written against d3 7.9.2, recharts 3.10.1 and @nivo/bar 0.99.0. The factories themselves do not import those libraries; your own drawing code does, so install a library only if you use its adapter.
+
+**Stability.** The three factory functions are stable. The adapter config and theme types are experimental and may change in a minor release: `D3Theme`, `D3PluginOptions`, `RechartsTheme`, `RechartsRow`, `RechartsConfig`, `NivoTheme` and `NivoPluginOptions`, plus the `rechartsThemeAdapter` and `nivoThemeAdapter` helpers. See [STABILITY](../STABILITY.md) for the full list.
+
+### D3
+
+`createD3Plugin` gives D3 an element to draw into and an imperative lifecycle. `mount` runs once when the chart first appears, `update` runs when data, size or theme change, and `destroy` runs when it unmounts. The theme passed to `mount` and `update` is a `D3Theme` with `colors`, `sequentialColors`, `fontFamily`, `fontSize`, `background`, `foreground` and `border`.
+
+Build the chart with D3's `append`, `attr` and `text` calls, as below, so that chart text is always inserted as text and never parsed as markup.
+
+<!-- snippet: adapters-d3#d3-bars -->
+
+```tsx
+import { select, scaleBand, scaleLinear } from 'd3';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
+import { createD3Plugin } from 'lumagrid/plugins';
+import type { D3Theme } from 'lumagrid/plugins';
+
+interface Bar {
+  label: string;
+  value: number;
+}
+
+// Draw (or redraw) the bars. D3 builds elements with append, attr and text only.
+function draw(el: HTMLDivElement, bars: Bar[], theme: D3Theme, width: number, height: number): void {
+  const x = scaleBand<string>().domain(bars.map((b) => b.label)).range([0, width]).padding(0.2);
+  const max = Math.max(...bars.map((b) => b.value), 1);
+  const y = scaleLinear().domain([0, max]).range([height - 20, 0]);
+
+  const svg = select(el).selectAll<SVGSVGElement, null>('svg').data([null]).join('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+  svg.selectAll<SVGRectElement, Bar>('rect')
+    .data(bars)
+    .join('rect')
+    .attr('x', (d) => x(d.label) ?? 0)
+    .attr('y', (d) => y(d.value))
+    .attr('width', x.bandwidth())
+    .attr('height', (d) => height - 20 - y(d.value))
+    .attr('fill', theme.colors[0] ?? 'steelblue');
+
+  svg.selectAll<SVGTextElement, Bar>('text')
+    .data(bars)
+    .join('text')
+    .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
+    .attr('y', height - 6)
+    .attr('text-anchor', 'middle')
+    .attr('fill', theme.foreground)
+    .attr('font-family', theme.fontFamily)
+    .attr('font-size', theme.fontSize)
+    .text((d) => d.label);
+}
+
+const d3BarsPlugin = createD3Plugin<Bar[]>({
+  id: 'd3-bars',
+  label: 'Bars (D3)',
+  // Reshape TransformedData into the array the D3 code wants.
+  dataAdapter: (data: TransformedData) =>
+    data.rows.map((row) => ({ label: String(row['region'] ?? ''), value: Number(row['revenue'] ?? 0) })),
+  // mount runs once, update on every data, size or theme change, destroy on unmount.
+  mount: draw,
+  update: draw,
+  destroy(el) {
+    select(el).selectAll('*').remove();
+  },
+});
+
+registerPlugin(d3BarsPlugin);
+
+const sales: TransformedData = {
+  rows: [
+    { region: 'North', revenue: 12000 },
+    { region: 'South', revenue: 14200 },
+    { region: 'East', revenue: 9300 },
+  ],
+  fields: [
+    { key: 'region', type: 'string' },
+    { key: 'revenue', type: 'number' },
+  ],
+};
+
+export function Example() {
+  return (
+    <ThemeProvider theme="light">
+      <WidgetContainer data={sales} title="D3 bars" width={500} height={300}>
+        {(data, width, height) => (
+          <ViewSwitcher views={[{ id: 'd3-bars' }]} data={data} width={width} height={height} />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
+  );
+}
+```
+
+### Recharts
+
+`createRechartsPlugin` takes your `Renderer`. The default `dataAdapter` turns each row into an object with a `name` (the first string column, or `config.nameKey`) and a `value` (the first number column, or `config.dataKey`), and keeps the original columns too. The `RechartsTheme` has `colors`, `fontFamily`, `fontSize`, `gridColor`, `textColor` and `background`.
+
+Use a fixed-size chart such as `BarChart` and pass it the `width` and `height` that the plugin receives. A `ResponsiveContainer` measures its parent, and measures zero in a test renderer such as jsdom.
+
+<!-- snippet: adapters-recharts#recharts-bars -->
+
+```tsx
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
+import { createRechartsPlugin } from 'lumagrid/plugins';
+
+// The default data adapter finds the first string column (name) and the first number
+// column (value). Pass config.nameKey and config.dataKey to choose columns yourself.
+const rechartsBarsPlugin = createRechartsPlugin({
+  id: 'recharts-bars',
+  label: 'Bars (Recharts)',
+  Renderer: ({ data, theme, width, height, config }) => (
+    // A fixed-size BarChart takes its size from the props the plugin receives.
+    <BarChart width={width} height={height} data={data}>
+      <CartesianGrid stroke={theme.gridColor} />
+      <XAxis
+        dataKey={config?.nameKey ?? 'name'}
+        tick={{ fill: theme.textColor, fontFamily: theme.fontFamily }}
+      />
+      <YAxis tick={{ fill: theme.textColor }} />
+      <Bar dataKey={config?.dataKey ?? 'value'} fill={theme.colors[0] ?? '#3b82f6'} />
+    </BarChart>
+  ),
+});
+
+registerPlugin(rechartsBarsPlugin);
+
+const sales: TransformedData = {
+  rows: [
+    { region: 'North', revenue: 12000 },
+    { region: 'South', revenue: 14200 },
+    { region: 'East', revenue: 9300 },
+  ],
+  fields: [
+    { key: 'region', type: 'string' },
+    { key: 'revenue', type: 'number' },
+  ],
+};
+
+export function Example() {
+  return (
+    <ThemeProvider theme="light">
+      <WidgetContainer data={sales} title="Recharts bars" width={500} height={300}>
+        {(data, width, height) => (
+          <ViewSwitcher views={[{ id: 'recharts-bars' }]} data={data} width={width} height={height} />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
+  );
+}
+```
+
+### Nivo
+
+`createNivoPlugin` requires a `dataAdapter`, because Nivo chart types disagree about their data shape (a bar chart wants flat rows, a pie chart wants `{ id, value }` items, a line chart wants series of points). The `NivoTheme` matches the shape of Nivo's own `theme` prop (`background`, `text`, `axis`, `grid` and `tooltip`) and adds a `colors` array for Nivo's separate `colors` prop, so you pass both straight through.
+
+Use the fixed-size component (`Bar`) with the plugin's `width` and `height` rather than `ResponsiveBar`, which also measures its parent.
+
+<!-- snippet: adapters-nivo#nivo-bars -->
+
+```tsx
+import { Bar } from '@nivo/bar';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
+import { createNivoPlugin } from 'lumagrid/plugins';
+
+// A type alias (not an interface) so the rows satisfy Nivo's BarDatum index signature.
+type Row = { region: string; revenue: number };
+
+// dataAdapter is required: Nivo chart types disagree about the data shape they expect.
+const nivoBarsPlugin = createNivoPlugin<Row[]>({
+  id: 'nivo-bars',
+  label: 'Bars (Nivo)',
+  dataAdapter: (data: TransformedData) =>
+    data.rows.map((row) => ({ region: String(row['region'] ?? ''), revenue: Number(row['revenue'] ?? 0) })),
+  Renderer: ({ data, theme, width, height }) => (
+    // The fixed-size Bar component takes its size from the props the plugin receives.
+    <Bar
+      data={data}
+      width={width}
+      height={height}
+      keys={['revenue']}
+      indexBy="region"
+      margin={{ top: 20, right: 20, bottom: 40, left: 60 }}
+      theme={theme}
+      colors={theme.colors}
+    />
+  ),
+});
+
+registerPlugin(nivoBarsPlugin);
+
+const sales: TransformedData = {
+  rows: [
+    { region: 'North', revenue: 12000 },
+    { region: 'South', revenue: 14200 },
+    { region: 'East', revenue: 9300 },
+  ],
+  fields: [
+    { key: 'region', type: 'string' },
+    { key: 'revenue', type: 'number' },
+  ],
+};
+
+export function Example() {
+  return (
+    <ThemeProvider theme="light">
+      <WidgetContainer data={sales} title="Nivo bars" width={500} height={300}>
+        {(data, width, height) => (
+          <ViewSwitcher views={[{ id: 'nivo-bars' }]} data={data} width={width} height={height} />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
+  );
+}
+```
