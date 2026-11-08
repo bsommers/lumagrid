@@ -1,3 +1,5 @@
+> Historical document — the project was renamed from VizBox to Lumagrid in Phase 5.
+
 # VizBox — Build Plan
 
 ## Stack

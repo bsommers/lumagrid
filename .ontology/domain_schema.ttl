@@ -1,3 +1,5 @@
+# Historical document — the project was renamed from VizBox to Lumagrid in Phase 5.
+
 @prefix bfo: <http://purl.obolibrary.org/obo/bfo.owl#> .
 @prefix : <http://bsommers.github.io/uitoolbox/> .
 
