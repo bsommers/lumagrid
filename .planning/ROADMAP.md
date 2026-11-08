@@ -53,7 +53,7 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 3/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
+**Plans:** 4/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
 **Wave 1**
@@ -64,7 +64,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [x] 05-03-PLAN.md — Wave 3: brand core: pixel-grid mark and favicon, palette tokens with contrast proof, outlined wordmark and lockup, tagline, SVG safety test
-- [ ] 05-04-PLAN.md — Wave 3: ARCHITECTURE, USING, PURPOSE docs with Mermaid and two neon SVG diagrams
+- [x] 05-04-PLAN.md — Wave 3: ARCHITECTURE, USING, PURPOSE docs with Mermaid and two neon SVG diagrams
 - [ ] 05-05-PLAN.md — Wave 3: `scripts/check-docs.mjs`, snippet type-check pipeline, getting-started, transforms and theming chapters
 
 **Wave 4** *(blocked on Wave 3 completion)*
