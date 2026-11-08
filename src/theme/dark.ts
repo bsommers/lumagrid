@@ -1,5 +1,10 @@
 import type { ThemeDefinition } from './types.js';
 
+/**
+ * The built-in dark theme.
+ *
+ * @public
+ */
 export const darkTheme: ThemeDefinition = {
   name: 'dark',
   colors: {

@@ -1,3 +1,8 @@
+/**
+ * Color scales (categorical, sequential, diverging) carried by a theme.
+ *
+ * @public
+ */
 export interface ColorPalette {
   /** Categorical colors for series/groups (at least 8). */
   categorical: string[];
@@ -7,6 +12,11 @@ export interface ColorPalette {
   diverging: string[];
 }
 
+/**
+ * Font family, size, weight and line-height tokens of a theme.
+ *
+ * @public
+ */
 export interface TypographyTokens {
   fontFamily: string;
   fontSizeBase: string;
@@ -17,6 +27,11 @@ export interface TypographyTokens {
   lineHeight: number;
 }
 
+/**
+ * Spacing tokens of a theme, all multiples of a base unit.
+ *
+ * @public
+ */
 export interface SpacingTokens {
   /** Base unit in px. All spacing is a multiple of this. */
   base: number;
@@ -27,6 +42,11 @@ export interface SpacingTokens {
   xl: string;
 }
 
+/**
+ * Background, border, radius and shadow tokens of a theme.
+ *
+ * @public
+ */
 export interface SurfaceTokens {
   background: string;
   surface: string;
@@ -36,6 +56,11 @@ export interface SurfaceTokens {
   shadowMd: string;
 }
 
+/**
+ * Text color tokens of a theme.
+ *
+ * @public
+ */
 export interface TextTokens {
   primary: string;
   secondary: string;
@@ -43,6 +68,11 @@ export interface TextTokens {
   inverse: string;
 }
 
+/**
+ * Complete theme: name plus color, typography, spacing, surface and text tokens.
+ *
+ * @public
+ */
 export interface ThemeDefinition {
   name: string;
   colors: ColorPalette;

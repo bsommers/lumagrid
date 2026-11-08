@@ -1,6 +1,10 @@
 import type { ThemeDefinition } from './types.js';
 
-/** Returns one of the theme's categorical colors by index (wraps around). */
+/**
+ * Returns one of the theme's categorical colors by index (wraps around).
+ *
+ * @public
+ */
 export function categoricalColor(theme: ThemeDefinition, index: number): string {
   const palette = theme.colors.categorical;
   return palette[index % palette.length] ?? palette[0] ?? '#4e79a7';
@@ -9,6 +13,8 @@ export function categoricalColor(theme: ThemeDefinition, index: number): string 
 /**
  * Maps a value in [0, 1] to a color on the theme's sequential scale.
  * Uses linear interpolation between the nearest two stops.
+ *
+ * @public
  */
 export function sequentialColor(theme: ThemeDefinition, t: number): string {
   const palette = theme.colors.sequential;
@@ -18,6 +24,8 @@ export function sequentialColor(theme: ThemeDefinition, t: number): string {
 /**
  * Maps a value in [-1, 1] to a color on the theme's diverging scale.
  * 0 maps to the midpoint, ±1 to the extremes.
+ *
+ * @public
  */
 export function divergingColor(theme: ThemeDefinition, t: number): string {
   const palette = theme.colors.diverging;
@@ -56,6 +64,8 @@ function hexToRgb(hex: string): [number, number, number] {
 /**
  * Creates a threshold-based color mapper.
  * Values below thresholds[0] → colors[0], etc.
+ *
+ * @public
  */
 export function thresholdScale(
   thresholds: number[],

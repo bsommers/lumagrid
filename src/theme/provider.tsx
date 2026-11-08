@@ -5,6 +5,11 @@ import { darkTheme } from './dark.js';
 
 const ThemeContext = createContext<ThemeDefinition>(lightTheme);
 
+/**
+ * Props for {@link ThemeProvider}.
+ *
+ * @public
+ */
 export interface ThemeProviderProps {
   /**
    * Pass a ThemeDefinition object for full control,
@@ -14,6 +19,11 @@ export interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * Provides a theme to descendant widgets; accepts a ThemeDefinition or the shorthand `'light'` / `'dark'`.
+ *
+ * @public
+ */
 export function ThemeProvider({ theme, children }: ThemeProviderProps): React.ReactElement {
   const resolved = useMemo<ThemeDefinition>(() => {
     if (theme === 'light') return lightTheme;
@@ -28,7 +38,11 @@ export function ThemeProvider({ theme, children }: ThemeProviderProps): React.Re
   );
 }
 
-/** Returns the current ThemeDefinition from the nearest ThemeProvider. */
+/**
+ * Returns the current ThemeDefinition from the nearest ThemeProvider.
+ *
+ * @public
+ */
 export function useTheme(): ThemeDefinition {
   return useContext(ThemeContext);
 }

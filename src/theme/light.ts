@@ -1,5 +1,10 @@
 import type { ThemeDefinition } from './types.js';
 
+/**
+ * The built-in light theme.
+ *
+ * @public
+ */
 export const lightTheme: ThemeDefinition = {
   name: 'light',
   colors: {
