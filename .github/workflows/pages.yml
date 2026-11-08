@@ -1,0 +1,68 @@
+# GitHub Pages showcase: builds the Vite site and the typedoc API reference, then publishes
+# site/dist. Separate from the (disabled) CI workflow; free on a public repository.
+#
+# Hardening (D-11): every action is pinned by full commit SHA; the token is read-only except in
+# the deploy job; there is no pull request trigger (no fork code, no secrets exposure); checkout
+# does not persist credentials; an in-flight deploy is never cancelled; every job has a timeout.
+# No headless-browser step runs here: the visuals and brand scripts are local-only (D-15).
+# Pages must be enabled (Settings > Pages > Source: GitHub Actions) before the first run.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'brand/**'
+      - 'docs/**'
+      - 'src/**'
+      - 'examples/shared/**'
+      - 'typedoc.json'
+      - 'package-lock.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      # typedoc -> docs/api (any warning fails the build)
+      - run: npm run docs:api
+      # vite build -> site/dist (the build empties its output folder)
+      - run: npm run site:build
+      # copy the API docs AFTER the site build, or the build would wipe them
+      - run: cp -r docs/api site/dist/api
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
