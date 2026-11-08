@@ -37,6 +37,13 @@
       "height": 512,
       "background": "#05070A",
       "padding": 0.15
+    },
+    {
+      "src": "brand/social.svg",
+      "out": "docs/assets/social-preview.png",
+      "width": 1280,
+      "height": 640,
+      "background": null
     }
   ],
   "ico": {
