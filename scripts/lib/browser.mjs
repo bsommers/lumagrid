@@ -7,6 +7,14 @@ import { chromium } from 'playwright-core';
 
 const SYSTEM_CHROME = '/usr/bin/google-chrome';
 
+function managedChromiumPath() {
+  try {
+    return chromium.executablePath();
+  } catch {
+    return '';
+  }
+}
+
 /**
  * Resolve a browser executable path.
  * @param {Record<string, string | undefined>} [env]
@@ -21,12 +29,7 @@ export function resolveChrome(env = process.env) {
     return fromEnv;
   }
 
-  let managed = '';
-  try {
-    managed = chromium.executablePath();
-  } catch {
-    managed = '';
-  }
+  const managed = managedChromiumPath();
   if (managed && existsSync(managed)) return managed;
 
   if (existsSync(SYSTEM_CHROME)) return SYSTEM_CHROME;

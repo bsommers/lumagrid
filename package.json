@@ -49,7 +49,16 @@
     "examples:dev": "vite --config examples/vite.config.ts",
     "docs:api": "typedoc",
     "api:check": "bash scripts/api.sh check",
-    "api:update": "npm run build:esm && bash scripts/api.sh update"
+    "api:update": "npm run build:esm && bash scripts/api.sh update",
+    "site:dev": "vite --config site/vite.config.ts",
+    "site:build": "vite build --config site/vite.config.ts",
+    "site:preview": "vite preview --config site/vite.config.ts",
+    "typecheck:site": "tsc -p site/tsconfig.json --noEmit && tsc -p docs/guide/snippets/tsconfig.json --noEmit",
+    "docs:check": "node scripts/check-docs.mjs",
+    "visuals": "node scripts/render-visuals.mjs",
+    "visuals:check": "node scripts/check-visuals.mjs",
+    "brand": "node scripts/build-brand.mjs",
+    "brand:check": "node scripts/check-brand.mjs"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
