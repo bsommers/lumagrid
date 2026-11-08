@@ -3,8 +3,18 @@ import { useTheme } from '../theme/provider.js';
 import { TransformPipeline } from '../transforms/pipeline.js';
 import type { ChainableTransform, DataTransform, TransformedData } from '../transforms/types.js';
 
-type AnyTransform = DataTransform<unknown> | ChainableTransform;
+/**
+ * A raw-input DataTransform or a ChainableTransform accepted as a pipeline step.
+ *
+ * @public
+ */
+export type AnyTransform = DataTransform<unknown> | ChainableTransform;
 
+/**
+ * Props for {@link WidgetContainer}.
+ *
+ * @public
+ */
 export interface WidgetContainerProps {
   /**
    * Raw data to pass through the transform pipeline.
@@ -36,11 +46,15 @@ export interface WidgetContainerProps {
  * dimensions to children.
  *
  * @example
+ * ```tsx
  * <WidgetContainer data={rawRows} transforms={[flatten, groupBy('region')]}>
  *   {(data, width, height) => (
  *     <ViewSwitcher views={[{ id: 'bar' }, { id: 'table' }]} data={data} width={width} height={height} />
  *   )}
  * </WidgetContainer>
+ * ```
+ *
+ * @public
  */
 export function WidgetContainer({
   data,

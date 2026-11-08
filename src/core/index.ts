@@ -1,5 +1,5 @@
 export { WidgetContainer } from './container.js';
-export type { WidgetContainerProps } from './container.js';
+export type { WidgetContainerProps, AnyTransform } from './container.js';
 
 export { ViewSwitcher } from './view-switcher.js';
 export type { ViewSwitcherProps } from './view-switcher.js';

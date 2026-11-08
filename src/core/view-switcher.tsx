@@ -4,6 +4,11 @@ import { getPlugin } from '../registry/index.js';
 import type { ViewSpec } from '../registry/types.js';
 import type { TransformedData } from '../transforms/types.js';
 
+/**
+ * Props for {@link ViewSwitcher}.
+ *
+ * @public
+ */
 export interface ViewSwitcherProps {
   views: ViewSpec[];
   data: TransformedData;
@@ -14,6 +19,11 @@ export interface ViewSwitcherProps {
   tabPosition?: 'top' | 'bottom';
 }
 
+/**
+ * Tabbed switcher that renders the registered plugin for the active view.
+ *
+ * @public
+ */
 export function ViewSwitcher({
   views, data, width, height,
   activeView: controlled, onViewChange, tabPosition = 'top',

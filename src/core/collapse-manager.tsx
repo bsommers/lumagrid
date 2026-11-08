@@ -1,5 +1,10 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
 
+/**
+ * Expand, collapse and drill-down state provided by {@link CollapseManager}.
+ *
+ * @public
+ */
 export interface CollapseState {
   /** Set of node IDs that are currently expanded. All others are collapsed. */
   expandedIds: ReadonlySet<string>;
@@ -22,12 +27,22 @@ export interface CollapseState {
 
 const CollapseContext = createContext<CollapseState | null>(null);
 
+/**
+ * Props for {@link CollapseManager}.
+ *
+ * @public
+ */
 export interface CollapseManagerProps {
   /** IDs that start expanded. Default: all collapsed. */
   defaultExpanded?: string[];
   children: React.ReactNode;
 }
 
+/**
+ * Context provider that tracks which nodes are expanded and the drill-down path.
+ *
+ * @public
+ */
 export function CollapseManager({ defaultExpanded = [], children }: CollapseManagerProps): React.ReactElement {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set(defaultExpanded));
   const drillPathRef = useRef<string[]>([]);
@@ -97,7 +112,11 @@ export function CollapseManager({ defaultExpanded = [], children }: CollapseMana
   );
 }
 
-/** Returns the collapse state from the nearest CollapseManager. */
+/**
+ * Returns the collapse state from the nearest CollapseManager.
+ *
+ * @public
+ */
 export function useCollapse(): CollapseState {
   const ctx = useContext(CollapseContext);
   if (!ctx) throw new Error('useCollapse must be used inside a CollapseManager');
