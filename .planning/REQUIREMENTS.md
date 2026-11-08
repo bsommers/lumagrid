@@ -13,7 +13,7 @@
 - [x] LINT-01: ESLint configured and clean (phase 03)
 - [x] REL-01: Apache-2.0 relicense complete (phase 04)
 - [ ] REL-02: Published to npm (phase 04)
-- [ ] REL-03: Public API frozen and documented (phase 04)
+- [x] REL-03: Public API frozen and documented (phase 04)
 
 ## Traceability
 | Req | Phase |

@@ -30,7 +30,7 @@
 **Goal**: Apache-2.0 relicense (done, 6660dda), npm publish, API freeze. See docs/RELEASE-PLAN.md.
 **Requirements**: REL-01, REL-02, REL-03
 **Depends on**: Phase 03
-**Plans:** 6/7 plans executed (REL-03 only; REL-01 done, REL-02 deferred by owner)
+**Plans:** 7/7 plans executed (REL-03 only; REL-01 done, REL-02 deferred by owner)
 
 Plans:
 **Wave 1**
@@ -46,4 +46,4 @@ Plans:
 - [x] 04-06-PLAN.md — Wave 3: CHANGELOG backfill and deprecations, `docs/STABILITY.md`, README/RELEASE-PLAN/CONTRIBUTING updates, examples on role names
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 04-07-PLAN.md — Wave 4: strict api-extractor, committed API reports, `api:check` wired into `scripts/ci.sh`, strict typedoc, full `scripts/ci.sh` gate
+- [x] 04-07-PLAN.md — Wave 4: strict api-extractor, committed API reports, `api:check` wired into `scripts/ci.sh`, strict typedoc, full `scripts/ci.sh` gate
