@@ -7,6 +7,7 @@ The guide takes you from installing the library to writing your own chart plugin
 ## Contents
 
 - [Reading order](#reading-order)
+- [Charts](#charts)
 - [Reference documents](#reference-documents)
 
 ## Reading order
@@ -16,6 +17,18 @@ The guide takes you from installing the library to writing your own chart plugin
 3. [Theming](./theming.md): `ThemeProvider`, `ThemeDefinition` and the color scale helpers.
 4. [Plugins and adapters](./plugins-and-adapters.md): the `ChartPlugin` contract, the registry, custom plugins, and the D3, Recharts and Nivo adapters.
 5. [Troubleshooting](./troubleshooting.md): symptoms, causes and fixes for the problems readers hit most.
+
+## Charts
+
+One page per native chart, each with its data shape, props, a verified example and the rendered light and dark images. Start at the [charts index](./charts/README.md).
+
+- [Bar chart](./charts/bar-chart.md)
+- [Line chart](./charts/line-chart.md)
+- [Pie chart](./charts/pie-chart.md)
+- [Force graph](./charts/force-graph.md)
+- [Choropleth](./charts/choropleth.md)
+- [Data table](./charts/data-table.md)
+- [Tree view](./charts/tree-view.md)
 
 ## Reference documents
 

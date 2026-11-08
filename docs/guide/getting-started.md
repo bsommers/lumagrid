@@ -136,6 +136,7 @@ To draw with D3, Recharts or Nivo instead, or to write your own plugin, see [Plu
 
 ## Next steps
 
+- [Charts](./charts/README.md): one reference page per native chart, with props, examples and rendered images.
 - [Transforms](./transforms.md): reshape raw data with `flatten`, `aggregate`, `pivot`, `groupBy` and `geoNormalize`.
 - [Theming](./theming.md): `ThemeProvider`, `ThemeDefinition` and the color scale helpers.
 - [Plugins and adapters](./plugins-and-adapters.md): the plugin contract and the D3, Recharts and Nivo adapters.
