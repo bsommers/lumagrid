@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
-import type { TransformedData } from 'lumagrid';
 import {
   nativeBarPlugin,
   nativeLinePlugin,
@@ -9,46 +8,12 @@ import {
   nativeTablePlugin,
   nativeTreePlugin,
 } from 'lumagrid/viz';
+import { sales, views } from '../shared/demos';
 
 // Register the plugins ViewSwitcher can choose between (once, at startup).
 [nativeBarPlugin, nativeLinePlugin, nativePiePlugin, nativeTablePlugin, nativeTreePlugin].forEach(
   (p) => registerPlugin(p),
 );
-
-const sales: TransformedData = {
-  rows: [
-    { region: 'North', revenue: 12000 },
-    { region: 'South', revenue: 14200 },
-    { region: 'East', revenue: 9300 },
-    { region: 'West', revenue: 11100 },
-  ],
-  fields: [
-    { key: 'region', type: 'string' },
-    { key: 'revenue', type: 'number' },
-  ],
-  hierarchy: {
-    id: 'all',
-    label: 'All regions',
-    value: 46600,
-    children: [
-      { id: 'north', label: 'North', value: 12000 },
-      { id: 'south', label: 'South', value: 14200 },
-      { id: 'east', label: 'East', value: 9300 },
-      { id: 'west', label: 'West', value: 11100 },
-    ],
-  },
-};
-
-// Role-named field props for the sales dataset (revenue = value, region = label).
-const salesFields = { valueField: 'revenue', labelField: 'region' };
-
-const views = [
-  { id: 'bar', label: 'Bar', config: salesFields },
-  { id: 'line', label: 'Line', config: salesFields },
-  { id: 'pie', label: 'Pie', config: salesFields },
-  { id: 'table', label: 'Table' },
-  { id: 'tree', label: 'Tree' },
-];
 
 function App(): React.ReactElement {
   const [mode, setMode] = useState<'light' | 'dark'>('light');

@@ -1,0 +1,20 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "rootDir": "..",
+    "baseUrl": ".",
+    "paths": {
+      "lumagrid": ["../src/index.ts"],
+      "lumagrid/transforms": ["../src/transforms/index.ts"],
+      "lumagrid/theme": ["../src/theme/index.ts"],
+      "lumagrid/viz": ["../src/viz/index.ts"],
+      "lumagrid/plugins": ["../src/plugins/index.ts"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["src", "../examples/shared", "../brand/contrast.ts"],
+  "exclude": ["src/**/__tests__"]
+}

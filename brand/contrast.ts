@@ -30,6 +30,9 @@ export function contrastRatio(a: string, b: string): number {
 export function parseTokens(css: string): Record<string, string> {
   const out: Record<string, string> = {};
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  for (const m of stripped.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) out[m[1]] = m[2].trim();
+  for (const m of stripped.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    const [, name, value] = m;
+    if (name !== undefined && value !== undefined) out[name] = value.trim();
+  }
   return out;
 }

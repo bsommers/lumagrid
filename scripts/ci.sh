@@ -2,9 +2,9 @@
 # Local CI gate for Lumagrid. GitHub Actions is disabled for this repo; run this before pushing.
 # The pre-push hook runs it automatically (enable once: git config core.hooksPath .githooks).
 #
-#   scripts/ci.sh           typecheck, lint, tests under coverage (thresholds in vitest.config.ts),
+#   scripts/ci.sh           typecheck, lint, site + guide typecheck, tests under coverage (thresholds in vitest.config.ts),
 #                           library build, API report check (api-extractor), examples build
-#   scripts/ci.sh --fast    typecheck, lint, tests (no coverage, no builds)
+#   scripts/ci.sh --fast    typecheck, lint, site + guide typecheck, tests (no coverage, no builds)
 #
 # Mirrors .github/workflows/ci.yml; keep the two in step.
 set -euo pipefail
@@ -29,6 +29,7 @@ fi
 
 step "typecheck";  npm run --silent typecheck
 step "lint";       npm run --silent lint
+step "typecheck site + guide"; npm run --silent typecheck:site
 if ((fast)); then
   step "tests";    npx vitest run
 else
