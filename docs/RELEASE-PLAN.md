@@ -10,24 +10,16 @@ Status at 0.1.0: four layers (theme, transforms, registry/core, viz/plugins), se
 
 ## 0.2 - correctness and hygiene
 
-- Add a `ViewSpec` and `NativeChartProps` audit: every native chart honours `xField`/`yField`/`colorField`/`ariaLabel` consistently (field meaning currently differs: bar uses `xField` for the value, pie uses `yField`).
+- ~~Add a `ViewSpec` and `NativeChartProps` audit: every native chart honours `xField`/`yField`/`colorField`/`ariaLabel` consistently (field meaning currently differs: bar uses `xField` for the value, pie uses `yField`).~~ Done 2026-11-07: every native chart takes role-named props (`valueField`, `labelField`, `idField`, `colorField`); `xField`/`yField` are deprecated aliases. See [STABILITY.md](STABILITY.md#field-props).
 - ~~`ForceGraph` only simulates on mount~~ — done 2026-11-07: relayouts when nodes/edges change (warm-started), `relayout={false}` opt-out, seeded deterministic placement (`seed`), aspect-preserving fit so resizes don't relayout.
 - `LineChart` `toPath` sorts input in place; copy first. Treat dates on the x-axis as a real scale rather than an index.
-- Resolve the `registerPlugin` global registry behaviour (duplicate ids silently overwrite): decide on warn/throw, document the registry-reset convention for tests.
+- ~~Resolve the `registerPlugin` global registry behaviour (duplicate ids silently overwrite): decide on warn/throw, document the registry-reset convention for tests.~~ Done 2026-11-07: duplicate ids warn outside production and then replace; `registerPlugin` returns the id. The reset convention is in [STABILITY.md](STABILITY.md#registry-test-convention).
 - Raise coverage thresholds as gaps close (2026-11-07: 97.8/91.8/94.5 lines/branches/funcs, barrels and transforms covered; remaining: `theme/color-scale.ts` branches ~36%, then pie-chart, container, tree-view).
 - Decide on the Deno story (`deno.json` exists): either test in CI or drop.
 
 ## 0.3 - API freeze candidates
 
-Candidates to lock for 1.0 (everything else stays experimental, marked `@experimental` in TSDoc):
-
-- `ThemeDefinition` token shape and `ThemeProvider`.
-- `DataTransform`/`TransformedData`/`HierarchyNode`/`GeoData` types and the built-in transforms' signatures.
-- `ChartPlugin` contract (`dataAdapter`, `themeAdapter`, `component`), `registerPlugin`/`getPlugin`/`listPlugins`, `createNativePlugin`.
-- `WidgetContainer` and `ViewSwitcher` props.
-- Package export map: `vizbox`, `/transforms`, `/theme`, `/viz`, `/plugins`.
-
-Likely to change before freeze: `NativeChartProps` field naming, adapter config shapes (`D3Theme`, `RechartsConfig`, `NivoTheme`), `Choropleth` projection API, `registerAndGetId`.
+The freeze scope is the stable (`@public`) list in [STABILITY.md](STABILITY.md). Everything marked `@experimental` in TSDoc stays outside the 1.0 contract; that list is in the same document.
 
 ## Deprecations
 
@@ -47,7 +39,7 @@ Likely to change before freeze: `NativeChartProps` field naming, adapter config 
 ## Docs and examples
 
 - README quickstart verified against `examples/`; one example per plugin family (native, D3, Recharts, Nivo).
-- API reference generated from TSDoc (typedoc) once the surface is frozen.
+- ~~API reference generated from TSDoc (typedoc) once the surface is frozen.~~ Done: `npm run docs:api` (typedoc).
 - Accessibility notes per chart (aria-label, keyboard behaviour for `TreeView`, `DataTable`).
 
 ## Remaining before 1.0

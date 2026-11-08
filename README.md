@@ -97,7 +97,7 @@ export function SalesWidget() {
 Runs data through a transform pipeline and provides the result to children via a render prop. Supports fluid sizing via ResizeObserver — pass `width="100%"` and let the DOM drive the dimensions.
 
 ```tsx
-<WidgetContainer data={raw} transforms={[flatten, aggregate({ groupBy: ['x'], aggregations: { y: 'sum' } })]}>
+<WidgetContainer data={raw} transforms={[flatten, groupBy('x', 'y')]}>
   {(transformedData, width, height) => (
     <ViewSwitcher views={[{ id: 'bar' }]} data={transformedData} width={width} height={height} />
   )}
@@ -181,7 +181,7 @@ registerPlugin(nativeForceGraphPlugin); // id: 'force-graph'
 
 | Plugin id | Chart | Required data shape |
 |-----------|-------|---------------------|
-| `line` | LineChart | rows with x (string/date) and y (number) fields |
+| `line` | LineChart | rows with a label (string/date) and a value (number) field |
 | `bar` | HorizontalBarChart | rows with a label (string) and value (number) field |
 | `pie` | PieChart | rows with a label and value field |
 | `choropleth` | Choropleth | `TransformedData` with `.geo` from `geoNormalize` |
@@ -189,13 +189,27 @@ registerPlugin(nativeForceGraphPlugin); // id: 'force-graph'
 | `tree` | TreeView | `TransformedData` with `.hierarchy` from `groupBy` |
 | `table` | DataTable | any rows |
 
-`ForceGraph` re-runs its layout when the set of nodes or edges changes (warm-started from the previous positions, so the graph evolves rather than jumps). Resizing never re-runs it. Options, passed via the view's `config`:
+`ForceGraph` re-runs its layout when the set of nodes or edges changes (warm-started from the previous positions, so the graph evolves rather than jumps). Resizing never re-runs it. Experimental options (see [Stability](#stability)), passed via the view's `config`:
 
 | Option | Default | Effect |
 |--------|---------|--------|
 | `relayout` | `true` | `false` keeps existing node positions on data changes; new nodes get their seeded start position, removed nodes are dropped |
 | `seed` | `1` | Deterministic initial placement |
 | `iterations` | `60` | Simulation steps per layout run |
+
+### Field props
+
+Charts name their columns by role. Pass them in the view's `config`, for example `config: { valueField: 'revenue', labelField: 'region' }`. A role prop that is omitted falls back to a column inferred from the data (see [docs/STABILITY.md](docs/STABILITY.md#field-props)).
+
+| Chart (plugin id) | `valueField` | `labelField` | `idField` | `colorField` |
+|-------------------|--------------|--------------|-----------|--------------|
+| Bar (`bar`) | bar length | bar label | | |
+| Line (`line`) | y value | x category | | series split |
+| Pie (`pie`) | slice size | slice label | | |
+| Choropleth (`choropleth`) | color value (`valueProperty` wins) | | | |
+| Force graph (`force-graph`) | | node label | node id | |
+
+The legacy `xField` and `yField` props still work but are deprecated and will be removed in 2.0. The role name wins when both are passed. The mapping per chart is in [docs/STABILITY.md](docs/STABILITY.md#field-props).
 
 ---
 
@@ -339,6 +353,10 @@ const brandTheme: ThemeDefinition = {
 ```
 
 ---
+
+## Stability
+
+The public API is being frozen for 1.0. Every export is tagged `@public` (frozen) or `@experimental` (may change in a minor release) in its TSDoc. The tag policy, the stable and experimental lists, the registry conventions and how the API surface is checked are in [docs/STABILITY.md](docs/STABILITY.md). Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

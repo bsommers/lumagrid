@@ -2,7 +2,7 @@
 
 ## Testing conventions
 
-**The plugin registry is a single shared module-level `Map` — tests that call `registerPlugin` must reset it.** `src/registry/index.ts` holds one `Map` for the lifetime of the test process, not one per test file or per test. If two tests (in the same file or different files run in the same worker) register a plugin under the same `id`, the second registration silently overwrites the first, and a test can end up exercising a plugin left behind by an earlier test instead of the one it just registered.
+**The plugin registry is a single shared module-level `Map` — tests that call `registerPlugin` must reset it.** `src/registry/index.ts` holds one `Map` for the lifetime of the test process, not one per test file or per test. If two tests (in the same file or different files run in the same worker) register a plugin under the same `id`, the second registration replaces the first and, outside production, logs a `console.warn`. A test can still end up exercising a plugin left behind by an earlier test instead of the one it just registered.
 
 Any test file that calls `registerPlugin` must call `__resetRegistryForTests()` (imported directly from `../../registry/index.js`, not from a barrel — it is deliberately not re-exported from `core/index.ts` or the top-level `vizbox` package) in a `beforeEach`:
 
@@ -22,9 +22,11 @@ Hosted GitHub Actions CI is disabled for this repo to save minutes; checks run l
 
 ```bash
 git config core.hooksPath .githooks   # once per clone: runs scripts/ci.sh before every push
-scripts/ci.sh                         # typecheck, lint, tests + coverage gate, build, examples build (~10s)
+scripts/ci.sh                         # typecheck, lint, tests + coverage gate, build, API report check, examples build (~10s)
 scripts/ci.sh --fast                  # typecheck, lint, tests only
 git push --no-verify                  # skip the hook once (avoid)
 ```
+
+After an intentional public API change, run `npm run api:update` and commit the updated reports under `etc/`. `scripts/ci.sh` fails until they match the build. See [docs/STABILITY.md](docs/STABILITY.md#how-the-surface-is-guarded).
 
 `.github/workflows/ci.yml` is a minimal backstop (PRs and manual dispatch only, one job, 10-minute cap) that just runs `scripts/ci.sh`. Keep the two in step.
