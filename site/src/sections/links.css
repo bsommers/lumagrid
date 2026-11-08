@@ -1,0 +1,47 @@
+/* Links section and footer. Colors come from the brand tokens (brand/tokens.css) with literal fallbacks. */
+.lg-links {
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 0 32px;
+  color: var(--lg-text-body, #C9D1D9);
+  font-family: var(--lg-font-body, ui-sans-serif, system-ui, sans-serif);
+}
+.lg-links *, .lg-links *::before, .lg-links *::after { box-sizing: border-box; }
+
+.lg-links-title {
+  margin: 0 0 24px;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--lg-text, #E6EDF3);
+}
+
+.lg-links-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lg-link-card {
+  padding: 16px;
+  border: 1px solid var(--lg-border, #1F2A37);
+  border-radius: 8px;
+  background: var(--lg-bg-card, #0B0F14);
+}
+.lg-link-card p { margin: 8px 0 0; color: var(--lg-muted, #9AA4B2); }
+.lg-link-anchor {
+  font-family: var(--lg-font-display, ui-sans-serif, system-ui, sans-serif);
+  font-size: 1.05rem;
+  color: var(--lg-cyan-light, #7DF9FF);
+  overflow-wrap: anywhere;
+}
+
+.lg-footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--lg-border, #1F2A37);
+  color: var(--lg-muted, #9AA4B2);
+  font-size: 0.9rem;
+}
+.lg-footer p { margin: 4px 0; }
