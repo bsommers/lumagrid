@@ -14,3 +14,12 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Fonts
+-----
+The Lumagrid wordmark outlines (brand/wordmark.svg, brand/lockup.svg) are derived from
+Orbitron 700 (https://github.com/theleagueof/orbitron, Copyright 2018 The Orbitron Project
+Authors). The documentation site and brand artwork also use Inter and JetBrains Mono.
+Orbitron, Inter and JetBrains Mono are licensed under the SIL Open Font License, Version 1.1
+(OFL-1.1, https://openfontlicense.org). The fonts are served from the @fontsource and
+@fontsource-variable packages, which ship the license files.
