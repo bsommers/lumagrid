@@ -4,6 +4,7 @@ import { CollapseManager, ThemeProvider, useTheme, lightTheme, darkTheme } from 
 import {
   HorizontalBarChart, LineChart, PieChart, ForceGraph, Choropleth, DataTable, TreeView,
 } from 'lumagrid/viz';
+import './capture.css';
 import { demoViews, hexProjectedPaths } from '../../examples/shared/demos';
 
 /** Charts the capture page can render, in display order. */

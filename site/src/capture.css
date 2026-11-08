@@ -1,0 +1,10 @@
+/* Capture-only font alias. The library themes name the family 'Inter' while the fontsource
+   variable package registers 'Inter Variable', so without this alias a capture would silently
+   fall back to a system font. Vite resolves the url() to a hashed asset. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
