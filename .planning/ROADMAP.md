@@ -53,7 +53,41 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 0 plans
+**Plans:** 16 plans in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 5 to break down)
+**Wave 1**
+- [ ] 05-01-PLAN.md — Wave 1 tracer: rename package, API reports, source, examples and docs to Lumagrid; `[lumagrid]` warning prefix; BREAKING CHANGELOG entry; historical-document notes
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 05-02-PLAN.md — Wave 2: one blocking install checkpoint (playwright-core 1.64.1, d3, recharts, @nivo/bar, opentype.js, fontsource), shared browser launcher, phase scripts, eslint `.mjs` globals, vitest alias
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 05-03-PLAN.md — Wave 3: brand core: pixel-grid mark and favicon, palette tokens with contrast proof, outlined wordmark and lockup, tagline, SVG safety test
+- [ ] 05-04-PLAN.md — Wave 3: ARCHITECTURE, USING, PURPOSE docs with Mermaid and two neon SVG diagrams
+- [ ] 05-05-PLAN.md — Wave 3: `scripts/check-docs.mjs`, snippet type-check pipeline, getting-started, transforms and theming chapters
+
+**Wave 4** *(blocked on Wave 3 completion)*
+- [ ] 05-06-PLAN.md — Wave 4: `npm run brand` generator and validator, favicon set, ICO, app icons, web manifest
+- [ ] 05-07-PLAN.md — Wave 4: shared demos, `site/` Vite app, deterministic capture page for the seven charts, shell with stub sections, ci.sh site typecheck
+- [ ] 05-08-PLAN.md — Wave 4: plugins-and-adapters, troubleshooting and guide index with compiled snippets
+
+**Wave 5** *(blocked on Wave 4 completion)*
+- [ ] 05-09-PLAN.md — Wave 5: social card, OG image, README banner and seven chart icons with generated PNGs
+- [ ] 05-10-PLAN.md — Wave 5: neon chart theme, hero and the ten-card interactive gallery (seven native, three lazy adapters)
+
+**Wave 6** *(blocked on Wave 5 completion)*
+- [ ] 05-11-PLAN.md — Wave 6: neon grid CSS with reduced-motion handling, features strip, links, footer, social metadata
+
+**Wave 7** *(blocked on Wave 6 completion)*
+- [ ] 05-12-PLAN.md — Wave 7: `npm run visuals` (14 PNG, 10 SVG), site layout assertions, validator
+
+**Wave 8** *(blocked on Wave 7 completion)*
+- [ ] 05-13-PLAN.md — Wave 8: seven chart pages and index with embedded rendered images
+- [ ] 05-14-PLAN.md — Wave 8: short README quickstart, docs hub, CHANGELOG and CONTRIBUTING updates
+
+**Wave 9** *(blocked on Wave 8 completion)*
+- [ ] 05-15-PLAN.md — Wave 9: hardened Pages workflow with local dry-run; human checkpoints: `gh repo rename`, `git remote set-url`
+
+**Wave 10** *(blocked on Wave 9 completion)*
+- [ ] 05-16-PLAN.md — Wave 10: human checkpoints: enable Pages, push; verify the live site
