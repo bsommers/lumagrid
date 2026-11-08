@@ -3,7 +3,7 @@
 # The pre-push hook runs it automatically (enable once: git config core.hooksPath .githooks).
 #
 #   scripts/ci.sh           typecheck, lint, tests under coverage (thresholds in vitest.config.ts),
-#                           library build, examples build
+#                           library build, API report check (api-extractor), examples build
 #   scripts/ci.sh --fast    typecheck, lint, tests (no coverage, no builds)
 #
 # Mirrors .github/workflows/ci.yml; keep the two in step.
@@ -34,6 +34,7 @@ if ((fast)); then
 else
   step "tests + coverage gate"; npm run --silent test:coverage
   step "build";    npm run --silent build
+  step "api report"; npm run --silent api:check
   step "examples build"; npm run --silent examples:build
 fi
 
