@@ -1,0 +1,55 @@
+{
+  // Shared api-extractor config; each etc/api-extractor.<entry>.json extends this and sets only the entry point and report name.
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+
+  // Resolve every <projectFolder> token against the repository root (this file lives in etc/).
+  "projectFolder": "..",
+
+  // The tool defaults to CRLF, which would churn the committed reports on Linux/macOS checkouts.
+  "newlineKind": "lf",
+
+  "compiler": {
+    // Pointing at tsconfig.json fails with "No inputs were found" (its include is src, the tool reads dist declarations),
+    // so the relevant options are inlined here.
+    "overrideTsconfig": {
+      "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "lib": ["ES2020", "DOM"],
+        "jsx": "react-jsx",
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true
+      }
+    },
+    "skipLibCheck": true
+  },
+
+  "apiReport": {
+    "enabled": true,
+    "reportFolder": "<projectFolder>/etc/",
+    // Scratch folder for the freshly generated report; gitignored.
+    "reportTempFolder": "<projectFolder>/temp/"
+  },
+
+  "docModel": { "enabled": false },
+  "dtsRollup": { "enabled": false },
+  "tsdocMetadata": { "enabled": false },
+
+  "messages": {
+    "compilerMessageReporting": {
+      "default": { "logLevel": "warning" }
+    },
+    "tsdocMessageReporting": {
+      "default": { "logLevel": "warning" }
+    },
+    "extractorMessageReporting": {
+      "default": { "logLevel": "warning", "addToApiReportFile": false },
+      // Plan 04-07 raises ae-missing-release-tag and ae-forgotten-export to "error" once every export is tagged
+      // and the root barrel exports every referenced type.
+      "ae-missing-release-tag": { "logLevel": "none" },
+      "ae-forgotten-export": { "logLevel": "none", "addToApiReportFile": true }
+    }
+  }
+}
