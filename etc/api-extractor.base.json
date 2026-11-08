@@ -46,10 +46,14 @@
     },
     "extractorMessageReporting": {
       "default": { "logLevel": "warning", "addToApiReportFile": false },
-      // Plan 04-07 raises ae-missing-release-tag and ae-forgotten-export to "error" once every export is tagged
-      // and the root barrel exports every referenced type.
-      "ae-missing-release-tag": { "logLevel": "none" },
-      "ae-forgotten-export": { "logLevel": "none", "addToApiReportFile": true }
+      // D-10: an export without @public/@beta/@alpha/@internal fails the check.
+      "ae-missing-release-tag": { "logLevel": "error", "addToApiReportFile": false },
+      // A type referenced by a public signature must itself be exported from the entry point.
+      "ae-forgotten-export": { "logLevel": "error", "addToApiReportFile": false },
+      // D-08/D-09 split by design: the stable adapter factories (createD3Plugin, createRechartsPlugin, createNivoPlugin)
+      // take experimental option and theme shapes, which may change in a minor release. Retagging either side would
+      // break the split, so the mismatch is not reported.
+      "ae-incompatible-release-tags": { "logLevel": "none", "addToApiReportFile": false }
     }
   }
 }

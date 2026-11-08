@@ -35,6 +35,7 @@ export type {
   PivotOptions,
   GroupByOptions,
   GeoNormalizeOptions,
+  PipelineStep,
 } from './transforms/index.js';
 
 // Plugin registry
@@ -55,6 +56,7 @@ export type {
   ViewSwitcherProps,
   CollapseManagerProps,
   CollapseState,
+  AnyTransform,
 } from './core/index.js';
 
 // Viz layer (re-export key symbols — consumers can also import from 'vizbox/viz')
@@ -67,7 +69,16 @@ export {
   ForceGraph,
   TreeView,
 } from './viz/index.js';
+export type { PieChartProps, ChoroplethProps, ForceGraphProps, TreeViewProps } from './viz/index.js';
 
 // Plugin layer
 export { createD3Plugin, createRechartsPlugin, createNivoPlugin } from './plugins/index.js';
-export type { D3Theme, RechartsTheme, RechartsConfig, NivoTheme } from './plugins/index.js';
+export type {
+  D3Theme,
+  D3PluginOptions,
+  RechartsTheme,
+  RechartsRow,
+  RechartsConfig,
+  NivoTheme,
+  NivoPluginOptions,
+} from './plugins/index.js';

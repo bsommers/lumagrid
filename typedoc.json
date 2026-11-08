@@ -12,6 +12,8 @@
   "name": "VizBox",
   "excludeInternal": true,
   "excludePrivate": true,
+  // D-11: any typedoc warning (unexported referenced type, bad link, modifier clash) fails the build.
+  "treatWarningsAsErrors": true,
   // typedoc's default list plus @beta: experimental declarations carry both @experimental and @beta for api-extractor,
   // and typedoc reports that pair as mutually exclusive modifiers.
   "excludeTags": [
