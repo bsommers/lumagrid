@@ -1,0 +1,13 @@
+{
+  "pngs": [
+    { "src": "brand/favicon.svg", "out": "site/public/favicon-16.png", "width": 16, "height": 16, "background": null },
+    { "src": "brand/favicon.svg", "out": "site/public/favicon-32.png", "width": 32, "height": 32, "background": null }
+  ],
+  "ico": {
+    "out": "site/public/favicon.ico",
+    "images": ["site/public/favicon-16.png", "site/public/favicon-32.png"]
+  },
+  "copies": [
+    { "src": "brand/favicon.svg", "out": "site/public/favicon.svg" }
+  ]
+}
