@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 320" width="960" height="320" role="img" aria-labelledby="pipeline-title pipeline-desc">
+  <title id="pipeline-title">Lumagrid pipeline</title>
+  <desc id="pipeline-desc">Raw data flows through the transforms (flatten, aggregate, pivot, groupBy, geoNormalize) into TransformedData. A plugin registry entry (a ChartPlugin with dataAdapter, themeAdapter and Renderer) takes TransformedData to one of the renderers: native SVG, D3, Recharts or Nivo. A theme band (ThemeProvider and ThemeDefinition) feeds the registry through the themeAdapter.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7DF9FF"/>
+    </marker>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#FF2BD6"/>
+    </marker>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00E5FF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#00E5FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00E5FF" stop-opacity="0.14"/>
+      <stop offset="0.5" stop-color="#7DF9FF" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#00E5FF" stop-opacity="0.14"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="320" fill="#05070A"/>
+
+  <!-- Nodes: 144 wide on a 184 pitch, 8-unit grid -->
+  <g font-family="'Inter', Arial, sans-serif" text-anchor="middle">
+    <g>
+      <rect x="40" y="48" width="144" height="144" rx="16" fill="#0B0F14"/>
+      <rect x="40" y="48" width="144" height="144" rx="16" fill="url(#glow)"/>
+      <rect x="40" y="48" width="144" height="144" rx="16" fill="none" stroke="#00E5FF" stroke-width="2"/>
+      <text x="112" y="96" font-size="16" font-weight="700" fill="#E6EDF3">Raw data</text>
+      <text x="112" y="128" font-size="12" fill="#9AA4B2">any shape:</text>
+      <text x="112" y="148" font-size="12" fill="#9AA4B2">rows, trees,</text>
+      <text x="112" y="168" font-size="12" fill="#9AA4B2">geographic</text>
+    </g>
+
+    <g>
+      <rect x="224" y="48" width="144" height="144" rx="16" fill="#0B0F14"/>
+      <rect x="224" y="48" width="144" height="144" rx="16" fill="url(#glow)"/>
+      <rect x="224" y="48" width="144" height="144" rx="16" fill="none" stroke="#00E5FF" stroke-width="2"/>
+      <text x="296" y="96" font-size="16" font-weight="700" fill="#E6EDF3">Transforms</text>
+      <text x="296" y="128" font-size="12" fill="#9AA4B2">flatten, aggregate,</text>
+      <text x="296" y="148" font-size="12" fill="#9AA4B2">pivot, groupBy,</text>
+      <text x="296" y="168" font-size="12" fill="#9AA4B2">geoNormalize</text>
+    </g>
+
+    <g>
+      <rect x="408" y="48" width="144" height="144" rx="16" fill="#0B0F14"/>
+      <rect x="408" y="48" width="144" height="144" rx="16" fill="url(#glow)"/>
+      <rect x="408" y="48" width="144" height="144" rx="16" fill="none" stroke="#7DF9FF" stroke-width="2"/>
+      <text x="480" y="88" font-size="16" font-weight="700" fill="#E6EDF3">Plugin registry</text>
+      <text x="480" y="112" font-size="12" fill="#7DF9FF">ChartPlugin</text>
+      <text x="480" y="136" font-size="12" fill="#9AA4B2">dataAdapter</text>
+      <text x="480" y="156" font-size="12" fill="#9AA4B2">themeAdapter</text>
+      <text x="480" y="176" font-size="12" fill="#9AA4B2">Renderer</text>
+    </g>
+
+    <g>
+      <rect x="592" y="48" width="144" height="144" rx="16" fill="#0B0F14"/>
+      <rect x="592" y="48" width="144" height="144" rx="16" fill="url(#glow)"/>
+      <rect x="592" y="48" width="144" height="144" rx="16" fill="none" stroke="#00E5FF" stroke-width="2"/>
+      <text x="664" y="96" font-size="16" font-weight="700" fill="#E6EDF3">Renderers</text>
+      <text x="664" y="128" font-size="12" fill="#9AA4B2">native SVG, D3,</text>
+      <text x="664" y="148" font-size="12" fill="#9AA4B2">Recharts, Nivo</text>
+    </g>
+
+    <g>
+      <rect x="776" y="48" width="144" height="144" rx="16" fill="#0B0F14"/>
+      <rect x="776" y="48" width="144" height="144" rx="16" fill="url(#glow)"/>
+      <rect x="776" y="48" width="144" height="144" rx="16" fill="none" stroke="#00E5FF" stroke-width="2"/>
+      <text x="848" y="96" font-size="16" font-weight="700" fill="#E6EDF3">Widget</text>
+      <text x="848" y="128" font-size="12" fill="#9AA4B2">WidgetContainer</text>
+      <text x="848" y="148" font-size="12" fill="#9AA4B2">and ViewSwitcher</text>
+      <text x="848" y="168" font-size="12" fill="#9AA4B2">draw the chart</text>
+    </g>
+  </g>
+
+  <!-- Flow arrows -->
+  <g stroke="#7DF9FF" stroke-width="2" fill="none">
+    <line x1="184" y1="120" x2="220" y2="120" marker-end="url(#arrow)"/>
+    <line x1="368" y1="120" x2="404" y2="120" marker-end="url(#arrow)"/>
+    <line x1="552" y1="120" x2="588" y2="120" marker-end="url(#arrow)"/>
+    <line x1="736" y1="120" x2="772" y2="120" marker-end="url(#arrow)"/>
+  </g>
+  <g font-family="'Inter', Arial, sans-serif" font-size="12" fill="#C9D1D9" text-anchor="middle">
+    <text x="296" y="36">TransformPipeline</text>
+    <text x="384" y="36" text-anchor="start">TransformedData</text>
+  </g>
+
+  <!-- Theme band -->
+  <g font-family="'Inter', Arial, sans-serif" text-anchor="middle">
+    <rect x="40" y="248" width="880" height="48" rx="16" fill="url(#band)"/>
+    <rect x="40" y="248" width="880" height="48" rx="16" fill="none" stroke="#1F2A37" stroke-width="2"/>
+    <text x="480" y="278" font-size="14" font-weight="700" fill="#E6EDF3">Theme: ThemeProvider and ThemeDefinition</text>
+  </g>
+  <line x1="480" y1="248" x2="480" y2="196" stroke="#FF2BD6" stroke-width="2" marker-end="url(#arrow-accent)"/>
+  <text x="496" y="228" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#C9D1D9">themeAdapter</text>
+</svg>
