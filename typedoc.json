@@ -1,0 +1,27 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "src/index.ts",
+    "src/transforms/index.ts",
+    "src/theme/index.ts",
+    "src/viz/index.ts",
+    "src/plugins/index.ts"
+  ],
+  "tsconfig": "tsconfig.json",
+  "out": "docs/api",
+  "name": "VizBox",
+  "excludeInternal": true,
+  "excludePrivate": true,
+  // typedoc's default list plus @beta: experimental declarations carry both @experimental and @beta for api-extractor,
+  // and typedoc reports that pair as mutually exclusive modifiers.
+  "excludeTags": [
+    "@override",
+    "@virtual",
+    "@privateRemarks",
+    "@satisfies",
+    "@overload",
+    "@inline",
+    "@inlineType",
+    "@beta"
+  ]
+}
