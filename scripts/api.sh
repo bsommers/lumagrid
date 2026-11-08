@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# API-surface runner for VizBox (api-extractor reports plus release-tag parity).
+# API-surface runner for Lumagrid (api-extractor reports plus release-tag parity).
 #
 #   scripts/api.sh check    run api-extractor on every entry point; fails if a committed report differs or is missing
 #   scripts/api.sh update   same, with --local so the reports in etc/ are rewritten

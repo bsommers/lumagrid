@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Local CI gate for VizBox. GitHub Actions is disabled for this repo; run this before pushing.
+# Local CI gate for Lumagrid. GitHub Actions is disabled for this repo; run this before pushing.
 # The pre-push hook runs it automatically (enable once: git config core.hooksPath .githooks).
 #
 #   scripts/ci.sh           typecheck, lint, tests under coverage (thresholds in vitest.config.ts),

@@ -9,5 +9,5 @@
       "ae-forgotten-export": { "logLevel": "none", "addToApiReportFile": true }
     }
   },
-  "apiReport": { "reportFileName": "vizbox-viz.api.md" }
+  "apiReport": { "reportFileName": "lumagrid-viz.api.md" }
 }

@@ -1,5 +1,5 @@
 {
   "extends": "./api-extractor.base.json",
   "mainEntryPointFilePath": "<projectFolder>/dist/esm/transforms/index.d.ts",
-  "apiReport": { "reportFileName": "vizbox-transforms.api.md" }
+  "apiReport": { "reportFileName": "lumagrid-transforms.api.md" }
 }

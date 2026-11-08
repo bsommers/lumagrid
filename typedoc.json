@@ -9,7 +9,7 @@
   ],
   "tsconfig": "tsconfig.json",
   "out": "docs/api",
-  "name": "VizBox",
+  "name": "Lumagrid",
   "excludeInternal": true,
   "excludePrivate": true,
   // D-11: any typedoc warning (unexported referenced type, bad link, modifier clash) fails the build.

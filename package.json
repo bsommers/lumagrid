@@ -1,5 +1,5 @@
 {
-  "name": "vizbox",
+  "name": "lumagrid",
   "version": "0.1.0",
   "description": "Layered React + TypeScript UI library for data visualization widgets",
   "type": "module",
@@ -85,9 +85,18 @@
     "charts",
     "dataviz",
     "ui-library",
-    "deno"
+    "deno",
+    "lumagrid"
   ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsommers/lumagrid.git"
+  },
+  "homepage": "https://bsommers.github.io/lumagrid/",
+  "bugs": {
+    "url": "https://github.com/bsommers/lumagrid/issues"
+  },
   "allowScripts": {
     "esbuild@0.21.5": true
   }

@@ -1,5 +1,5 @@
 {
   "extends": "./api-extractor.base.json",
   "mainEntryPointFilePath": "<projectFolder>/dist/esm/theme/index.d.ts",
-  "apiReport": { "reportFileName": "vizbox-theme.api.md" }
+  "apiReport": { "reportFileName": "lumagrid-theme.api.md" }
 }
