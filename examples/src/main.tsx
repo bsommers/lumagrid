@@ -39,10 +39,13 @@ const sales: TransformedData = {
   },
 };
 
+// Role-named field props for the sales dataset (revenue = value, region = label).
+const salesFields = { valueField: 'revenue', labelField: 'region' };
+
 const views = [
-  { id: 'bar', label: 'Bar' },
-  { id: 'line', label: 'Line' },
-  { id: 'pie', label: 'Pie' },
+  { id: 'bar', label: 'Bar', config: salesFields },
+  { id: 'line', label: 'Line', config: salesFields },
+  { id: 'pie', label: 'Pie', config: salesFields },
   { id: 'table', label: 'Table' },
   { id: 'tree', label: 'Tree' },
 ];
