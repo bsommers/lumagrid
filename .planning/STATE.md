@@ -71,3 +71,8 @@ Resume file: None
 - [Phase 4]: Choropleth color property resolves valueProperty, valueField, yField, then 'value'
 - [Phase 4]: groupBy stays a factory (D-15 option 1); registerPlugin warns on duplicate ids in dev only
 - [Phase 4]: Stable adapter factories reference experimental option types by design (D-08/D-09); 04-07 silences incompatible-release-tags
+
+## Accumulated Context
+
+### Roadmap Evolution
+- Phase 5 added (2026-11-07): Brand, docs & showcase — rename VizBox→Lumagrid, user guides, doc refresh, rendered visuals, GitHub Pages showcase, logo and icons.

@@ -47,3 +47,13 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 - [x] 04-07-PLAN.md — Wave 4: strict api-extractor, committed API reports, `api:check` wired into `scripts/ci.sh`, strict typedoc, full `scripts/ci.sh` gate
+
+### Phase 5: Brand, docs & showcase
+
+**Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
+**Requirements**: TBD
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 5 to break down)
