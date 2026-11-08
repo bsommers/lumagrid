@@ -26,6 +26,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
+        index: here('./index.html'),
         capture: here('./capture.html'),
       },
     },
