@@ -53,11 +53,11 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 16 plans in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
+**Plans:** 1/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
 **Wave 1**
-- [ ] 05-01-PLAN.md — Wave 1 tracer: rename package, API reports, source, examples and docs to Lumagrid; `[lumagrid]` warning prefix; BREAKING CHANGELOG entry; historical-document notes
+- [x] 05-01-PLAN.md — Wave 1 tracer: rename package, API reports, source, examples and docs to Lumagrid; `[lumagrid]` warning prefix; BREAKING CHANGELOG entry; historical-document notes
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 05-02-PLAN.md — Wave 2: one blocking install checkpoint (playwright-core 1.64.1, d3, recharts, @nivo/bar, opentype.js, fontsource), shared browser launcher, phase scripts, eslint `.mjs` globals, vitest alias

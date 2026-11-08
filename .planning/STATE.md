@@ -5,25 +5,25 @@ milestone_name: Release readiness
 current_phase: 05
 current_phase_name: Brand, docs & showcase
 status: ready
-stopped_at: Phase 5 context gathered
-last_updated: "2026-11-08T02:50:52.827Z"
-state_head: 9df7adda27c4e0e8a75cc193caa351d8da5e0f6c
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-11-08T03:47:23.279Z"
+state_head: dbb06509575ff725700a18039964f7ae2c85b2aa
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 23
-  completed_plans: 7
-  percent: 20
+  completed_plans: 8
+  percent: 35
 ---
 
 # Project State
 
 **Core value:** Drop-in, themeable, type-safe data widgets with a pluggable ChartPlugin contract.
-**Current focus:** Phase 4 — Release prep (1.0)
+**Current focus:** Phase 05 — Brand, docs & showcase
 
 ## Current Position
 
-Phase: 05 (Brand, docs & showcase) — READY TO EXECUTE
+Phase: 05 (Brand, docs & showcase) — EXECUTING
 Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Remaining (Phase 04)
@@ -54,9 +54,9 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-08T01:22:45.784Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-brand-docs-showcase/05-CONTEXT.md
+Last session: 2026-11-08T03:47:23.234Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
 
 ## Performance Metrics
 
@@ -66,12 +66,14 @@ Resume file: .planning/phases/05-brand-docs-showcase/05-CONTEXT.md
 | Phase 4 P04-03 | 10min | 3 tasks | 13 files |
 | Phase 4 P04-04 | 5 min | 3 tasks | 12 files |
 | Phase 4 P05 | 15min | 4 tasks | 11 files |
+| Phase 05 P01 | 10m | 3 tasks | 40 files |
 
 ## Decisions
 
 - [Phase 4]: Choropleth color property resolves valueProperty, valueField, yField, then 'value'
 - [Phase 4]: groupBy stays a factory (D-15 option 1); registerPlugin warns on duplicate ids in dev only
 - [Phase 4]: Stable adapter factories reference experimental option types by design (D-08/D-09); 04-07 silences incompatible-release-tags
+- [Phase 05]: D-01: package renamed to lumagrid with no alias; [lumagrid] warning prefix; historical docs annotated
 
 ## Accumulated Context
 
