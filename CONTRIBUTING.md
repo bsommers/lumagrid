@@ -30,3 +30,12 @@ git push --no-verify                  # skip the hook once (avoid)
 After an intentional public API change, run `npm run api:update` and commit the updated reports under `etc/`. `scripts/ci.sh` fails until they match the build. See [docs/STABILITY.md](docs/STABILITY.md#how-the-surface-is-guarded).
 
 `.github/workflows/ci.yml` is a minimal backstop (PRs and manual dispatch only, one job, 10-minute cap) that just runs `scripts/ci.sh`. Keep the two in step.
+
+## Docs, brand and site
+
+- **Snippets.** Guide code lives in `docs/guide/snippets/*.tsx`, with `// #region name` and `// #endregion` markers around each excerpt. A markdown page embeds an excerpt with a `<!-- snippet: file#region -->` marker followed by a fenced block that copies the region unchanged. `npm run docs:check` fails when a block drifts from its source, when a retired name appears outside the historical allowlist, or when an image is missing or remote.
+- **Type checks.** `npm run typecheck:site` type-checks the site and the snippets. `scripts/ci.sh` runs it, so a broken example fails the local gate.
+- **Chart images.** `npm run visuals` regenerates `docs/assets/charts` and needs a Chrome or Chromium. Set `LUMAGRID_CHROME` to the binary path to override the lookup. `npm run visuals:check` validates the committed files and needs no browser.
+- **Brand assets.** `npm run brand` regenerates the icon and art PNGs and ICO files from the SVG sources under `brand/`. `npm run brand:check` validates them. Generated PNG and ICO files are never edited by hand; change the SVG source and regenerate.
+- **Site.** `npm run site:dev` serves the showcase site, `npm run site:build` builds it and `npm run site:preview` serves the build.
+- **What the gate skips.** The local gate never runs the visuals or the site build. They run on demand and in the Pages workflow.

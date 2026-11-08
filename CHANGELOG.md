@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- User guide under `docs/guide` (getting started, transforms, theming, plugins and adapters, troubleshooting and one page per chart), with every code example type-checked and embedded from `docs/guide/snippets`.
+- `docs/ARCHITECTURE.md`, `docs/USING.md` and `docs/PURPOSE.md`, plus a documentation hub in `docs/README.md`.
+- The showcase site under `site/`, deployed by the Pages workflow, with `site:dev`, `site:build`, `site:preview` and `typecheck:site` scripts.
+- The Lumagrid brand assets: logo, wordmark, favicon set, social card, chart icons and palette tokens under `brand/` and `docs/assets`.
+- `npm run visuals` and `npm run visuals:check`: rendered light and dark chart images under `docs/assets/charts`.
+- `npm run brand` and `npm run brand:check`: regenerate and validate the brand PNG and ICO files from the SVG sources.
+- `npm run docs:check`: verifies embedded snippets, names, links and images across the docs.
 - Role-named field props on every native chart: `valueField`, `labelField`, `idField` and `colorField`. See the field props table in `README.md` and `docs/STABILITY.md`. `HorizontalBarChart` (45dab13), `LineChart` and `PieChart` (e332b78), `ForceGraph` and `Choropleth` (4e0c621).
 - `ForceGraph` options `relayout`, `seed` and `iterations` (experimental) (4285c68).
 - `docs/STABILITY.md`: what the `@public`, `@experimental` and `@deprecated` tags promise, the stable and experimental lists, the field props, the registry semantics and the registry test convention.
@@ -24,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `README.md` is now a short quickstart with a type-checked example; the reference content moved to `docs/guide`.
 - **BREAKING**: the package is renamed from `vizbox` to `lumagrid`. The entry points are `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz` and `lumagrid/plugins`. There is no `vizbox` alias. The console warning prefix is `[lumagrid]`.
 - `registerPlugin` returns the plugin id (`string`; it returned `void` before). Outside production it logs a `console.warn` when it replaces an existing id. It still replaces the earlier plugin (242b566).
 - `ForceGraph` relayouts when the set of nodes or edges changes, warm-started from the previous positions. `relayout={false}` keeps existing positions (4285c68).
