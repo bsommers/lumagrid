@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stability tags on the exported API: `@public` on stable exports and `@experimental` (paired with `@beta`) on experimental ones (132c085, 5bbdf3c, 0f2e5cf, 1b930ca, b09880e).
 - `PipelineStep` is exported from the transforms entry point (5bbdf3c).
 - API tooling: `npm run docs:api` generates the API reference with typedoc into `docs/api/` (gitignored); `npm run api:check` and `npm run api:update` run api-extractor against the built declarations (7dd145e, 98c145b, bb0236f).
+- Committed API reports under `etc/` (one per entry point: root, `/transforms`, `/theme`, `/viz`, `/plugins`). `scripts/ci.sh` runs `api:check` after the build and fails when the public surface changes without an updated report or an export has no release tag. `npm run docs:api` now fails on any typedoc warning.
+- The package root exports the prop and option types that its public signatures reference: `PieChartProps`, `ChoroplethProps`, `ForceGraphProps`, `TreeViewProps`, `D3PluginOptions`, `NivoPluginOptions`, `RechartsRow`, `PipelineStep` and `AnyTransform`.
 - Examples app: a Vite + React app under `examples/`, with `npm run examples:build` (cf089dc).
 - Flat ESLint config with typescript-eslint and react-hooks rules, and a `lint` script (a6aaa35).
 - Local-first CI gate: `scripts/ci.sh` and a pre-push hook, with a minimal hosted backstop (379954d).
