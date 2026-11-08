@@ -1,0 +1,19 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "rootDir": "../../..",
+    "baseUrl": ".",
+    "paths": {
+      "lumagrid": ["../../../src/index.ts"],
+      "lumagrid/transforms": ["../../../src/transforms/index.ts"],
+      "lumagrid/theme": ["../../../src/theme/index.ts"],
+      "lumagrid/viz": ["../../../src/viz/index.ts"],
+      "lumagrid/plugins": ["../../../src/plugins/index.ts"]
+    }
+  },
+  "include": ["*.ts", "*.tsx"],
+  "exclude": ["__tests__"]
+}
