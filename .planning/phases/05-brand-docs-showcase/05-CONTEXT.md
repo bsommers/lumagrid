@@ -74,6 +74,13 @@ Out of scope:
 - **D-20:** Treat `.ontology/` as historical, as in D-04: add a header note and leave the content unchanged.
 - **D-21:** `scripts/ci.sh` gains only the site/ typecheck and lint. `site:build` runs in the Pages workflow or by hand, not in ci.sh.
 
+### Owner-confirmed planning choices (2026-11-07, after plan check)
+- No `checkpoint:decision` before the rename; `lumagrid` is settled by D-01.
+- Extra pins accepted: `@fontsource/orbitron` 5.3.0 (wordmark build) and `vite` 5.4.21 (already installed).
+- Tagline: "Themeable, pluggable data widgets for React".
+- Pre-release / not-yet-published note beside `npm install lumagrid` in the README and site footer.
+- Orchestrator runs `bash scripts/ci.sh` after waves 3, 4, 5 and 8.
+
 ### Claude's Discretion
 - The tagline wording.
 - The exact Pages path filters and workflow trigger details, within D-11.
