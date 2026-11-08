@@ -68,6 +68,12 @@ Out of scope:
   Write it following the `writing-user-guides` skill. Refresh `docs/ARCHITECTURE.md`, `docs/USING.md` and `docs/PURPOSE.md` (create any that are missing). The README becomes a short quickstart with the banner, a chart image strip and links to the guide, site and API. Every code example must compile against the real API (prefer snippets that a typecheck or a test exercises).
 - **D-17:** Diagrams are Mermaid in markdown (GitHub renders it), plus hand-tuned neon SVG versions of the key diagrams (pipeline and plugin architecture) for the site and README.
 
+### Post-research decisions (2026-11-07, plan-phase)
+- **D-18:** Add the adapter demo devDependencies at exact pins: `d3` 7.9.2, `recharts` 3.10.1, `@nivo/bar` 0.99.0. Put the install behind an install-approval checkpoint, plus a human-verify step for `d3` because the legitimacy seam flagged it.
+- **D-19:** `npm run visuals` uses `playwright-core` 1.64.1 with an `executablePath` fallback chain: an env var first, then a Playwright-managed Chromium if one is present, then the system `/usr/bin/google-chrome`. Don't make the Chromium download mandatory.
+- **D-20:** Treat `.ontology/` as historical, as in D-04: add a header note and leave the content unchanged.
+- **D-21:** `scripts/ci.sh` gains only the site/ typecheck and lint. `site:build` runs in the Pages workflow or by hand, not in ci.sh.
+
 ### Claude's Discretion
 - The tagline wording.
 - The exact Pages path filters and workflow trigger details, within D-11.
