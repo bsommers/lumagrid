@@ -1,13 +1,82 @@
 {
   "pngs": [
-    { "src": "brand/favicon.svg", "out": "site/public/favicon-16.png", "width": 16, "height": 16, "background": null },
-    { "src": "brand/favicon.svg", "out": "site/public/favicon-32.png", "width": 32, "height": 32, "background": null }
+    {
+      "src": "brand/favicon.svg",
+      "out": "site/public/favicon-16.png",
+      "width": 16,
+      "height": 16,
+      "background": null
+    },
+    {
+      "src": "brand/favicon.svg",
+      "out": "site/public/favicon-32.png",
+      "width": 32,
+      "height": 32,
+      "background": null
+    },
+    {
+      "src": "brand/mark.svg",
+      "out": "site/public/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "background": "#05070A",
+      "padding": 0.15
+    },
+    {
+      "src": "brand/mark.svg",
+      "out": "site/public/icon-192.png",
+      "width": 192,
+      "height": 192,
+      "background": "#05070A",
+      "padding": 0.15
+    },
+    {
+      "src": "brand/mark.svg",
+      "out": "site/public/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "background": "#05070A",
+      "padding": 0.15
+    }
   ],
   "ico": {
     "out": "site/public/favicon.ico",
-    "images": ["site/public/favicon-16.png", "site/public/favicon-32.png"]
+    "images": [
+      "site/public/favicon-16.png",
+      "site/public/favicon-32.png"
+    ]
   },
   "copies": [
-    { "src": "brand/favicon.svg", "out": "site/public/favicon.svg" }
-  ]
+    {
+      "src": "brand/favicon.svg",
+      "out": "site/public/favicon.svg"
+    }
+  ],
+  "manifest": {
+    "out": "site/public/site.webmanifest",
+    "content": {
+      "name": "Lumagrid",
+      "short_name": "Lumagrid",
+      "description": "Themeable, pluggable data widgets for React",
+      "start_url": "./",
+      "scope": "./",
+      "display": "standalone",
+      "background_color": "#000000",
+      "theme_color": "#05070A",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    }
+  }
 }

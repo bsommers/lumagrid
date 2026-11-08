@@ -3,13 +3,16 @@
 // brand/assets.json. Output is byte-deterministic. Run it with `npm run brand`.
 //
 // brand/assets.json schema (JSON has no comments, so it is documented here):
-//   pngs:   [{ src, out, width, height, background }]
+//   pngs:   [{ src, out, width, height, background, padding? }]
 //             src         repo-relative SVG path
 //             out         repo-relative PNG path (must be inside site/public/ or docs/assets/)
 //             width,height target pixel size
 //             background  null for transparent, or a hex color such as "#05070A"
+//             padding     optional fraction of the size left empty on each side (0.15 puts the
+//                         SVG inside the inner 70 percent, clear of platform icon masks)
 //   ico:    { out, images }   images lists PNG outputs (above) packed into one ICO, in order
 //   copies: [{ src, out }]    files copied verbatim
+//   manifest: { out, content }  content is written to out as JSON (the web app manifest)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -53,12 +56,13 @@ function svgBody(src) {
   return text.slice(start);
 }
 
-function pageHtml(svg, width, height, background) {
+function pageHtml(svg, width, height, background, padding = 0) {
   const bg = background ?? 'transparent';
+  const inset = Math.round(width * padding);
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 html,body{margin:0;padding:0;background:${bg};}
-body{width:${width}px;height:${height}px;overflow:hidden;}
-svg{display:block;width:${width}px;height:${height}px;}
+body{width:${width}px;height:${height}px;overflow:hidden;box-sizing:border-box;padding:${inset}px;}
+svg{display:block;width:100%;height:100%;}
 </style></head><body>${svg}</body></html>`;
 }
 
@@ -72,7 +76,7 @@ async function rasterize(browser, spec) {
     // The SVGs are repository-owned; abort anything that tries to reach the network anyway.
     await context.route('**/*', (route) => route.abort());
     const page = await context.newPage();
-    await page.setContent(pageHtml(svgBody(spec.src), spec.width, spec.height, spec.background), {
+    await page.setContent(pageHtml(svgBody(spec.src), spec.width, spec.height, spec.background, spec.padding), {
       waitUntil: 'load',
     });
     return await page.screenshot({
@@ -128,6 +132,10 @@ async function main() {
   }
 
   for (const c of manifest.copies ?? []) write(c.out, readFileSync(c.src));
+
+  if (manifest.manifest) {
+    write(manifest.manifest.out, Buffer.from(`${JSON.stringify(manifest.manifest.content, null, 2)}\n`));
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
