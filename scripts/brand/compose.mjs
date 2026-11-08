@@ -46,6 +46,30 @@ function loadFont() {
 }
 
 /**
+ * Serialize opentype.js path commands ourselves: Path.toPathData() emits NaN for some glyph and
+ * size combinations in opentype.js 2.0.0 (seen at 18, 20 and 24 px), which would corrupt the art.
+ */
+function pathData(commands) {
+  return commands
+    .map((c) => {
+      switch (c.type) {
+        case 'M':
+        case 'L':
+          return `${c.type}${n(c.x)} ${n(c.y)}`;
+        case 'Q':
+          return `Q${n(c.x1)} ${n(c.y1)} ${n(c.x)} ${n(c.y)}`;
+        case 'C':
+          return `C${n(c.x1)} ${n(c.y1)} ${n(c.x2)} ${n(c.y2)} ${n(c.x)} ${n(c.y)}`;
+        case 'Z':
+          return 'Z';
+        default:
+          throw new Error(`unsupported path command ${c.type}`);
+      }
+    })
+    .join('');
+}
+
+/**
  * Outline the tagline at the given font size with its top-left ink corner at (x, y).
  * @returns {{ d: string, width: number, height: number }}
  */
@@ -53,7 +77,7 @@ export function outlineTagline(text, size, x, y) {
   const font = loadFont();
   const options = { letterSpacing: LETTER_SPACING };
   const box = font.getPath(text, 0, 0, size, options).getBoundingBox();
-  const d = font.getPath(text, x - box.x1, y - box.y1, size, options).toPathData(2);
+  const d = pathData(font.getPath(text, x - box.x1, y - box.y1, size, options).commands);
   return { d, width: box.x2 - box.x1, height: box.y2 - box.y1 };
 }
 
@@ -92,7 +116,7 @@ function compose(layout) {
   const taglineY = layout.lockupY + lockupH + layout.taglineGap;
   const taglineProbe = outlineTagline(tagline, layout.taglineSize, 0, 0);
   const taglineX = layout.lockupX ?? (width - taglineProbe.width) / 2;
-  const tag = outlineTagline(tagline, layout.taglineSize, n(taglineX) * 1, n(taglineY) * 1);
+  const tag = outlineTagline(tagline, layout.taglineSize, taglineX, taglineY);
 
   const grid = perspectiveGrid(layout);
   const gridMarkup = layout.fadeLeft

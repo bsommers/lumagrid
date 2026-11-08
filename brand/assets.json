@@ -44,6 +44,20 @@
       "width": 1280,
       "height": 640,
       "background": null
+    },
+    {
+      "src": "brand/og.svg",
+      "out": "site/public/og.png",
+      "width": 1200,
+      "height": 630,
+      "background": null
+    },
+    {
+      "src": "brand/banner.svg",
+      "out": "docs/assets/banner.png",
+      "width": 1280,
+      "height": 320,
+      "background": null
     }
   ],
   "ico": {

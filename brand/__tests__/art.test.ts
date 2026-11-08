@@ -22,6 +22,8 @@ const BACKGROUND = '#05070A';
 
 const ART = [
   { file: 'brand/social.svg', viewBox: '0 0 1280 640' },
+  { file: 'brand/og.svg', viewBox: '0 0 1200 630' },
+  { file: 'brand/banner.svg', viewBox: '0 0 1280 320' },
 ];
 
 function colors(svg: string): string[] {
@@ -50,6 +52,10 @@ describe.each(ART)('$file', ({ file, viewBox }) => {
 
   it.each(FORBIDDEN)('contains no %s', (re) => {
     expect(svg).not.toMatch(re);
+  });
+
+  it('contains no NaN or Infinity in any coordinate', () => {
+    expect(svg).not.toMatch(/NaN|Infinity/);
   });
 
   it('uses only D-07 palette colors', () => {
