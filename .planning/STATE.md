@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: Release readiness
 current_phase: 05
 current_phase_name: Brand, docs & showcase
-current_plan: 9
+current_plan: 10
 status: ready
-stopped_at: Completed 05-08-PLAN.md
-last_updated: "2026-11-08T13:07:06.105Z"
-state_head: 0a4d4204158d13955807b77d5c519fb84d3b6d81
+stopped_at: Completed 05-09-PLAN.md
+last_updated: "2026-11-08T13:16:23.871Z"
+state_head: e9705890d689d00ee0313b19f234c53da7d72682
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 23
-  completed_plans: 15
+  completed_plans: 16
   percent: 60
 ---
 
@@ -25,7 +25,7 @@ progress:
 ## Current Position
 
 Phase: 05 (Brand, docs & showcase) — EXECUTING
-Current Plan: 9
+Current Plan: 10
 Total Plans in Phase: 16
 Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
@@ -57,8 +57,8 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-08T13:07:06.056Z
-Stopped at: Completed 05-08-PLAN.md
+Last session: 2026-11-08T13:16:23.818Z
+Stopped at: Completed 05-09-PLAN.md
 Resume file: None
 
 ## Performance Metrics
@@ -77,6 +77,7 @@ Resume file: None
 | Phase 05 P06 | 12 min | 2 tasks | 12 files |
 | Phase 05 P07 | 8 min | 3 tasks | 17 files |
 | Phase 05 P08 | 12 min | 3 tasks | 9 files |
+| Phase 05 P09 | 12 min | 3 tasks | 29 files |
 
 ## Decisions
 
@@ -91,6 +92,7 @@ Resume file: None
 - [Phase 05]: 05-06: brand output allow-list (isAllowedOutput) lives in check-brand.mjs and is shared by the generator and the icons test; app icons use 0.15 padding so the mark sits in the inner 70 percent
 - [Phase 05]: 05-07: capture page allow-lists chart/theme/seed and renders a fixed alert for invalid input; TreeView captured inside CollapseManager
 - [Phase 05]: 05-08: adapter guide examples import factories from lumagrid/plugins and use fixed-size chart components (BarChart, @nivo/bar Bar) so they render under jsdom
+- [Phase 05]: Brand art tagline path serialized locally; opentype toPathData emits NaN at some sizes
 
 ## Accumulated Context
 
