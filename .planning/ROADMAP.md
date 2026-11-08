@@ -53,7 +53,7 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 5/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
+**Plans:** 6/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
 **Wave 1**
@@ -68,7 +68,7 @@ Plans:
 - [x] 05-05-PLAN.md — Wave 3: `scripts/check-docs.mjs`, snippet type-check pipeline, getting-started, transforms and theming chapters
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 05-06-PLAN.md — Wave 4: `npm run brand` generator and validator, favicon set, ICO, app icons, web manifest
+- [x] 05-06-PLAN.md — Wave 4: `npm run brand` generator and validator, favicon set, ICO, app icons, web manifest
 - [ ] 05-07-PLAN.md — Wave 4: shared demos, `site/` Vite app, deterministic capture page for the seven charts, shell with stub sections, ci.sh site typecheck
 - [ ] 05-08-PLAN.md — Wave 4: plugins-and-adapters, troubleshooting and guide index with compiled snippets
 
