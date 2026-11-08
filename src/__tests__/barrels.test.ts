@@ -18,7 +18,7 @@ import {
 // Guards the package export map: every runtime symbol each entry point is
 // expected to expose. A removed or renamed export fails here before it ships.
 const expected: Record<string, [Record<string, unknown>, string[]]> = {
-  'vizbox': [root, [
+  'lumagrid': [root, [
     'ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme',
     'categoricalColor', 'sequentialColor', 'divergingColor', 'thresholdScale',
     'flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'TransformPipeline',
@@ -27,20 +27,20 @@ const expected: Record<string, [Record<string, unknown>, string[]]> = {
     'DataTable', 'HorizontalBarChart', 'LineChart', 'PieChart', 'Choropleth', 'ForceGraph', 'TreeView',
     'createD3Plugin', 'createRechartsPlugin', 'createNivoPlugin',
   ]],
-  'vizbox/core': [core, [
+  'lumagrid/core': [core, [
     'WidgetContainer', 'ViewSwitcher', 'CollapseManager', 'useCollapse',
     'registerPlugin', 'getPlugin', 'listPlugins', 'registerAndGetId', 'createNativePlugin',
   ]],
-  'vizbox/viz': [viz, [
+  'lumagrid/viz': [viz, [
     'DataTable', 'HorizontalBarChart', 'LineChart', 'PieChart', 'Choropleth', 'ForceGraph', 'TreeView',
     'nativeBarPlugin', 'nativeLinePlugin', 'nativePiePlugin', 'nativeTablePlugin',
     'nativeTreePlugin', 'nativeChoroplethPlugin', 'nativeForceGraphPlugin',
   ]],
-  'vizbox/plugins': [plugins, [
+  'lumagrid/plugins': [plugins, [
     'createD3Plugin', 'createRechartsPlugin', 'rechartsThemeAdapter', 'createNivoPlugin', 'nivoThemeAdapter',
   ]],
-  'vizbox/theme': [theme, ['ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme']],
-  'vizbox/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'TransformPipeline']],
+  'lumagrid/theme': [theme, ['ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme']],
+  'lumagrid/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'TransformPipeline']],
 };
 
 describe('entry-point barrels', () => {

@@ -10,8 +10,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
-      { find: /^vizbox\/viz$/, replacement: here('../src/viz/index.ts') },
-      { find: /^vizbox$/, replacement: here('../src/index.ts') },
+      { find: /^lumagrid\/viz$/, replacement: here('../src/viz/index.ts') },
+      { find: /^lumagrid$/, replacement: here('../src/index.ts') },
     ],
   },
   build: { outDir: here('./dist'), emptyOutDir: true },

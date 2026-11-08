@@ -4,8 +4,8 @@ import type { ThemeDefinition } from '../theme/types.js';
 import type { ChartPlugin, RendererProps } from '../registry/types.js';
 
 /**
- * Minimal theme tokens extracted from VizBox ThemeDefinition for D3 charts.
- * Keeps D3 charts decoupled from VizBox internals.
+ * Minimal theme tokens extracted from Lumagrid ThemeDefinition for D3 charts.
+ * Keeps D3 charts decoupled from Lumagrid internals.
  *
  * Experimental: may change in a minor release.
  *
@@ -59,12 +59,12 @@ export interface D3PluginOptions<TData, TConfig = Record<string, unknown>> {
 
 /**
  * Creates a ChartPlugin backed by a D3 imperative lifecycle.
- * The D3Theme is derived automatically from the VizBox ThemeDefinition.
+ * The D3Theme is derived automatically from the Lumagrid ThemeDefinition.
  *
  * @example
  * ```ts
  * import * as d3 from 'd3';
- * import { createD3Plugin } from 'vizbox/plugins';
+ * import { createD3Plugin } from 'lumagrid/plugins';
  *
  * const bubblePlugin = createD3Plugin({
  *   id: 'bubble',

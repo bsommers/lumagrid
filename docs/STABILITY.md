@@ -1,6 +1,6 @@
 # Stability policy
 
-This page says what each stability tag promises for the `vizbox` public API, which exports carry which tag, and the conventions that go with them. The TSDoc tags on each export are the source of truth. The API reference (`npm run docs:api`) and the API reports are generated from them.
+This page says what each stability tag promises for the `lumagrid` public API, which exports carry which tag, and the conventions that go with them. The TSDoc tags on each export are the source of truth. The API reference (`npm run docs:api`) and the API reports are generated from them.
 
 ## What the tags promise
 
@@ -10,7 +10,7 @@ This page says what each stability tag promises for the `vizbox` public API, whi
 | `@experimental` | May change in a minor release. Always paired with `@beta`: api-extractor only understands `@public`, `@beta`, `@alpha` and `@internal`, so `@beta` carries the same meaning to it. `typedoc.json` excludes `@beta` from the generated reference. |
 | `@deprecated` | Still works and is kept for at least one minor release, then removed in the next major. Each deprecation is listed under **Deprecated** in `CHANGELOG.md`. The current deprecations are removed in 2.0. |
 
-Stability is expressed only through these TSDoc tags. There is no separate `vizbox/experimental` entry point. An export without `@public` or `@experimental` is an error in the API report check (see [How the surface is guarded](#how-the-surface-is-guarded)).
+Stability is expressed only through these TSDoc tags. There is no separate `lumagrid/experimental` entry point. An export without `@public` or `@experimental` is an error in the API report check (see [How the surface is guarded](#how-the-surface-is-guarded)).
 
 ## Stable (`@public`)
 
@@ -20,7 +20,7 @@ Stability is expressed only through these TSDoc tags. There is no separate `vizb
 - **Containers:** `WidgetContainer`, `ViewSwitcher`, `CollapseManager`, `useCollapse`, and their props types.
 - **Native charts:** the seven chart components (`DataTable`, `HorizontalBarChart`, `LineChart`, `PieChart`, `Choropleth`, `ForceGraph`, `TreeView`) and their core props. The seven `native*Plugin` presets are stable too.
 - **Adapter factories:** `createD3Plugin`, `createRechartsPlugin` and `createNivoPlugin`.
-- **Entry points:** `vizbox`, `vizbox/transforms`, `vizbox/theme`, `vizbox/viz` and `vizbox/plugins`.
+- **Entry points:** `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz` and `lumagrid/plugins`.
 
 ## Experimental (`@experimental`, also `@beta`)
 

@@ -84,12 +84,12 @@ export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
 
 /**
  * Creates a ChartPlugin backed by a declarative Nivo component.
- * The NivoTheme is derived automatically from the VizBox ThemeDefinition.
+ * The NivoTheme is derived automatically from the Lumagrid ThemeDefinition.
  *
  * @example
  * ```tsx
  * import { ResponsiveBar } from '@nivo/bar';
- * import { createNivoPlugin } from 'vizbox/plugins';
+ * import { createNivoPlugin } from 'lumagrid/plugins';
  *
  * registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
  *   id: 'nivo-bar',

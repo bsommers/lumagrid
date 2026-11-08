@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **BREAKING**: the package is renamed from `vizbox` to `lumagrid`. The entry points are `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz` and `lumagrid/plugins`. There is no `vizbox` alias. The console warning prefix is `[lumagrid]`.
 - `registerPlugin` returns the plugin id (`string`; it returned `void` before). Outside production it logs a `console.warn` when it replaces an existing id. It still replaces the earlier plugin (242b566).
 - `ForceGraph` relayouts when the set of nodes or edges changes, warm-started from the previous positions. `relayout={false}` keeps existing positions (4285c68).
 - `groupBy`'s declared type is now its real factory signature, `(field, valueField?) => ChainableTransform<GroupByOptions>`. There is no runtime change (0eecd9a).

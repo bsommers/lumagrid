@@ -22,7 +22,7 @@ export function registerPlugin<TData, TTheme, TConfig>(
 ): string {
   if (plugins.has(plugin.id) && typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
     console.warn(
-      `[uitoolbox] Plugin "${plugin.id}" is already registered; replacing the earlier registration. ` +
+      `[lumagrid] Plugin "${plugin.id}" is already registered; replacing the earlier registration. ` +
         'This is expected under hot reload.',
     );
   }

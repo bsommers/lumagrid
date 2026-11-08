@@ -5,7 +5,7 @@ import type { ChartPlugin, RendererProps } from '../registry/types.js';
 
 /**
  * Minimal theme tokens for Recharts components.
- * Extracted from VizBox ThemeDefinition by rechartsThemeAdapter.
+ * Extracted from Lumagrid ThemeDefinition by rechartsThemeAdapter.
  *
  * Experimental: may change in a minor release.
  *
@@ -72,7 +72,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
     if (nameKey === undefined) {
       nameKey = '';
       console.warn(
-        '[vizbox] recharts-adapter: no string field found for nameKey auto-detection; ' +
+        '[lumagrid] recharts-adapter: no string field found for nameKey auto-detection; ' +
         'defaulting to an empty name for every row. Pass config.nameKey explicitly to silence this warning.',
       );
     }
@@ -83,7 +83,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
     if (dataKey === undefined) {
       dataKey = '';
       console.warn(
-        '[vizbox] recharts-adapter: no number field found for dataKey auto-detection; ' +
+        '[lumagrid] recharts-adapter: no number field found for dataKey auto-detection; ' +
         'defaulting to a zero value for every row. Pass config.dataKey explicitly to silence this warning.',
       );
     }
@@ -105,7 +105,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
  * @example
  * ```tsx
  * import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
- * import { createRechartsPlugin } from 'vizbox/plugins';
+ * import { createRechartsPlugin } from 'lumagrid/plugins';
  *
  * registerPlugin(createRechartsPlugin({
  *   id: 'recharts-bar',

@@ -30,7 +30,7 @@ The freeze scope is the stable (`@public`) list in [STABILITY.md](STABILITY.md).
 
 > **TODO — deferred by owner (2026-11-07).** Not started; do not publish until explicitly requested.
 
-1. Confirm package name availability (`vizbox`) or move to a scope.
+1. Confirm package name availability (`lumagrid`) or move to a scope.
 2. Finalise `package.json`: `repository`, `bugs`, `homepage`, `sideEffects: false`, `engines`, `peerDependencies` (react, react-dom; d3/recharts/nivo optional), `files`.
 3. Add a `prepublishOnly` script running typecheck, lint, test, build; verify with `npm pack --dry-run` and install the tarball into `examples/`.
 4. Check `exports` resolve for both ESM and CJS consumers (e.g. `publint`, `arethetypeswrong`).

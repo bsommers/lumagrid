@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'vizbox';
-import type { TransformedData } from 'vizbox';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
 import {
   nativeBarPlugin,
   nativeLinePlugin,
   nativePiePlugin,
   nativeTablePlugin,
   nativeTreePlugin,
-} from 'vizbox/viz';
+} from 'lumagrid/viz';
 
 // Register the plugins ViewSwitcher can choose between (once, at startup).
 [nativeBarPlugin, nativeLinePlugin, nativePiePlugin, nativeTablePlugin, nativeTreePlugin].forEach(

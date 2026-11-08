@@ -6,7 +6,7 @@
     "declarationMap": false,
     "rootDir": "..",
     "baseUrl": ".",
-    "paths": { "vizbox": ["../src/index.ts"], "vizbox/viz": ["../src/viz/index.ts"] }
+    "paths": { "lumagrid": ["../src/index.ts"], "lumagrid/viz": ["../src/viz/index.ts"] }
   },
   "include": ["src"]
 }

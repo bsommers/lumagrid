@@ -59,7 +59,7 @@ export type {
   AnyTransform,
 } from './core/index.js';
 
-// Viz layer (re-export key symbols — consumers can also import from 'vizbox/viz')
+// Viz layer (re-export key symbols — consumers can also import from 'lumagrid/viz')
 export {
   DataTable,
   HorizontalBarChart,

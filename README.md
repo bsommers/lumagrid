@@ -1,11 +1,11 @@
-# VizBox
+# Lumagrid
 
 A layered React + TypeScript UI library for data visualization widgets. Works with tabular, hierarchical, geographic, and time-series data. Plug in any chart library — built-in SVG charts, D3, Recharts, Nivo, or your own.
 
 ## Install
 
 ```bash
-npm install vizbox
+npm install lumagrid
 # peer deps
 npm install react react-dom
 # optional: for D3-based charts
@@ -48,8 +48,8 @@ Each layer may only import from layers below it. The transform layer has zero Re
 ## 5-minute quickstart
 
 ```tsx
-import { ThemeProvider, WidgetContainer, ViewSwitcher, groupBy, registerPlugin } from 'vizbox';
-import { nativeBarPlugin, nativeTablePlugin } from 'vizbox/viz';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, groupBy, registerPlugin } from 'lumagrid';
+import { nativeBarPlugin, nativeTablePlugin } from 'lumagrid/viz';
 
 // 1. Register the plugins you want to switch between (once at app startup)
 registerPlugin(nativeBarPlugin);
@@ -142,7 +142,7 @@ const { drillDown, rollUp, drillPath, isExpanded, toggle } = useCollapse();
 ### Transform pipeline
 
 ```tsx
-import { TransformPipeline, flatten, aggregate, groupBy } from 'vizbox';
+import { TransformPipeline, flatten, aggregate, groupBy } from 'lumagrid';
 
 const pipeline = new TransformPipeline([
   flatten,                            // normalize nested objects
@@ -159,7 +159,7 @@ const result = pipeline.run(rawData); // → TransformedData
 Register any of the pre-built native plugins at startup:
 
 ```tsx
-import { registerPlugin } from 'vizbox';
+import { registerPlugin } from 'lumagrid';
 import {
   nativeBarPlugin,
   nativeLinePlugin,
@@ -168,7 +168,7 @@ import {
   nativeTreePlugin,
   nativeChoroplethPlugin,
   nativeForceGraphPlugin,
-} from 'vizbox/viz';
+} from 'lumagrid/viz';
 
 registerPlugin(nativeBarPlugin);    // id: 'bar'
 registerPlugin(nativeLinePlugin);   // id: 'line'
@@ -217,7 +217,7 @@ The legacy `xField` and `yField` props still work but are deprecated and will be
 
 ```tsx
 import * as d3 from 'd3';
-import { createD3Plugin, registerPlugin } from 'vizbox';
+import { createD3Plugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createD3Plugin({
   id: 'bubble',
@@ -242,7 +242,7 @@ registerPlugin(createD3Plugin({
 }));
 ```
 
-The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFamily`, `fontSize`, `background`, `foreground`, `border`. It's derived automatically from the active VizBox theme.
+The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFamily`, `fontSize`, `background`, `foreground`, `border`. It's derived automatically from the active Lumagrid theme.
 
 ---
 
@@ -250,7 +250,7 @@ The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFam
 
 ```tsx
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { createRechartsPlugin, registerPlugin } from 'vizbox';
+import { createRechartsPlugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createRechartsPlugin({
   id: 'recharts-bar',
@@ -273,7 +273,7 @@ registerPlugin(createRechartsPlugin({
 
 ```tsx
 import { ResponsiveBar } from '@nivo/bar';
-import { createNivoPlugin, registerPlugin } from 'vizbox';
+import { createNivoPlugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
   id: 'nivo-bar',
@@ -305,8 +305,8 @@ straight through with no reshaping.
 ## Writing a custom plugin from scratch
 
 ```tsx
-import { registerPlugin } from 'vizbox';
-import type { ChartPlugin } from 'vizbox';
+import { registerPlugin } from 'lumagrid';
+import type { ChartPlugin } from 'lumagrid';
 
 const heatmapPlugin: ChartPlugin<number[][], HeatmapTheme, HeatmapConfig> = {
   id: 'heatmap',
@@ -331,8 +331,8 @@ registerPlugin(heatmapPlugin);
 ## Custom theme
 
 ```tsx
-import type { ThemeDefinition } from 'vizbox';
-import { lightTheme, ThemeProvider } from 'vizbox';
+import type { ThemeDefinition } from 'lumagrid';
+import { lightTheme, ThemeProvider } from 'lumagrid';
 
 const brandTheme: ThemeDefinition = {
   ...lightTheme,

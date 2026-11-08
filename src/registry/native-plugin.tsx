@@ -44,7 +44,7 @@ export interface NativeChartProps {
 export type NativeConfig = Omit<NativeChartProps, 'data' | 'width' | 'height' | 'theme'>;
 
 /**
- * Wraps an existing VizBox native SVG chart component as a ChartPlugin.
+ * Wraps an existing Lumagrid native SVG chart component as a ChartPlugin.
  * Uses identity adapters — data and theme pass through unchanged.
  *
  * @example
