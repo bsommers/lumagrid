@@ -9,6 +9,11 @@ import type { ChartPlugin, RendererProps } from '../registry/types.js';
  * Covers the fields most Nivo charts read (background, text, axis, grid,
  * tooltip) — not Nivo's full theme surface (no legends/markers/crosshair/
  * dots; override those directly on the Nivo component if needed).
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
  */
 export interface NivoTheme {
   background: string;
@@ -24,7 +29,14 @@ export interface NivoTheme {
   colors: string[];
 }
 
-/** Shared theme adapter for all Nivo plugins. */
+/**
+ * Shared theme adapter for all Nivo plugins.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export function nivoThemeAdapter(theme: ThemeDefinition): NivoTheme {
   const fontSize = parseInt(theme.typography.fontSizeSm, 10);
   return {
@@ -54,6 +66,14 @@ export function nivoThemeAdapter(theme: ThemeDefinition): NivoTheme {
   };
 }
 
+/**
+ * Options for {@link createNivoPlugin}.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
   id: string;
   label?: string;
@@ -88,6 +108,8 @@ export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
  *   ),
  * }));
  * ```
+ *
+ * @public
  */
 export function createNivoPlugin<TData, TConfig = Record<string, unknown>>(
   options: NivoPluginOptions<TData, TConfig>,

@@ -6,6 +6,11 @@ import type { ChartPlugin, RendererProps } from '../registry/types.js';
 /**
  * Minimal theme tokens for Recharts components.
  * Extracted from VizBox ThemeDefinition by rechartsThemeAdapter.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
  */
 export interface RechartsTheme {
   colors: string[];
@@ -16,9 +21,24 @@ export interface RechartsTheme {
   background: string;
 }
 
-/** Row shape passed to Recharts data arrays. */
+/**
+ * Row shape passed to Recharts data arrays.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export type RechartsRow = Record<string, string | number | null>;
 
+/**
+ * Per-view configuration for Recharts plugins.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export interface RechartsConfig {
   /** Field name to use as the bar/line value key. Auto-detected if omitted. */
   dataKey?: string;
@@ -26,7 +46,14 @@ export interface RechartsConfig {
   nameKey?: string;
 }
 
-/** Shared theme adapter for all Recharts plugins. */
+/**
+ * Shared theme adapter for all Recharts plugins.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export function rechartsThemeAdapter(theme: ThemeDefinition): RechartsTheme {
   return {
     colors: theme.colors.categorical,
@@ -94,6 +121,8 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
  *   ),
  * }));
  * ```
+ *
+ * @public
  */
 export function createRechartsPlugin(options: {
   id: string;

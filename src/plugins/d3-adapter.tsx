@@ -6,6 +6,11 @@ import type { ChartPlugin, RendererProps } from '../registry/types.js';
 /**
  * Minimal theme tokens extracted from VizBox ThemeDefinition for D3 charts.
  * Keeps D3 charts decoupled from VizBox internals.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
  */
 export interface D3Theme {
   /** Categorical color palette (for grouping/series). */
@@ -31,6 +36,14 @@ function toD3Theme(theme: ThemeDefinition): D3Theme {
   };
 }
 
+/**
+ * Options for {@link createD3Plugin}.
+ *
+ * Experimental: may change in a minor release.
+ *
+ * @beta
+ * @experimental
+ */
 export interface D3PluginOptions<TData, TConfig = Record<string, unknown>> {
   id: string;
   label?: string;
@@ -76,6 +89,8 @@ export interface D3PluginOptions<TData, TConfig = Record<string, unknown>> {
  *
  * registerPlugin(bubblePlugin);
  * ```
+ *
+ * @public
  */
 export function createD3Plugin<TData, TConfig = Record<string, unknown>>(
   options: D3PluginOptions<TData, TConfig>,
