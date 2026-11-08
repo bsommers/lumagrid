@@ -53,7 +53,7 @@ Plans:
 **Goal:** Rename VizBox to Lumagrid (package name, export map, etc/ API report names, docs, examples, warning prefix); write user guides; refresh README/ARCHITECTURE/USING/PURPOSE; render SVG/PNG visuals for examples and docs; build a GitHub Pages showcase site (futuristic black background, light-blue neon grid); create a logo and icons.
 **Requirements**: TBD
 **Depends on:** Phase 4
-**Plans:** 9/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
+**Plans:** 10/16 plans executed in 9 waves (REL-02 npm publish stays deferred; D-01..D-21 in 05-CONTEXT.md are the traceable IDs)
 
 Plans:
 **Wave 1**
@@ -74,7 +74,7 @@ Plans:
 
 **Wave 5** *(blocked on Wave 4 completion)*
 - [x] 05-09-PLAN.md — Wave 5: social card, OG image, README banner and seven chart icons with generated PNGs
-- [ ] 05-10-PLAN.md — Wave 5: neon chart theme, hero and the ten-card interactive gallery (seven native, three lazy adapters)
+- [x] 05-10-PLAN.md — Wave 5: neon chart theme, hero and the ten-card interactive gallery (seven native, three lazy adapters)
 
 **Wave 6** *(blocked on Wave 5 completion)*
 - [ ] 05-11-PLAN.md — Wave 6: neon grid CSS with reduced-motion handling, features strip, links, footer, social metadata
