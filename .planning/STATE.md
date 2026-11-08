@@ -4,16 +4,17 @@ milestone: v1.0
 milestone_name: Release readiness
 current_phase: 05
 current_phase_name: Brand, docs & showcase
+current_plan: 4
 status: ready
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-11-08T12:41:13.310Z"
-state_head: 45007a19ce00c2a7c2d7b2764aa314f9a2258170
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-11-08T12:44:57.127Z"
+state_head: d5a4bf7a069d7718cf8892744c61a731e5a0aea0
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 23
-  completed_plans: 9
-  percent: 39
+  completed_plans: 10
+  percent: 43
 ---
 
 # Project State
@@ -24,6 +25,8 @@ progress:
 ## Current Position
 
 Phase: 05 (Brand, docs & showcase) — EXECUTING
+Current Plan: 4
+Total Plans in Phase: 16
 Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Remaining (Phase 04)
@@ -54,8 +57,8 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-08T12:41:13.265Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-11-08T12:44:51.449Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
 
 ## Performance Metrics
@@ -68,6 +71,7 @@ Resume file: None
 | Phase 4 P05 | 15min | 4 tasks | 11 files |
 | Phase 05 P01 | 10m | 3 tasks | 40 files |
 | Phase 05 P02 | 15min | 3 tasks | 7 files |
+| Phase 05 P03 | 10 min | 3 tasks | 13 files |
 
 ## Decisions
 
@@ -76,6 +80,7 @@ Resume file: None
 - [Phase 4]: Stable adapter factories reference experimental option types by design (D-08/D-09); 04-07 silences incompatible-release-tags
 - [Phase 05]: D-01: package renamed to lumagrid with no alias; [lumagrid] warning prefix; historical docs annotated
 - [Phase 05]: 05-02: ten devDependencies exact-pinned after user-approved install gate (d3 7.9.2, playwright-core 1.64.1); browser launcher resolves LUMAGRID_CHROME, managed Chromium, system Chrome
+- [Phase 05]: 05-03: rect edges (x and x+width) count toward mirror-symmetry sets in the mark geometry test
 
 ## Accumulated Context
 
