@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: Release readiness
 current_phase: 05
 current_phase_name: Brand, docs & showcase
-current_plan: 11
+current_plan: 12
 status: ready
-stopped_at: Completed 05-10-PLAN.md
-last_updated: "2026-11-08T13:21:58.488Z"
-state_head: 629bb2480a1ba90e530177c7d212ccf28f5bccaa
+stopped_at: Completed 05-11-PLAN.md
+last_updated: "2026-11-08T15:40:01.270Z"
+state_head: adbb3823f153dabd928b383072c8423f90a73ab1
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 23
-  completed_plans: 17
+  completed_plans: 18
   percent: 60
 ---
 
@@ -25,7 +25,7 @@ progress:
 ## Current Position
 
 Phase: 05 (Brand, docs & showcase) — EXECUTING
-Current Plan: 11
+Current Plan: 12
 Total Plans in Phase: 16
 Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
@@ -57,8 +57,8 @@ Phases 01-03 complete. REL-01 (Apache-2.0) done.
 
 ## Session Continuity
 
-Last session: 2026-11-08T13:21:58.429Z
-Stopped at: Completed 05-10-PLAN.md
+Last session: 2026-11-08T15:40:01.220Z
+Stopped at: Completed 05-11-PLAN.md
 Resume file: None
 
 ## Performance Metrics
@@ -79,6 +79,7 @@ Resume file: None
 | Phase 05 P08 | 12 min | 3 tasks | 9 files |
 | Phase 05 P09 | 12 min | 3 tasks | 29 files |
 | Phase 05 P10 | 12 min | 3 tasks | 24 files |
+| Phase 05 P11 | 8 min | 2 tasks | 11 files |
 
 ## Decisions
 
@@ -95,6 +96,7 @@ Resume file: None
 - [Phase 05]: 05-08: adapter guide examples import factories from lumagrid/plugins and use fixed-size chart components (BarChart, @nivo/bar Bar) so they render under jsdom
 - [Phase 05]: Brand art tagline path serialized locally; opentype toPathData emits NaN at some sizes
 - [Phase 05]: 05-10: force and tree demos hold state inside the displayed code region; force graph keyed by seed so a new seed relayouts from scratch
+- [Phase 05]: 05-11: grid-bg at z-index 0 with main at z-index 1 (opaque body background would hide a z-index -1 grid)
 
 ## Accumulated Context
 
