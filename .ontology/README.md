@@ -1,6 +1,6 @@
-> Historical document — the project was renamed from VizBox to Lumagrid in Phase 5.
+> Historical document — written before Phase 5; names have since been updated to Lumagrid, but the content describes the earlier codebase.
 
-# Ontological Semantic Binding: uitoolbox
+# Ontological Semantic Binding: lumagrid
 
 This directory contains the non-destructive semantic bindings mapping this repository to the Basic Formal Ontology (BFO) 2020 framework.
 

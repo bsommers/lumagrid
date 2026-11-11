@@ -1,6 +1,6 @@
-> Historical document — the project was renamed from VizBox to Lumagrid in Phase 5.
+> Historical document — written before Phase 5; names have since been updated to Lumagrid, but the content describes the earlier codebase.
 
-# VizBox — Build Plan
+# Lumagrid — Build Plan
 
 ## Stack
 - React + TypeScript (strict mode)
@@ -45,9 +45,9 @@
 The following must type-check and render:
 
 ```tsx
-import { WidgetContainer, ViewSwitcher, ThemeProvider } from 'vizbox';
-import { HorizontalBarChart, DataTable, registerVisualization } from 'vizbox/viz';
-import { groupBy } from 'vizbox/transforms';
+import { WidgetContainer, ViewSwitcher, ThemeProvider } from 'lumagrid';
+import { HorizontalBarChart, DataTable, registerVisualization } from 'lumagrid/viz';
+import { groupBy } from 'lumagrid/transforms';
 
 registerVisualization('bar', HorizontalBarChart);
 registerVisualization('table', DataTable);
@@ -69,7 +69,7 @@ registerVisualization('table', DataTable);
 ## File Structure
 
 ```
-vizbox/
+lumagrid/
   package.json
   tsconfig.json
   README.md

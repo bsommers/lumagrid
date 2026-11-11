@@ -1,19 +1,19 @@
-> Historical document — the project was renamed from VizBox to Lumagrid in Phase 5.
+> Historical document — written before Phase 5; names have since been updated to Lumagrid, but the content describes the earlier codebase.
 
-# VizBox — Complete Rebuild Specification
+# Lumagrid — Complete Rebuild Specification
 
 **Generated:** 2026-08-23
-**Purpose:** This document contains everything needed to reconstruct the VizBox codebase from nothing — in a different session, with a different AI model, or by hand. It is self-contained: it does not assume access to this repository's git history or any prior conversation. Every file's full, exact, current source is included verbatim, along with the reasoning behind non-obvious decisions and a list of real bugs that were found and fixed during a QA pass, so they are not reintroduced.
+**Purpose:** This document contains everything needed to reconstruct the Lumagrid codebase from nothing — in a different session, with a different AI model, or by hand. It is self-contained: it does not assume access to this repository's git history or any prior conversation. Every file's full, exact, current source is included verbatim, along with the reasoning behind non-obvious decisions and a list of real bugs that were found and fixed during a QA pass, so they are not reintroduced.
 
 **How to use this document:** Follow section order. Sections 7 onward give exact file paths and complete file contents, grouped by architectural layer, in dependency order (each layer only depends on layers listed before it). Copy each file's content verbatim into the stated path. Section 15 lists five specific bugs that existed in earlier versions of this code and were fixed — the fixes are already baked into the source given here, but they're called out explicitly because the "obvious" naive implementation of several functions reintroduces them. Section 18 gives exact commands and exact expected output (test counts, etc.) to confirm a rebuild is correct.
 
 ---
 
-## 1. What VizBox Is
+## 1. What Lumagrid Is
 
-VizBox is a layered React + TypeScript library for data-visualization widgets. It works with tabular, hierarchical, geographic, and time-series data, and it can render that data through built-in SVG chart components or through a plugin adapter for any external chart library (D3, Recharts, Nivo, or a hand-written one). Version `0.1.0`, Apache-2.0 licensed (see `LICENSE` and `NOTICE`), published as `vizbox` on npm (package scope in some historical config was `@vizbox/vizbox`, but the shipped `package.json` name is `vizbox`).
+Lumagrid is a layered React + TypeScript library for data-visualization widgets. It works with tabular, hierarchical, geographic, and time-series data, and it can render that data through built-in SVG chart components or through a plugin adapter for any external chart library (D3, Recharts, Nivo, or a hand-written one). Version `0.1.0`, Apache-2.0 licensed (see `LICENSE` and `NOTICE`), published as `lumagrid` on npm (package scope in some historical config was `@lumagrid/lumagrid`, but the shipped `package.json` name is `lumagrid`).
 
-The core idea: a small, framework-agnostic **plugin contract** (`ChartPlugin<TData, TTheme, TConfig>`) sits between VizBox's normalized data/theme representation and whatever a specific chart library needs. A dispatcher component (`ViewSwitcher`) knows nothing about D3, Recharts, or SVG internals — it only calls three things on the active plugin: `dataAdapter`, `themeAdapter`, and `Renderer`. Adding a new chart library is: write one adapter file, call `registerPlugin` once.
+The core idea: a small, framework-agnostic **plugin contract** (`ChartPlugin<TData, TTheme, TConfig>`) sits between Lumagrid's normalized data/theme representation and whatever a specific chart library needs. A dispatcher component (`ViewSwitcher`) knows nothing about D3, Recharts, or SVG internals — it only calls three things on the active plugin: `dataAdapter`, `themeAdapter`, and `Renderer`. Adding a new chart library is: write one adapter file, call `registerPlugin` once.
 
 ---
 
@@ -25,7 +25,7 @@ These rules were established during the original build and reinforced during a l
 2. **No `any`, no `as unknown` type-erasure.** The one narrow exception is the single `as` cast inside `TransformPipeline.run` (documented inline, see Section 8) to bridge the "first step accepts raw `unknown`, later steps accept `TransformedData`" contract — this is a deliberate, commented, single-site cast, not a pattern to repeat elsewhere.
 3. **Every file has one clear responsibility.** No file should casually exceed ~200 lines; if one does, it's a signal to split it.
 4. **All props are fully typed with exported interfaces.** No default exports except React components themselves (and even those are named-exported as `export function ComponentName`, never `export default`).
-5. **No runtime dependency beyond `react`/`react-dom`.** D3, Recharts, and Nivo are never imported by VizBox's own source — the three adapters in `src/plugins/` are **dependency-free**: the caller supplies their own chart library component/calls, and the adapter only reshapes data and theme. This is why `package.json` never lists `d3`, `recharts`, or any `@nivo/*` package as a dependency of any kind, even though three adapter files exist for them.
+5. **No runtime dependency beyond `react`/`react-dom`.** D3, Recharts, and Nivo are never imported by Lumagrid's own source — the three adapters in `src/plugins/` are **dependency-free**: the caller supplies their own chart library component/calls, and the adapter only reshapes data and theme. This is why `package.json` never lists `d3`, `recharts`, or any `@nivo/*` package as a dependency of any kind, even though three adapter files exist for them.
 6. **TypeScript strict mode, plus `exactOptionalPropertyTypes` and `noUncheckedIndexedAccess`.** Both are on in `tsconfig.json` and must stay on — they catch real bugs (e.g. forgetting that `array[i]` can be `undefined`).
 7. **TDD for new behavior; tests document existing behavior when back-filling coverage.** When adding a test for code that already exists and is believed correct, it's fine for the test to pass immediately — that's expected, not a violation. When fixing a bug, write the failing test first.
 
@@ -46,7 +46,7 @@ These rules were established during the original build and reinforced during a l
 ## 4. Full Directory Tree
 
 ```
-vizbox/
+lumagrid/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
@@ -169,7 +169,7 @@ Build in this order; each step produces something independently typecheckable an
 
 ```json
 {
-  "name": "vizbox",
+  "name": "lumagrid",
   "version": "0.1.0",
   "description": "Layered React + TypeScript UI library for data visualization widgets",
   "type": "module",
@@ -246,13 +246,13 @@ Build in this order; each step produces something independently typecheckable an
 }
 ```
 
-Note: `peerDependenciesMeta` only lists `d3` as an optional peer, not `recharts` or `@nivo/*` — this is a pre-existing minor inconsistency (the Recharts and Nivo adapters are equally dependency-free and equally "optional peer" in spirit) that was never fixed; it doesn't affect behavior since none of the three are actually imported by VizBox's own source. Reproduce it as-is unless deliberately fixing it.
+Note: `peerDependenciesMeta` only lists `d3` as an optional peer, not `recharts` or `@nivo/*` — this is a pre-existing minor inconsistency (the Recharts and Nivo adapters are equally dependency-free and equally "optional peer" in spirit) that was never fixed; it doesn't affect behavior since none of the three are actually imported by Lumagrid's own source. Reproduce it as-is unless deliberately fixing it.
 
 ### `deno.json`
 
 ```json
 {
-  "name": "@vizbox/vizbox",
+  "name": "@lumagrid/lumagrid",
   "version": "0.1.0",
   "exports": {
     ".": "./src/index.ts",
@@ -278,7 +278,7 @@ Note: `peerDependenciesMeta` only lists `d3` as an optional peer, not `recharts`
 }
 ```
 
-Note the package name differs between `package.json` (`vizbox`, what's actually published to npm) and `deno.json` (`@vizbox/vizbox`, a scoped name for JSR/Deno-style resolution) — this is intentional, not a typo; the two registries have different naming conventions.
+Note the package name differs between `package.json` (`lumagrid`, what's actually published to npm) and `deno.json` (`@lumagrid/lumagrid`, a scoped name for JSR/Deno-style resolution) — this is intentional, not a typo; the two registries have different naming conventions.
 
 ### `tsconfig.json` (base config)
 
@@ -405,7 +405,7 @@ jobs:
 
 ```
 Apache License, Version 2.0 (full verbatim text in the repo-root LICENSE file;
-copyright notice in NOTICE: "VizBox, Copyright 2026 Bill Sommers").
+copyright notice in NOTICE: "Lumagrid, Copyright 2026 Bill Sommers").
 ```
 
 Additional devDependencies installed but not yet reflected above if starting from an older snapshot: run `npm install -D jsdom @testing-library/jest-dom` if `vitest.config.ts`'s `jsdom` environment or `vitest.setup.ts`'s `@testing-library/jest-dom/vitest` import fail to resolve.
@@ -1564,16 +1564,16 @@ export interface ChartPlugin<
   /** Unique identifier used to register and look up this plugin. */
   id: string;
   /**
-   * Converts VizBox TransformedData into whatever format this library expects.
+   * Converts Lumagrid TransformedData into whatever format this library expects.
    * Called on every render when data or config changes.
    */
   dataAdapter: (data: TransformedData, config?: TConfig) => TData;
   /**
-   * Converts VizBox ThemeDefinition into the styling tokens this library expects.
+   * Converts Lumagrid ThemeDefinition into the styling tokens this library expects.
    * Called on every render when the theme changes.
    */
   themeAdapter: (theme: ThemeDefinition, config?: TConfig) => TTheme;
-  /** The actual chart component. Receives adapted data and theme — no VizBox internals. */
+  /** The actual chart component. Receives adapted data and theme — no Lumagrid internals. */
   Renderer: React.ComponentType<RendererProps<TData, TTheme, TConfig>>;
   /** Human-readable display name for the tab strip. Defaults to id. */
   label?: string;
@@ -1661,7 +1661,7 @@ export interface NativeChartProps {
 export type NativeConfig = Omit<NativeChartProps, 'data' | 'width' | 'height' | 'theme'>;
 
 /**
- * Wraps an existing VizBox native SVG chart component as a ChartPlugin.
+ * Wraps an existing Lumagrid native SVG chart component as a ChartPlugin.
  * Uses identity adapters — data and theme pass through unchanged.
  *
  * @example
@@ -2198,7 +2198,7 @@ export { createNativePlugin } from '../registry/native-plugin.js';
 export type { NativeChartProps, NativeConfig } from '../registry/native-plugin.js';
 ```
 
-Note this barrel re-exports the registry layer's public functions too (`registerPlugin` etc.) — `src/core/index.ts` is effectively "core + the registry API," which is why `vizbox` (the top-level barrel) doesn't need to import registry functions from two different places.
+Note this barrel re-exports the registry layer's public functions too (`registerPlugin` etc.) — `src/core/index.ts` is effectively "core + the registry API," which is why `lumagrid` (the top-level barrel) doesn't need to import registry functions from two different places.
 
 
 ### `src/core/__tests__/container.test.tsx`
@@ -3444,7 +3444,7 @@ export {
 
 ## 13. Layer 6 — Plugins (`src/plugins/`): External Chart-Library Adapters
 
-Three adapters, one per external chart library. **None of them import the library they adapt** — this is the load-bearing design decision for this whole layer (Section 2, rule 5). The caller supplies their own chart component (Recharts, Nivo) or drawing callbacks (D3), and the adapter's only job is reshaping VizBox's `TransformedData`/`ThemeDefinition` into what that library expects.
+Three adapters, one per external chart library. **None of them import the library they adapt** — this is the load-bearing design decision for this whole layer (Section 2, rule 5). The caller supplies their own chart component (Recharts, Nivo) or drawing callbacks (D3), and the adapter's only job is reshaping Lumagrid's `TransformedData`/`ThemeDefinition` into what that library expects.
 
 ### `src/plugins/d3-adapter.tsx`
 
@@ -3457,8 +3457,8 @@ import type { ThemeDefinition } from '../theme/types.js';
 import type { ChartPlugin, RendererProps } from '../registry/types.js';
 
 /**
- * Minimal theme tokens extracted from VizBox ThemeDefinition for D3 charts.
- * Keeps D3 charts decoupled from VizBox internals.
+ * Minimal theme tokens extracted from Lumagrid ThemeDefinition for D3 charts.
+ * Keeps D3 charts decoupled from Lumagrid internals.
  */
 export interface D3Theme {
   /** Categorical color palette (for grouping/series). */
@@ -3499,12 +3499,12 @@ export interface D3PluginOptions<TData, TConfig = Record<string, unknown>> {
 
 /**
  * Creates a ChartPlugin backed by a D3 imperative lifecycle.
- * The D3Theme is derived automatically from the VizBox ThemeDefinition.
+ * The D3Theme is derived automatically from the Lumagrid ThemeDefinition.
  *
  * @example
  * ```ts
  * import * as d3 from 'd3';
- * import { createD3Plugin } from 'vizbox/plugins';
+ * import { createD3Plugin } from 'lumagrid/plugins';
  *
  * const bubblePlugin = createD3Plugin({
  *   id: 'bubble',
@@ -3728,7 +3728,7 @@ import type { ChartPlugin, RendererProps } from '../registry/types.js';
 
 /**
  * Minimal theme tokens for Recharts components.
- * Extracted from VizBox ThemeDefinition by rechartsThemeAdapter.
+ * Extracted from Lumagrid ThemeDefinition by rechartsThemeAdapter.
  */
 export interface RechartsTheme {
   colors: string[];
@@ -3768,7 +3768,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
     if (nameKey === undefined) {
       nameKey = '';
       console.warn(
-        '[vizbox] recharts-adapter: no string field found for nameKey auto-detection; ' +
+        '[lumagrid] recharts-adapter: no string field found for nameKey auto-detection; ' +
         'defaulting to an empty name for every row. Pass config.nameKey explicitly to silence this warning.',
       );
     }
@@ -3779,7 +3779,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
     if (dataKey === undefined) {
       dataKey = '';
       console.warn(
-        '[vizbox] recharts-adapter: no number field found for dataKey auto-detection; ' +
+        '[lumagrid] recharts-adapter: no number field found for dataKey auto-detection; ' +
         'defaulting to a zero value for every row. Pass config.dataKey explicitly to silence this warning.',
       );
     }
@@ -3801,7 +3801,7 @@ function defaultDataAdapter(data: TransformedData, config?: RechartsConfig): Rec
  * @example
  * ```tsx
  * import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
- * import { createRechartsPlugin } from 'vizbox/plugins';
+ * import { createRechartsPlugin } from 'lumagrid/plugins';
  *
  * registerPlugin(createRechartsPlugin({
  *   id: 'recharts-bar',
@@ -4079,12 +4079,12 @@ export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
 
 /**
  * Creates a ChartPlugin backed by a declarative Nivo component.
- * The NivoTheme is derived automatically from the VizBox ThemeDefinition.
+ * The NivoTheme is derived automatically from the Lumagrid ThemeDefinition.
  *
  * @example
  * ```tsx
  * import { ResponsiveBar } from '@nivo/bar';
- * import { createNivoPlugin } from 'vizbox/plugins';
+ * import { createNivoPlugin } from 'lumagrid/plugins';
  *
  * registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
  *   id: 'nivo-bar',
@@ -4336,7 +4336,7 @@ export type {
   CollapseState,
 } from './core/index.js';
 
-// Viz layer (re-export key symbols — consumers can also import from 'vizbox/viz')
+// Viz layer (re-export key symbols — consumers can also import from 'lumagrid/viz')
 export {
   DataTable,
   HorizontalBarChart,
@@ -4352,7 +4352,7 @@ export { createD3Plugin, createRechartsPlugin, createNivoPlugin } from './plugin
 export type { D3Theme, RechartsTheme, RechartsConfig, NivoTheme } from './plugins/index.js';
 ```
 
-**Deliberate asymmetry, verified against precedent — preserve it:** this top-level barrel exports each adapter's **factory function and its primary theme type**, but **not** `rechartsThemeAdapter`, `nivoThemeAdapter`, `D3PluginOptions`, `NivoPluginOptions`, or `RechartsRow` — those remain reachable only via `vizbox/plugins` (Section 13). Similarly, `__resetRegistryForTests` from the registry layer is absent here entirely (Section 10). When adding a fourth adapter, follow the same split: full surface in `plugins/index.ts`, factory + primary theme type only at the top level.
+**Deliberate asymmetry, verified against precedent — preserve it:** this top-level barrel exports each adapter's **factory function and its primary theme type**, but **not** `rechartsThemeAdapter`, `nivoThemeAdapter`, `D3PluginOptions`, `NivoPluginOptions`, or `RechartsRow` — those remain reachable only via `lumagrid/plugins` (Section 13). Similarly, `__resetRegistryForTests` from the registry layer is absent here entirely (Section 10). When adding a fourth adapter, follow the same split: full surface in `plugins/index.ts`, factory + primary theme type only at the top level.
 
 ---
 
@@ -4443,9 +4443,9 @@ This is a consolidated list of deliberate behaviors that could be mistaken for b
 
 14. **`NivoTheme` is a nested object structure** (mirroring Nivo's real `theme` prop shape, e.g. `theme.typography.fontSizeSm`) **plus a separate flat `colors` convenience field**, whereas `D3Theme` and `RechartsTheme` are flat. This mirrors the actual shape Nivo's real theming API expects (so a real Nivo consumer's `theme` prop assignment is a direct passthrough of `nivoThemeAdapter`'s output), while `colors` is added on top purely for convenience since categorical colors are the single most commonly needed value.
 
-15. **`nivoThemeAdapter` uses `parseInt(theme.typography.fontSizeSm, 10)` to convert a CSS font-size string to a bare number Nivo expects**, and this is a known, deliberately parked edge case: it assumes the string is a `px` value (or otherwise starts with a parseable integer) and will silently produce wrong results for a theme using `rem`, `em`, or other units (e.g. `parseInt('1.5rem', 10)` → `1`, which is very wrong for a font size). This was identified during the Nivo adapter's build and explicitly scoped out as future work rather than blocking the adapter's initial release — VizBox's two built-in themes (`light.ts`, `dark.ts`) both use `px` throughout, so it doesn't manifest with the shipped themes, but a custom theme using other units would hit it.
+15. **`nivoThemeAdapter` uses `parseInt(theme.typography.fontSizeSm, 10)` to convert a CSS font-size string to a bare number Nivo expects**, and this is a known, deliberately parked edge case: it assumes the string is a `px` value (or otherwise starts with a parseable integer) and will silently produce wrong results for a theme using `rem`, `em`, or other units (e.g. `parseInt('1.5rem', 10)` → `1`, which is very wrong for a font size). This was identified during the Nivo adapter's build and explicitly scoped out as future work rather than blocking the adapter's initial release — Lumagrid's two built-in themes (`light.ts`, `dark.ts`) both use `px` throughout, so it doesn't manifest with the shipped themes, but a custom theme using other units would hit it.
 
-16. **The top-level barrel (`src/index.ts`) and the plugins barrel (`src/plugins/index.ts`) export deliberately asymmetric surfaces** — see the callout at the end of Section 14. Full detail: `src/index.ts` exports each adapter's factory function and *primary* theme type only; secondary theme-adapter functions (`rechartsThemeAdapter`, `nivoThemeAdapter`), secondary option types (`D3PluginOptions`, `NivoPluginOptions`, `RechartsRow`), and `toD3Theme` are reachable only via `vizbox/plugins`. This keeps the top-level import surface small and focused on "the thing most consumers need" (register a chart), while power users who need direct access to a theme-adapter function (e.g. to reuse it outside a plugin) import from the more specific `vizbox/plugins` path.
+16. **The top-level barrel (`src/index.ts`) and the plugins barrel (`src/plugins/index.ts`) export deliberately asymmetric surfaces** — see the callout at the end of Section 14. Full detail: `src/index.ts` exports each adapter's factory function and *primary* theme type only; secondary theme-adapter functions (`rechartsThemeAdapter`, `nivoThemeAdapter`), secondary option types (`D3PluginOptions`, `NivoPluginOptions`, `RechartsRow`), and `toD3Theme` are reachable only via `lumagrid/plugins`. This keeps the top-level import surface small and focused on "the thing most consumers need" (register a chart), while power users who need direct access to a theme-adapter function (e.g. to reuse it outside a plugin) import from the more specific `lumagrid/plugins` path.
 
 17. **`__resetRegistryForTests` exists specifically to support tests, and must never be added to any public barrel's explicit export list.** Both `src/core/index.ts` and `src/index.ts` re-export by naming each symbol individually — never `export *` — which is what keeps this test-only function out of the public API automatically, as long as its name is never added to those export statements. It is imported directly from `src/registry/index.js` (not through a barrel) in every test file that calls `registerPlugin`, since the registry is a single shared module-level `Map` and would otherwise leak registered plugin ids across test files.
 
@@ -4454,14 +4454,14 @@ This is a consolidated list of deliberate behaviors that could be mistaken for b
 Reproduce this file exactly at the repo root. It is the user-facing documentation and is validated by the compiling-example check in Section 18 (the Nivo example in particular must retain its explicit generic type parameters — see Section 13's callout on why the plain-inference version doesn't typecheck).
 
 ````markdown
-# VizBox
+# Lumagrid
 
 A layered React + TypeScript UI library for data visualization widgets. Works with tabular, hierarchical, geographic, and time-series data. Plug in any chart library — built-in SVG charts, D3, Recharts, Nivo, or your own.
 
 ## Install
 
 ```bash
-npm install vizbox
+npm install lumagrid
 # peer deps
 npm install react react-dom
 # optional: for D3-based charts
@@ -4504,8 +4504,8 @@ Each layer may only import from layers below it. The transform layer has zero Re
 ## 5-minute quickstart
 
 ```tsx
-import { ThemeProvider, WidgetContainer, ViewSwitcher, groupBy, registerPlugin } from 'vizbox';
-import { nativeBarPlugin, nativeTablePlugin } from 'vizbox/viz';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, groupBy, registerPlugin } from 'lumagrid';
+import { nativeBarPlugin, nativeTablePlugin } from 'lumagrid/viz';
 
 // 1. Register the plugins you want to switch between (once at app startup)
 registerPlugin(nativeBarPlugin);
@@ -4598,7 +4598,7 @@ const { drillDown, rollUp, drillPath, isExpanded, toggle } = useCollapse();
 ### Transform pipeline
 
 ```tsx
-import { TransformPipeline, flatten, aggregate, groupBy } from 'vizbox';
+import { TransformPipeline, flatten, aggregate, groupBy } from 'lumagrid';
 
 const pipeline = new TransformPipeline([
   flatten,                            // normalize nested objects
@@ -4615,7 +4615,7 @@ const result = pipeline.run(rawData); // → TransformedData
 Register any of the pre-built native plugins at startup:
 
 ```tsx
-import { registerPlugin } from 'vizbox';
+import { registerPlugin } from 'lumagrid';
 import {
   nativeBarPlugin,
   nativeLinePlugin,
@@ -4624,7 +4624,7 @@ import {
   nativeTreePlugin,
   nativeChoroplethPlugin,
   nativeForceGraphPlugin,
-} from 'vizbox/viz';
+} from 'lumagrid/viz';
 
 registerPlugin(nativeBarPlugin);    // id: 'bar'
 registerPlugin(nativeLinePlugin);   // id: 'line'
@@ -4651,7 +4651,7 @@ registerPlugin(nativeForceGraphPlugin); // id: 'force-graph'
 
 ```tsx
 import * as d3 from 'd3';
-import { createD3Plugin, registerPlugin } from 'vizbox';
+import { createD3Plugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createD3Plugin({
   id: 'bubble',
@@ -4676,7 +4676,7 @@ registerPlugin(createD3Plugin({
 }));
 ```
 
-The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFamily`, `fontSize`, `background`, `foreground`, `border`. It's derived automatically from the active VizBox theme.
+The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFamily`, `fontSize`, `background`, `foreground`, `border`. It's derived automatically from the active Lumagrid theme.
 
 ---
 
@@ -4684,7 +4684,7 @@ The `D3Theme` passed to mount/update has: `colors`, `sequentialColors`, `fontFam
 
 ```tsx
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { createRechartsPlugin, registerPlugin } from 'vizbox';
+import { createRechartsPlugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createRechartsPlugin({
   id: 'recharts-bar',
@@ -4707,7 +4707,7 @@ registerPlugin(createRechartsPlugin({
 
 ```tsx
 import { ResponsiveBar } from '@nivo/bar';
-import { createNivoPlugin, registerPlugin } from 'vizbox';
+import { createNivoPlugin, registerPlugin } from 'lumagrid';
 
 registerPlugin(createNivoPlugin<{ name: string; value: number }[], { dataKey?: string; nameKey?: string }>({
   id: 'nivo-bar',
@@ -4739,8 +4739,8 @@ straight through with no reshaping.
 ## Writing a custom plugin from scratch
 
 ```tsx
-import { registerPlugin } from 'vizbox';
-import type { ChartPlugin } from 'vizbox';
+import { registerPlugin } from 'lumagrid';
+import type { ChartPlugin } from 'lumagrid';
 
 const heatmapPlugin: ChartPlugin<number[][], HeatmapTheme, HeatmapConfig> = {
   id: 'heatmap',
@@ -4765,8 +4765,8 @@ registerPlugin(heatmapPlugin);
 ## Custom theme
 
 ```tsx
-import type { ThemeDefinition } from 'vizbox';
-import { lightTheme, ThemeProvider } from 'vizbox';
+import type { ThemeDefinition } from 'lumagrid';
+import { lightTheme, ThemeProvider } from 'lumagrid';
 
 const brandTheme: ThemeDefinition = {
   ...lightTheme,
@@ -4900,4 +4900,4 @@ Tests: `src/plugins/__tests__/d3-adapter.test.tsx` (5), `src/plugins/__tests__/r
 
 ---
 
-*End of rebuild specification. This document was generated from the VizBox repository as of commit `9581d94`, immediately before the P3 QA-plan phase (coverage tooling in CI + a testing-convention note) was implemented. If the source repository has moved past that commit, treat any discrepancy between this document and the live code as this document being stale — the code is always the source of truth; update this document to match, don't force the code to match a stale spec.*
+*End of rebuild specification. This document was generated from the Lumagrid repository as of commit `9581d94`, immediately before the P3 QA-plan phase (coverage tooling in CI + a testing-convention note) was implemented. If the source repository has moved past that commit, treat any discrepancy between this document and the live code as this document being stale — the code is always the source of truth; update this document to match, don't force the code to match a stale spec.*
