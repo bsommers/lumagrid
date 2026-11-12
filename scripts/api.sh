@@ -55,7 +55,7 @@ flags=()
 [[ "$mode" == "update" ]] && flags+=(--local)
 
 failed=0
-for entry in index transforms theme viz plugins; do
+for entry in index transforms theme viz plugins testing; do
   echo "==> api-extractor ($mode): $entry"
   node_modules/.bin/api-extractor run --config "etc/api-extractor.$entry.json" ${flags[@]+"${flags[@]}"} || failed=1
 done

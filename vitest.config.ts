@@ -13,6 +13,7 @@ export default defineConfig({
       { find: /^lumagrid\/theme$/, replacement: here('./src/theme/index.ts') },
       { find: /^lumagrid\/viz$/, replacement: here('./src/viz/index.ts') },
       { find: /^lumagrid\/plugins$/, replacement: here('./src/plugins/index.ts') },
+      { find: /^lumagrid\/testing$/, replacement: here('./src/testing/index.ts') },
       { find: /^lumagrid$/, replacement: here('./src/index.ts') },
     ],
   },

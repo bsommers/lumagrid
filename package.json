@@ -3,43 +3,48 @@
   "version": "0.1.0",
   "description": "Layered React + TypeScript UI library for data visualization widgets",
   "type": "module",
-  "main": "./dist/cjs/index.cjs",
+  "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/esm/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.cjs",
-      "types": "./dist/esm/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./transforms": {
+      "types": "./dist/esm/transforms/index.d.ts",
       "import": "./dist/esm/transforms/index.js",
-      "require": "./dist/cjs/transforms/index.cjs",
-      "types": "./dist/esm/transforms/index.d.ts"
+      "require": "./dist/cjs/transforms/index.js"
     },
     "./theme": {
+      "types": "./dist/esm/theme/index.d.ts",
       "import": "./dist/esm/theme/index.js",
-      "require": "./dist/cjs/theme/index.cjs",
-      "types": "./dist/esm/theme/index.d.ts"
+      "require": "./dist/cjs/theme/index.js"
     },
     "./viz": {
+      "types": "./dist/esm/viz/index.d.ts",
       "import": "./dist/esm/viz/index.js",
-      "require": "./dist/cjs/viz/index.cjs",
-      "types": "./dist/esm/viz/index.d.ts"
+      "require": "./dist/cjs/viz/index.js"
     },
     "./plugins": {
+      "types": "./dist/esm/plugins/index.d.ts",
       "import": "./dist/esm/plugins/index.js",
-      "require": "./dist/cjs/plugins/index.cjs",
-      "types": "./dist/esm/plugins/index.d.ts"
+      "require": "./dist/cjs/plugins/index.js"
+    },
+    "./testing": {
+      "types": "./dist/esm/testing/index.d.ts",
+      "import": "./dist/esm/testing/index.js",
+      "require": "./dist/cjs/testing/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
+    "build": "tsc -p tsconfig.esm.json && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/write-cjs-package.mjs",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc -p tsconfig.esm.json --noEmit",
     "test": "vitest run",
@@ -47,6 +52,7 @@
     "test:coverage": "vitest run --coverage",
     "examples:build": "vite build --config examples/vite.config.ts",
     "examples:dev": "vite --config examples/vite.config.ts",
+    "smoke:dist": "node scripts/smoke-dist.mjs",
     "docs:api": "typedoc",
     "api:check": "bash scripts/api.sh check",
     "api:update": "npm run build:esm && bash scripts/api.sh update",

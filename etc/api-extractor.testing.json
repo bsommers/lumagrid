@@ -1,0 +1,12 @@
+{
+  "extends": "./api-extractor.base.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/esm/testing/index.d.ts",
+  // The kit's signatures reference ChartPlugin, which consumers import from the package root, so the
+  // unexported-type rule is relaxed here. The release-tag rule stays at "error".
+  "messages": {
+    "extractorMessageReporting": {
+      "ae-forgotten-export": { "logLevel": "none", "addToApiReportFile": true }
+    }
+  },
+  "apiReport": { "reportFileName": "lumagrid-testing.api.md" }
+}
