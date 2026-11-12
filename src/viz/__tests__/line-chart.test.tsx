@@ -193,7 +193,7 @@ describe('LineChart non-finite values', () => {
     it('renders no x-tick labels and no NaN for empty rows', () => {
       const { container } = renderChart({ rows: [], fields: [{ key: 'v', type: 'number' }] });
       const texts = Array.from(container.querySelectorAll('text'));
-      expect(texts).toHaveLength(5); // y-axis ticks only
+      expect(texts.map((t) => t.textContent)).toEqual(['0', '0.5', '1']); // y-axis ticks only
       expect(container.innerHTML).not.toContain('NaN');
     });
 

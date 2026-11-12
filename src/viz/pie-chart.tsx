@@ -86,6 +86,14 @@ export function PieChart({
     return { slice, i, start, end, lp, pct, path: slicePath(cx, cy, r, innerR, start, end) };
   });
 
+  // Drop the percent, then the value, when the legend column is too narrow for the full text.
+  const fits = (make: (l: string, v: string, p: string) => string) =>
+    paths.every(({ slice, pct }) => make(slice.label, slice.value.toLocaleString(), String(pct)).length * 6.5 <= legendW - 20);
+  const legendText = [
+    (l: string, v: string, p: string) => `${l}: ${v} (${p}%)`,
+    (l: string, v: string) => `${l}: ${v}`,
+  ].find(fits) ?? ((l: string) => l);
+
   return (
     <svg width={width} height={height} aria-label={ariaLabel ?? `Pie chart of ${valueKey}`} role="img"
       style={{ fontFamily: theme.typography.fontFamily }}>
@@ -108,7 +116,7 @@ export function PieChart({
           {paths.map(({ slice, i, pct }) => (
             <g key={i} transform={`translate(${width - legendW},${12 + i * 18})`}>
               <rect width={10} height={10} y={-5} fill={categoricalColor(theme, i)} />
-              <text x={16} dominantBaseline="middle">{slice.label}: {slice.value.toLocaleString()} ({pct}%)</text>
+              <text x={16} dominantBaseline="middle">{legendText(slice.label, slice.value.toLocaleString(), pct)}</text>
             </g>
           ))}
         </g>

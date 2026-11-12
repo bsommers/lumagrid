@@ -9,6 +9,14 @@ export { ForceGraph } from './force-graph.js';
 export type { ForceGraphProps } from './force-graph.js';
 export { TreeView } from './tree-view.js';
 export type { TreeViewProps } from './tree-view.js';
+export { ScatterChart } from './scatter-chart.js';
+export type { ScatterChartProps } from './scatter-chart.js';
+export { AreaChart } from './area-chart.js';
+export type { AreaChartProps } from './area-chart.js';
+export { ColumnChart } from './column-chart.js';
+export type { ColumnChartProps } from './column-chart.js';
+export { Heatmap } from './heatmap.js';
+export type { HeatmapProps, HeatmapCell } from './heatmap.js';
 
 // Convenience: pre-built plugins for all native charts
 export {
@@ -19,4 +27,8 @@ export {
   nativeTreePlugin,
   nativeChoroplethPlugin,
   nativeForceGraphPlugin,
+  nativeScatterPlugin,
+  nativeAreaPlugin,
+  nativeColumnPlugin,
+  nativeHeatmapPlugin,
 } from './plugins.js';

@@ -7,10 +7,19 @@
 import { default as React_2 } from 'react';
 
 // @public
-export function Choropleth(input: ChoroplethProps): React_2.ReactElement;
+export function AreaChart(input: AreaChartProps): React_2.ReactElement;
 
 // Warning: (ae-forgotten-export) The symbol "NativeChartProps" needs to be exported by the entry point index.d.ts
 //
+// @public
+export interface AreaChartProps extends NativeChartProps {
+    showLegend?: boolean;
+    stacked?: boolean;
+}
+
+// @public
+export function Choropleth(input: ChoroplethProps): React_2.ReactElement;
+
 // @public
 export interface ChoroplethProps extends NativeChartProps {
     // @beta
@@ -18,6 +27,16 @@ export interface ChoroplethProps extends NativeChartProps {
     showLabels?: boolean;
     showLegend?: boolean;
     valueProperty?: string;
+}
+
+// @public
+export function ColumnChart(input: ColumnChartProps): React_2.ReactElement;
+
+// @public
+export interface ColumnChartProps extends NativeChartProps {
+    mode?: 'grouped' | 'stacked';
+    showLegend?: boolean;
+    showValues?: boolean;
 }
 
 // @public
@@ -41,6 +60,28 @@ export interface ForceGraphProps extends NativeChartProps {
 }
 
 // @public
+export function Heatmap(input: HeatmapProps): React_2.ReactElement;
+
+// @public
+export interface HeatmapCell {
+    // (undocumented)
+    column: string;
+    // (undocumented)
+    row: string;
+    // (undocumented)
+    value: number;
+}
+
+// @public
+export interface HeatmapProps extends NativeChartProps {
+    columnField?: string;
+    onSelect?: (cell: HeatmapCell) => void;
+    rowField?: string;
+    showLegend?: boolean;
+    showValues?: boolean;
+}
+
+// @public
 export function HorizontalBarChart(input: NativeChartProps): React_2.ReactElement;
 
 // @public
@@ -54,19 +95,31 @@ export function LineChart(input: NativeChartProps & {
 // Warning: (ae-forgotten-export) The symbol "NativeConfig" needs to be exported by the entry point index.d.ts
 //
 // @public
+export const nativeAreaPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
+
+// @public
 export const nativeBarPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
 
 // @public
 export const nativeChoroplethPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
 
 // @public
+export const nativeColumnPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
+
+// @public
 export const nativeForceGraphPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
+
+// @public
+export const nativeHeatmapPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
 
 // @public
 export const nativeLinePlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
 
 // @public
 export const nativePiePlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
+
+// @public
+export const nativeScatterPlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
 
 // @public
 export const nativeTablePlugin: ChartPlugin<TransformedData, ThemeDefinition, NativeConfig>;
@@ -81,6 +134,17 @@ export function PieChart(input: PieChartProps): React_2.ReactElement;
 export interface PieChartProps extends NativeChartProps {
     donut?: boolean;
     showLegend?: boolean;
+}
+
+// @public
+export function ScatterChart(input: ScatterChartProps): React_2.ReactElement;
+
+// @public
+export interface ScatterChartProps extends NativeChartProps {
+    onSelect?: (row: Record<string, unknown>) => void;
+    showLegend?: boolean;
+    sizeField?: string;
+    xValueField?: string;
 }
 
 // @public

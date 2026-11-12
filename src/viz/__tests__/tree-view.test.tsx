@@ -25,6 +25,17 @@ const draw = (data: TransformedData, expanded: string[] = [], onSelect?: (n: Hie
   );
 
 describe('TreeView', () => {
+  it('names the tree with a default and with ariaLabel', () => {
+    const { container, rerender } = draw(withTree(tree));
+    expect(container.querySelector('[role="tree"]')?.getAttribute('aria-label')).toBe('Tree');
+    rerender(
+      <CollapseManager>
+        <TreeView data={withTree(tree)} width={300} height={200} theme={lightTheme} ariaLabel="Org chart" />
+      </CollapseManager>,
+    );
+    expect(container.querySelector('[role="tree"]')?.getAttribute('aria-label')).toBe('Org chart');
+  });
+
   it('shows a message when there is no hierarchy', () => {
     const { container } = draw(withTree());
     expect(container.textContent).toContain('requires a hierarchy');

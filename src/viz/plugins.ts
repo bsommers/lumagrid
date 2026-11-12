@@ -6,6 +6,10 @@ import { PieChart } from './pie-chart.js';
 import { Choropleth } from './choropleth.js';
 import { ForceGraph } from './force-graph.js';
 import { TreeView } from './tree-view.js';
+import { ScatterChart } from './scatter-chart.js';
+import { AreaChart } from './area-chart.js';
+import { ColumnChart } from './column-chart.js';
+import { Heatmap } from './heatmap.js';
 
 /**
  * Chart plugin with id `table` wrapping {@link DataTable}.
@@ -49,3 +53,27 @@ export const nativeForceGraphPlugin = createNativePlugin('force-graph', ForceGra
  * @public
  */
 export const nativeTreePlugin = createNativePlugin('tree', TreeView, 'Tree');
+/**
+ * Chart plugin with id `scatter` wrapping {@link ScatterChart}.
+ *
+ * @public
+ */
+export const nativeScatterPlugin = createNativePlugin('scatter', ScatterChart, 'Scatter Chart');
+/**
+ * Chart plugin with id `area` wrapping {@link AreaChart}.
+ *
+ * @public
+ */
+export const nativeAreaPlugin = createNativePlugin('area', AreaChart, 'Area Chart');
+/**
+ * Chart plugin with id `column` wrapping {@link ColumnChart}.
+ *
+ * @public
+ */
+export const nativeColumnPlugin = createNativePlugin('column', ColumnChart, 'Column Chart');
+/**
+ * Chart plugin with id `heatmap` wrapping {@link Heatmap}.
+ *
+ * @public
+ */
+export const nativeHeatmapPlugin = createNativePlugin('heatmap', Heatmap, 'Heatmap');

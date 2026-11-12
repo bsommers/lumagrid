@@ -1,5 +1,6 @@
 import React from 'react';
 import { categoricalColor } from '../theme/color-scale.js';
+import { legendHeight, niceTicks } from './ticks.js';
 import type { NativeChartProps } from '../registry/native-plugin.js';
 
 const MARGIN = { top: 24, right: 24, bottom: 40, left: 56 };
@@ -56,10 +57,15 @@ export function LineChart({
 
   const allSeries = [...seriesMap.values()];
   const allYValues = allSeries.flatMap((s) => s.points.map((p) => p.y)).filter(Number.isFinite);
-  const minY = Math.min(...allYValues, 0);
-  const maxY = Math.max(...allYValues, 1);
+  const yTickValues = niceTicks(Math.min(...allYValues, 0), Math.max(...allYValues, 1));
+  const minY = yTickValues[0]!;
+  const maxY = yTickValues[yTickValues.length - 1]!;
+  const hasLegend = showLegend && !!colorField && allSeries.length > 0;
+  // The legend sits below the plot; shrink the plot so both fit the given height.
+  const legendH = hasLegend ? legendHeight(allSeries.map((s) => s.key), width - MARGIN.left - 8) : 0;
+  const svgH = Math.max(height - legendH, 0);
   const innerW = width - MARGIN.left - MARGIN.right;
-  const innerH = height - MARGIN.top - MARGIN.bottom;
+  const innerH = svgH - MARGIN.top - MARGIN.bottom;
   const xCount = Math.max(allXLabels.length - 1, 1);
 
   const scaleX = (i: number) => (i / xCount) * innerW;
@@ -79,19 +85,16 @@ export function LineChart({
     : Array.from({ length: tickCount }, (_, i) =>
         Math.round((i / (tickCount - 1)) * (allXLabels.length - 1)),
       );
-  const yTicks = 5;
 
   const fmt = (v: number) => v.toLocaleString();
-  const hasLegend = showLegend && !!colorField && allSeries.length > 0;
 
   return (
     <>
-    <svg width={width} height={height} aria-label={ariaLabel ?? `Line chart of ${numericField}`} role="img"
+    <svg width={width} height={svgH} aria-label={ariaLabel ?? `Line chart of ${numericField}`} role="img"
       style={{ fontFamily: theme.typography.fontFamily }}>
       <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
         {/* Y grid + ticks */}
-        {Array.from({ length: yTicks }, (_, i) => {
-          const v = minY + (i / (yTicks - 1)) * (maxY - minY);
+        {yTickValues.map((v, i) => {
           const y = scaleY(v);
           return (
             <g key={i}>
@@ -123,7 +126,9 @@ export function LineChart({
     {hasLegend && (
       <ul aria-label="Legend" style={{
         display: 'flex', flexWrap: 'wrap', gap: theme.spacing.md, listStyle: 'none', margin: 0,
-        padding: `${theme.spacing.xs} ${MARGIN.left}px`, fontFamily: theme.typography.fontFamily,
+        height: legendH, boxSizing: 'border-box', overflow: 'hidden', alignContent: 'center',
+        rowGap: 0, lineHeight: '22px',
+        padding: `0 8px 0 ${MARGIN.left}px`, fontFamily: theme.typography.fontFamily,
         fontSize: theme.typography.fontSizeSm, color: theme.text.secondary,
       }}>
         {allSeries.map((series, si) => (

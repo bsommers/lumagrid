@@ -68,8 +68,22 @@ export {
   Choropleth,
   ForceGraph,
   TreeView,
+  ScatterChart,
+  AreaChart,
+  ColumnChart,
+  Heatmap,
 } from './viz/index.js';
-export type { PieChartProps, ChoroplethProps, ForceGraphProps, TreeViewProps } from './viz/index.js';
+export type {
+  PieChartProps,
+  ChoroplethProps,
+  ForceGraphProps,
+  TreeViewProps,
+  ScatterChartProps,
+  AreaChartProps,
+  ColumnChartProps,
+  HeatmapProps,
+  HeatmapCell,
+} from './viz/index.js';
 
 // Plugin layer
 export { createD3Plugin, createRechartsPlugin, createNivoPlugin } from './plugins/index.js';

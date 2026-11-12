@@ -25,6 +25,15 @@ export type AggregationFn = 'sum' | 'avg' | 'min' | 'max' | 'count' | 'first' | 
 export type AnyTransform = DataTransform<unknown> | ChainableTransform;
 
 // @public
+export function AreaChart(input: AreaChartProps): React_2.ReactElement;
+
+// @public
+export interface AreaChartProps extends NativeChartProps {
+    showLegend?: boolean;
+    stacked?: boolean;
+}
+
+// @public
 export function categoricalColor(theme: ThemeDefinition, index: number): string;
 
 // @public
@@ -91,6 +100,16 @@ export interface ColorPalette {
     categorical: string[];
     diverging: string[];
     sequential: string[];
+}
+
+// @public
+export function ColumnChart(input: ColumnChartProps): React_2.ReactElement;
+
+// @public
+export interface ColumnChartProps extends NativeChartProps {
+    mode?: 'grouped' | 'stacked';
+    showLegend?: boolean;
+    showValues?: boolean;
 }
 
 // @public
@@ -236,6 +255,28 @@ export interface GroupByOptions {
     field: string;
     rootLabel?: string;
     valueField?: string;
+}
+
+// @public
+export function Heatmap(input: HeatmapProps): React_2.ReactElement;
+
+// @public
+export interface HeatmapCell {
+    // (undocumented)
+    column: string;
+    // (undocumented)
+    row: string;
+    // (undocumented)
+    value: number;
+}
+
+// @public
+export interface HeatmapProps extends NativeChartProps {
+    columnField?: string;
+    onSelect?: (cell: HeatmapCell) => void;
+    rowField?: string;
+    showLegend?: boolean;
+    showValues?: boolean;
 }
 
 // @public
@@ -425,6 +466,17 @@ export interface RendererProps<TData, TTheme, TConfig = Record<string, unknown>>
     theme: TTheme;
     // (undocumented)
     width: number;
+}
+
+// @public
+export function ScatterChart(input: ScatterChartProps): React_2.ReactElement;
+
+// @public
+export interface ScatterChartProps extends NativeChartProps {
+    onSelect?: (row: Record<string, unknown>) => void;
+    showLegend?: boolean;
+    sizeField?: string;
+    xValueField?: string;
 }
 
 // @public

@@ -91,11 +91,12 @@ export interface TreeViewProps extends NativeChartProps {
 }
 
 /**
- * Collapsible tree of `data.hierarchy`. Ignores the field props.
+ * Collapsible tree of `data.hierarchy`. Ignores the field props. The tree is named by `ariaLabel`
+ * (default `"Tree"`).
  *
  * @public
  */
-export function TreeView({ data, height, theme, onSelect }: TreeViewProps): React.ReactElement {
+export function TreeView({ data, height, theme, onSelect, ariaLabel }: TreeViewProps): React.ReactElement {
   const collapse = useCollapse();
   const containerRef = useRef<HTMLDivElement>(null);
   const [focusIdState, setFocusId] = useState<string | null>(null);
@@ -169,6 +170,7 @@ export function TreeView({ data, height, theme, onSelect }: TreeViewProps): Reac
     <div
       ref={containerRef}
       role="tree"
+      aria-label={ariaLabel ?? 'Tree'}
       onKeyDown={onKeyDown}
       style={{
         height,
