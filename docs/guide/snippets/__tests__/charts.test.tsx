@@ -7,6 +7,10 @@ import { Example as Table, tableView } from '../chart-table.js';
 import { Example as Force, forceView } from '../chart-force.js';
 import { Example as MapChart, choroplethView, projectedPaths, tiles } from '../chart-choropleth.js';
 import { Example as Tree, grouped } from '../chart-tree.js';
+import { Example as Scatter, scatterView } from '../chart-scatter.js';
+import { Example as Area, areaView } from '../chart-area.js';
+import { Example as Column, columnView } from '../chart-column.js';
+import { Example as HeatmapExample, heatmapView } from '../chart-heatmap.js';
 import { Choropleth } from '../../../../src/viz/choropleth.js';
 import { lightTheme } from '../../../../src/theme/light.js';
 
@@ -80,5 +84,35 @@ describe('chart page snippets render', () => {
     expect(grouped.hierarchy?.children).toHaveLength(3);
     fireEvent.click(screen.getByText('North'));
     expect(picked).toEqual(['North']);
+  });
+
+  it('scatter draws a focusable point per row with a legend', () => {
+    const { container } = render(<Scatter />);
+    expect(screen.getByRole('group').getAttribute('aria-label')).toBe('Revenue against marketing spend by channel');
+    expect(container.querySelectorAll('[data-scatter-point]')).toHaveLength(6);
+    expect(screen.getByLabelText('Legend')).toBeInTheDocument();
+    expect(scatterView.config.sizeField).toBe('signups');
+  });
+
+  it('area draws one stacked area per series', () => {
+    const { container } = render(<Area />);
+    expect(screen.getByRole('img').getAttribute('aria-label')).toBe('Monthly revenue by region');
+    expect(container.querySelectorAll('svg path').length).toBeGreaterThanOrEqual(2);
+    expect(container.querySelector('table[data-area-chart-data]')).not.toBeNull();
+    expect(areaView.config.stacked).toBe(true);
+  });
+
+  it('column draws one bar per month and region', () => {
+    const { container } = render(<Column />);
+    expect(screen.getByRole('img', { name: 'Monthly revenue by region' }).tagName.toLowerCase()).toBe('svg');
+    expect(container.querySelectorAll('svg rect[role="img"], svg g[role="img"] rect').length).toBeGreaterThan(0);
+    expect(columnView.config.mode).toBe('stacked');
+  });
+
+  it('heatmap is a grid with one cell per row of data', () => {
+    render(<HeatmapExample />);
+    expect(screen.getByRole('grid', { name: 'Support tickets by weekday and time slot' })).toBeInTheDocument();
+    expect(screen.getAllByRole('gridcell')).toHaveLength(6);
+    expect(heatmapView.config.rowField).toBe('day');
   });
 });

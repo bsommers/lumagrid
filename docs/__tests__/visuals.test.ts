@@ -14,10 +14,10 @@ describe('committed chart images', () => {
     expect(check({ root })).toEqual([]);
   });
 
-  it('hold exactly 14 PNG and 10 SVG files', () => {
+  it('hold exactly 22 PNG and 18 SVG files', () => {
     const files = readdirSync(dir);
-    expect(files.filter((f) => f.endsWith('.png'))).toHaveLength(14);
-    expect(files.filter((f) => f.endsWith('.svg'))).toHaveLength(10);
+    expect(files.filter((f) => f.endsWith('.png'))).toHaveLength(22);
+    expect(files.filter((f) => f.endsWith('.svg'))).toHaveLength(18);
   });
 
   it('reports a problem for a selector with a missing file (the checker is not vacuous)', () => {

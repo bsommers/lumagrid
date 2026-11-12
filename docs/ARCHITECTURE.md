@@ -67,8 +67,9 @@ flowchart TB
 | `src/theme` | `ThemeDefinition` tokens, `lightTheme`, `darkTheme`, `ThemeProvider`, `useTheme` and the color scales. | nothing else in `src` |
 | `src/registry` | The `ChartPlugin` contract, the registry (`registerPlugin`, `getPlugin`, `listPlugins`) and `createNativePlugin`. | `theme`, `transforms` (types only) |
 | `src/core` | `WidgetContainer`, `ViewSwitcher`, `CollapseManager`, `useCollapse`. | `registry`, `theme`, `transforms` |
-| `src/viz` | The seven native SVG charts and their `native*Plugin` presets. | `registry`, `core`, `theme`, `transforms` |
+| `src/viz` | The eleven native charts and their `native*Plugin` presets. | `registry`, `core`, `theme`, `transforms` |
 | `src/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`. | `registry`, `theme`, `transforms` (types only) |
+| `src/testing` | The conformance kit published as `lumagrid/testing`: `checkPluginConformance` and `assertPluginConformance`. Used by the library's own tests for every built-in plugin. | `registry`, `theme`, `transforms` (types only) |
 
 The rule is checked against the real `import` statements in `src`: `src/transforms` and `src/theme` contain no import from a sibling layer, and `src/transforms` does not import React.
 
@@ -138,22 +139,24 @@ classDiagram
 - `dataAdapter` converts `TransformedData` into the shape the chart library wants. `themeAdapter` converts a `ThemeDefinition` into that library's styling tokens. Both may receive the per-view `config`.
 - `ViewSpec` is what you pass to `ViewSwitcher`'s `views` prop: a registered plugin `id`, an optional `config` and an optional tab `label`. `label` on `ChartPlugin` defaults to the id.
 - `registerPlugin(plugin)` stores the plugin under its `id` and returns the id. Registering an id again replaces the earlier plugin (see [Registry semantics](STABILITY.md#registry-semantics)).
-- `createNativePlugin(id, Component, label)` wraps a native chart with identity adapters. The seven presets in `lumagrid/viz` (`nativeTablePlugin`, `nativeBarPlugin`, `nativeLinePlugin`, `nativePiePlugin`, `nativeChoroplethPlugin`, `nativeForceGraphPlugin`, `nativeTreePlugin`) are built with it.
+- `createNativePlugin(id, Component, label)` wraps a native chart with identity adapters. The eleven presets in `lumagrid/viz` (`nativeTablePlugin`, `nativeBarPlugin`, `nativeLinePlugin`, `nativePiePlugin`, `nativeChoroplethPlugin`, `nativeForceGraphPlugin`, `nativeTreePlugin`, `nativeScatterPlugin`, `nativeAreaPlugin`, `nativeColumnPlugin`, `nativeHeatmapPlugin`) are built with it.
 - `createD3Plugin`, `createRechartsPlugin` and `createNivoPlugin` build a `ChartPlugin` around your own `Renderer`.
 
 ## Entry points and build outputs
 
-`package.json` exposes five entry points. Each has an ESM build, a CJS build and type declarations.
+`package.json` exposes six entry points. Each has an ESM build, a CJS build and type declarations.
 
 | Entry point | `import` | `require` | `types` |
 |-------------|----------|-----------|---------|
-| `lumagrid` | `./dist/esm/index.js` | `./dist/cjs/index.cjs` | `./dist/esm/index.d.ts` |
-| `lumagrid/transforms` | `./dist/esm/transforms/index.js` | `./dist/cjs/transforms/index.cjs` | `./dist/esm/transforms/index.d.ts` |
-| `lumagrid/theme` | `./dist/esm/theme/index.js` | `./dist/cjs/theme/index.cjs` | `./dist/esm/theme/index.d.ts` |
-| `lumagrid/viz` | `./dist/esm/viz/index.js` | `./dist/cjs/viz/index.cjs` | `./dist/esm/viz/index.d.ts` |
-| `lumagrid/plugins` | `./dist/esm/plugins/index.js` | `./dist/cjs/plugins/index.cjs` | `./dist/esm/plugins/index.d.ts` |
+| `lumagrid` | `./dist/esm/index.js` | `./dist/cjs/index.js` | `./dist/esm/index.d.ts` |
+| `lumagrid/transforms` | `./dist/esm/transforms/index.js` | `./dist/cjs/transforms/index.js` | `./dist/esm/transforms/index.d.ts` |
+| `lumagrid/theme` | `./dist/esm/theme/index.js` | `./dist/cjs/theme/index.js` | `./dist/esm/theme/index.d.ts` |
+| `lumagrid/viz` | `./dist/esm/viz/index.js` | `./dist/cjs/viz/index.js` | `./dist/esm/viz/index.d.ts` |
+| `lumagrid/plugins` | `./dist/esm/plugins/index.js` | `./dist/cjs/plugins/index.js` | `./dist/esm/plugins/index.d.ts` |
+| `lumagrid/testing` | `./dist/esm/testing/index.js` | `./dist/cjs/testing/index.js` | `./dist/esm/testing/index.d.ts` |
 
-- `npm run build` compiles ESM (`tsconfig.esm.json`) and then CJS (`tsconfig.cjs.json`) into `dist/`.
+- `npm run build` compiles ESM (`tsconfig.esm.json`) and then CJS (`tsconfig.cjs.json`) into `dist/`. The package is `"type": "module"`, so `scripts/write-cjs-package.mjs` writes `dist/cjs/package.json` with `{"type": "commonjs"}`; that is what makes the CJS `.js` files load through `require`.
+- `npm run smoke:dist` (part of `scripts/ci.sh`) `require()`s and `import()`s every entry point from the built `dist` and checks a known export.
 - The `files` field limits the published package to `dist`.
 - The root `lumagrid` entry re-exports the theme, transform, registry, core, viz and plugin APIs. The `native*Plugin` presets are only on `lumagrid/viz`.
 

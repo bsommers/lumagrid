@@ -6,7 +6,8 @@
     "./transforms": "./src/transforms/index.ts",
     "./theme": "./src/theme/index.ts",
     "./viz": "./src/viz/index.ts",
-    "./plugins": "./src/plugins/index.ts"
+    "./plugins": "./src/plugins/index.ts src/testing/index.ts",
+    "./testing": "./src/testing/index.ts"
   },
   "compilerOptions": {
     "strict": true,
@@ -19,7 +20,7 @@
     "react-dom": "npm:react-dom@^18.3.0"
   },
   "tasks": {
-    "typecheck": "deno check src/index.ts src/transforms/index.ts src/theme/index.ts src/viz/index.ts src/plugins/index.ts",
+    "typecheck": "deno check src/index.ts src/transforms/index.ts src/theme/index.ts src/viz/index.ts src/plugins/index.ts src/testing/index.ts",
     "test": "deno test --allow-read src/transforms/__tests__/"
   }
 }

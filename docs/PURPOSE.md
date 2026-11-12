@@ -36,7 +36,7 @@ React developers who want data widgets that look consistent across an app and th
 
 - **It does not fetch data.** Lumagrid takes data you already have. Loading, caching and refreshing are the app's job.
 - **It does not ship a map projection engine.** `Choropleth` takes pre-projected SVG paths through its `projectedPaths` prop (an experimental option). Without them it shows a placeholder that says so. Use a projection library of your choice, such as D3, to produce the paths.
-- **It is not a full charting engine.** It ships seven native charts for common cases. For anything else, wrap a charting library you already use as a `ChartPlugin`.
+- **It is not a full charting engine.** It ships eleven native charts for common cases. For anything else, wrap a charting library you already use as a `ChartPlugin`.
 - **It does not bundle the chart libraries.** The D3, Recharts and Nivo adapters take your renderer. The libraries are your dependencies.
 
 ## Trust notes

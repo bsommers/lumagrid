@@ -16,7 +16,8 @@ The guide takes you from installing the library to writing your own chart plugin
 2. [Transforms](./transforms.md): reshape raw data with `flatten`, `aggregate`, `pivot`, `groupBy` and `geoNormalize`.
 3. [Theming](./theming.md): `ThemeProvider`, `ThemeDefinition` and the color scale helpers.
 4. [Plugins and adapters](./plugins-and-adapters.md): the `ChartPlugin` contract, the registry, custom plugins, and the D3, Recharts and Nivo adapters.
-5. [Troubleshooting](./troubleshooting.md): symptoms, causes and fixes for the problems readers hit most.
+5. [Bring your own engine](./bring-your-own-engine.md): write a plugin for a new engine from scratch and prove it with the `lumagrid/testing` conformance kit.
+6. [Troubleshooting](./troubleshooting.md): symptoms, causes and fixes for the problems readers hit most.
 
 ## Charts
 
@@ -29,6 +30,10 @@ One page per native chart, each with its data shape, props, a verified example a
 - [Choropleth](./charts/choropleth.md)
 - [Data table](./charts/data-table.md)
 - [Tree view](./charts/tree-view.md)
+- [Scatter chart](./charts/scatter-chart.md)
+- [Area chart](./charts/area-chart.md)
+- [Column chart](./charts/column-chart.md)
+- [Heatmap](./charts/heatmap.md)
 
 ## Reference documents
 

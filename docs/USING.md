@@ -50,8 +50,9 @@ bash scripts/ci.sh   # typecheck, lint, tests with coverage, build, API report c
 | `lumagrid` | The main API: theme, transforms, registry, containers, native charts and adapter factories. |
 | `lumagrid/transforms` | The transform layer on its own: `flatten`, `aggregate`, `pivot`, `groupBy`, `geoNormalize`, `TransformPipeline`. No React. |
 | `lumagrid/theme` | `ThemeProvider`, `useTheme`, `lightTheme`, `darkTheme`, the `ThemeDefinition` tokens and the color scales. |
-| `lumagrid/viz` | The seven native SVG charts and the `native*Plugin` presets that register them. |
+| `lumagrid/viz` | The eleven native charts (bar, line, pie, scatter, area, column, heatmap, table, tree, choropleth, force graph) and the `native*Plugin` presets that register them. |
 | `lumagrid/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin` and the Recharts and Nivo theme adapters. |
+| `lumagrid/testing` | The plugin conformance kit: `checkPluginConformance` and `assertPluginConformance` run eight checks (render, accessible name, theme, resize, server render and more) against any `ChartPlugin`. Use it in your own test runner. |
 
 How the layers fit together is in [ARCHITECTURE.md](ARCHITECTURE.md#entry-points-and-build-outputs).
 

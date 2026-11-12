@@ -18,9 +18,9 @@ Stability is expressed only through these TSDoc tags. There is no separate `luma
 - **Transforms:** the transform types (`DataTransform`, `ChainableTransform`, `TransformedData`, `HierarchyNode`, `GeoData`, `PipelineStep`) and the built-in transforms (`flatten`, `aggregate`, `pivot`, `groupBy`, `geoNormalize`, `TransformPipeline`).
 - **Registry and plugin contract:** `ChartPlugin` (its renderer field is named `Renderer`), `registerPlugin`, `getPlugin`, `listPlugins`, `createNativePlugin`, `ViewSpec`, `RendererProps`, `NativeChartProps` and `NativeConfig`.
 - **Containers:** `WidgetContainer`, `ViewSwitcher`, `CollapseManager`, `useCollapse`, and their props types.
-- **Native charts:** the seven chart components (`DataTable`, `HorizontalBarChart`, `LineChart`, `PieChart`, `Choropleth`, `ForceGraph`, `TreeView`) and their core props. The seven `native*Plugin` presets are stable too.
+- **Native charts:** the eleven chart components (`DataTable`, `HorizontalBarChart`, `LineChart`, `PieChart`, `Choropleth`, `ForceGraph`, `TreeView`, `ScatterChart`, `AreaChart`, `ColumnChart`, `Heatmap`) and their core props. The eleven `native*Plugin` presets are stable too.
 - **Adapter factories:** `createD3Plugin`, `createRechartsPlugin` and `createNivoPlugin`.
-- **Entry points:** `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz` and `lumagrid/plugins`.
+- **Entry points:** `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz`, `lumagrid/plugins` and `lumagrid/testing`.
 
 ## Experimental (`@experimental`, also `@beta`)
 
@@ -36,10 +36,10 @@ Native charts name their columns by role. The same role name means the same thin
 
 | Role prop | Meaning | Used by |
 |-----------|---------|---------|
-| `valueField` | Numeric measure | bar (bar length), line (y value), pie (slice size), choropleth (color value) |
-| `labelField` | Category or display label | bar (bar label), line (x category), pie (slice label), force graph (node label) |
+| `valueField` | Numeric measure | bar (bar length), line, area and scatter (y value), column (bar height), pie (slice size), heatmap (cell value), choropleth (color value) |
+| `labelField` | Category or display label | bar (bar label), line, area and column (x category), pie (slice label), heatmap (column label), force graph (node label) |
 | `idField` | Node identifier | force graph |
-| `colorField` | Groups rows into series | line |
+| `colorField` | Groups rows into series | line, area, column, scatter |
 
 Resolution order for each prop: the role name, then the legacy alias if the chart has one, then inference from `data.fields`. ForceGraph falls back to the literal `id` and `label` columns, and Choropleth falls back to `value`. When a role name and its alias are both passed, the role name wins.
 

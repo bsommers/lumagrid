@@ -5,7 +5,8 @@
     "src/transforms/index.ts",
     "src/theme/index.ts",
     "src/viz/index.ts",
-    "src/plugins/index.ts"
+    "src/plugins/index.ts",
+    "src/testing/index.ts"
   ],
   "tsconfig": "tsconfig.json",
   "out": "docs/api",

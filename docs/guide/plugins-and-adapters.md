@@ -8,7 +8,7 @@ Every chart in Lumagrid is a plugin. This chapter explains the plugin contract, 
 
 - [The ChartPlugin contract](#the-chartplugin-contract)
 - [The registry](#the-registry)
-- [The seven native plugins](#the-seven-native-plugins)
+- [The eleven native plugins](#the-eleven-native-plugins)
 - [Writing your own plugin](#writing-your-own-plugin)
 - [Adapters](#adapters)
   - [D3](#d3)
@@ -52,9 +52,9 @@ There is one global registry for the whole page. A view in `ViewSwitcher` names 
 
 Tests that register plugins share this one registry across a whole test process, so they reset it between tests. That convention is described in [CONTRIBUTING.md](../../CONTRIBUTING.md) and the stability rules for the registry are in [STABILITY](../STABILITY.md#registry-semantics).
 
-## The seven native plugins
+## The eleven native plugins
 
-The built-in SVG charts are plugins too. `createNativePlugin(id, Component, label?)` wraps a chart component as a plugin with identity adapters, so the data and the theme pass straight through to the chart and the view's `config` becomes its props. The seven presets that `lumagrid/viz` exports are registered under these ids:
+The built-in SVG charts are plugins too. `createNativePlugin(id, Component, label?)` wraps a chart component as a plugin with identity adapters, so the data and the theme pass straight through to the chart and the view's `config` becomes its props. The eleven presets that `lumagrid/viz` exports are registered under these ids:
 
 | Plugin id | Preset | Chart |
 |-----------|--------|-------|
@@ -65,6 +65,10 @@ The built-in SVG charts are plugins too. `createNativePlugin(id, Component, labe
 | `tree` | `nativeTreePlugin` | `TreeView` |
 | `choropleth` | `nativeChoroplethPlugin` | `Choropleth` |
 | `force-graph` | `nativeForceGraphPlugin` | `ForceGraph` |
+| `scatter` | `nativeScatterPlugin` | `ScatterChart` |
+| `area` | `nativeAreaPlugin` | `AreaChart` |
+| `column` | `nativeColumnPlugin` | `ColumnChart` |
+| `heatmap` | `nativeHeatmapPlugin` | `Heatmap` |
 
 The `tree` view reads its expand and collapse state from a `CollapseManager`, so place one around the `ViewSwitcher` when you use it.
 
@@ -174,6 +178,8 @@ export function Example() {
 ```
 
 Because the same typed `config` reaches `dataAdapter`, `themeAdapter` and `Renderer`, a view can steer all three with one object, for example `{ id: 'stripe-bars', config: { valueKey: 'revenue' } }`.
+
+To see a plugin written for a new engine from scratch, and to check any plugin (this one, the D3, Recharts and Nivo adapters, or your own) against the contract with `checkPluginConformance` from `lumagrid/testing`, read [Bring your own engine](./bring-your-own-engine.md).
 
 ## Adapters
 

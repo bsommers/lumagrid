@@ -120,7 +120,7 @@ The older `xField` and `yField` props still work but are deprecated and will be 
 
 A view refers to a chart by plugin id, and `ViewSwitcher` can only draw ids that have been registered. Call `registerPlugin` once at startup, before the first render. Registering the same id twice replaces the earlier plugin (outside production builds it also logs a console warning). If a view names an id that is not registered, `ViewSwitcher` shows a message asking you to call `registerPlugin`.
 
-The seven built-in plugins come from `lumagrid/viz`:
+The eleven built-in plugins come from `lumagrid/viz`:
 
 | Plugin id | Preset | Chart | Data it needs |
 |-----------|--------|-------|---------------|
@@ -131,6 +131,10 @@ The seven built-in plugins come from `lumagrid/viz`:
 | `tree` | `nativeTreePlugin` | `TreeView` | `hierarchy`, for example from `groupBy` |
 | `choropleth` | `nativeChoroplethPlugin` | `Choropleth` | `geo`, from `geoNormalize` |
 | `force-graph` | `nativeForceGraphPlugin` | `ForceGraph` | node rows with `id` and `label`, plus edge rows with `source` and `target` |
+| `scatter` | `nativeScatterPlugin` | `ScatterChart` | two number fields, optionally a series field and a size field |
+| `area` | `nativeAreaPlugin` | `AreaChart` | a label field and a number field, optionally a series field |
+| `column` | `nativeColumnPlugin` | `ColumnChart` | a label field and a number field, optionally a series field |
+| `heatmap` | `nativeHeatmapPlugin` | `Heatmap` | a row field, a column field and a number field |
 
 To draw with D3, Recharts or Nivo instead, or to write your own plugin, see [Plugins and adapters](./plugins-and-adapters.md).
 

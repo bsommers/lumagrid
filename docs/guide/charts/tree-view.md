@@ -33,6 +33,7 @@ The tree takes no role field props: it ignores `valueField`, `labelField`, `idFi
 | Prop | Meaning | When omitted |
 |------|---------|--------------|
 | `onSelect` | called with the `HierarchyNode` of a row when it is clicked (leaf rows included) | clicks only expand and collapse |
+| `ariaLabel` | accessible name of the tree (`role="tree"` must have one) | `Tree` |
 | `height` | height of the scrolling tree area | required |
 
 **It needs a `CollapseManager` above it.** Expand state comes from the nearest `CollapseManager`, and rendering a tree without one throws `useCollapse must be used inside a CollapseManager`. Its `defaultExpanded` prop lists the node ids that start open; by default everything is collapsed, so pass `['root']` (the id `groupBy` gives its root) to show the first level. Clicking a row that has children toggles it. A row shows its `value`, formatted for the viewer's locale, when it has one. Hovering highlights the row.
@@ -102,7 +103,7 @@ Only PNG files exist for this chart. It renders HTML elements rather than an SVG
 
 ## Accessibility
 
-The container has `role="tree"` and each row `role="treeitem"`, with `aria-expanded` set on rows that have children. Rows respond to mouse clicks but are not focusable, so expanding and selecting are not available from the keyboard yet. Text uses theme colors, so contrast follows the theme you pass.
+The container has `role="tree"` and an `aria-label` (your `ariaLabel`, default `Tree`), and each row has `role="treeitem"` with `aria-expanded` on rows that have children. One row is in the tab order; the arrow keys, Home and End move between rows, and Enter or Space expands, collapses and selects. Text uses theme colors, so contrast follows the theme you pass.
 
 ## See also
 

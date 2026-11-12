@@ -2,13 +2,13 @@
 // check-visuals.mjs (D-14). Plain data plus one helper; no side effects.
 
 /** Chart ids in capture order (they match site/src/capture.tsx). */
-export const CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree'];
+export const CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree', 'scatter', 'area', 'column', 'heatmap'];
 
 /** Library themes captured for every chart. */
 export const THEMES = ['light', 'dark'];
 
 /** Charts drawn as SVG; the rest are HTML and get PNG output only. */
-export const SVG_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth'];
+export const SVG_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'scatter', 'area', 'column', 'heatmap'];
 
 /** Capture element size in CSS pixels (matches CAPTURE_WIDTH and CAPTURE_HEIGHT in capture.tsx). */
 export const CAPTURE_BOX = { width: 640, height: 400 };

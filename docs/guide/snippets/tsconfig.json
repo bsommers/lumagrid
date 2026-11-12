@@ -11,7 +11,8 @@
       "lumagrid/transforms": ["../../../src/transforms/index.ts"],
       "lumagrid/theme": ["../../../src/theme/index.ts"],
       "lumagrid/viz": ["../../../src/viz/index.ts"],
-      "lumagrid/plugins": ["../../../src/plugins/index.ts"]
+      "lumagrid/plugins": ["../../../src/plugins/index.ts"],
+      "lumagrid/testing": ["../../../src/testing/index.ts"]
     }
   },
   "include": ["*.ts", "*.tsx"],

@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Four native charts: `ScatterChart` (with bubble sizes), `AreaChart` (overlaid or stacked), `ColumnChart` (grouped or stacked) and `Heatmap` (keyboard-navigable ARIA grid), with the plugins `nativeScatterPlugin`, `nativeAreaPlugin`, `nativeColumnPlugin` and `nativeHeatmapPlugin` (ids `scatter`, `area`, `column`, `heatmap`). They are exported from `lumagrid` and `lumagrid/viz`, have guide pages, gallery demos, rendered light and dark images, and pass the conformance kit.
+- `lumagrid/testing`: a plugin conformance kit (`checkPluginConformance`, `assertPluginConformance`) with eight checks for any `ChartPlugin`, plus the guide chapter "Bring your own engine". Every built-in plugin is verified against it.
+- `npm run smoke:dist`, run by `scripts/ci.sh` after the build: `require()`s and `import()`s every `exports` entry from the built `dist` and asserts a known export.
+- The showcase site has an Examples section (dashboard, CSV to chart, engine switcher, theme playground).
+- README: a "Why Lumagrid" comparison with Recharts, Nivo and D3.
 - User guide under `docs/guide` (getting started, transforms, theming, plugins and adapters, troubleshooting and one page per chart), with every code example type-checked and embedded from `docs/guide/snippets`.
 - `docs/ARCHITECTURE.md`, `docs/USING.md` and `docs/PURPOSE.md`, plus a documentation hub in `docs/README.md`.
 - The showcase site under `site/`, deployed by the Pages workflow, with `site:dev`, `site:build`, `site:preview` and `typecheck:site` scripts.
@@ -50,6 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `require('lumagrid')` was broken: `exports` pointed at `dist/cjs/**/*.cjs` files that `tsc` never emitted (it emits `.js`), and the package is `"type": "module"`. `exports` now point at the emitted `.js` files and the build writes `dist/cjs/package.json` with `{"type": "commonjs"}`, for every entry point including `lumagrid/testing`.
+- `TreeView` now has an accessible name: `role="tree"` gets an `aria-label` from the new `ariaLabel` prop (default `Tree`).
+- The `types` condition now comes first in each `exports` entry, so TypeScript no longer reports it as unreachable.
 - NaN and zero-division guards in LineChart, PieChart, ForceGraph and Choropleth (f6eef36). PieChart renders a lone 100% slice as a full circle instead of an empty arc.
 - Choropleth tooltip shows an em dash instead of `NaN` for non-finite values (b765864).
 - ForceGraph nodes no longer bunch into a corner after a resize. The render fit is a uniform, centred scale (4285c68).

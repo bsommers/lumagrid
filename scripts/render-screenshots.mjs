@@ -22,6 +22,8 @@ const SHOTS = [
   { name: 'gallery-neon', viewport: { width: 1280, height: 900 }, selector: '#gallery', theme: 'Neon' },
   { name: 'gallery-dark', viewport: { width: 1280, height: 900 }, selector: '#gallery', theme: 'Dark' },
   { name: 'gallery-light', viewport: { width: 1280, height: 900 }, selector: '#gallery', theme: 'Light' },
+  { name: 'examples', viewport: { width: 1280, height: 900 }, selector: '#examples' },
+  { name: 'examples-mobile', viewport: { width: 375, height: 812 }, selector: '#examples' },
   { name: 'mobile', viewport: { width: 390, height: 844 }, selector: null },
 ];
 

@@ -31,7 +31,7 @@ Read in this order:
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Layered design, data flow and the plugin contract, with diagrams |
 | [STABILITY.md](./STABILITY.md) | Tag policy, stable and experimental lists, field props, registry semantics |
 | [RELEASE-PLAN.md](./RELEASE-PLAN.md) | Release checklist and open items |
-| [assets/charts/](./assets/charts/README.md) | Generated light and dark images of the seven native charts |
+| [assets/charts/](./assets/charts/README.md) | Generated light and dark images of the eleven native charts |
 | [assets/diagrams/](./assets/diagrams/pipeline.svg) | Hand-authored SVG diagrams (pipeline and plugin architecture) |
 | [assets/chart-icons/](./assets/chart-icons/) | Generated chart-type icons |
 | [assets/social-preview.png](./assets/social-preview.png) and [assets/banner.png](./assets/banner.png) | Generated social card and README banner raster |

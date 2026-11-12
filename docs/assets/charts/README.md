@@ -2,12 +2,12 @@
 
 [Back to the docs](../../USING.md) | [Guide](../../guide/)
 
-Rendered images of the seven native Lumagrid charts in both library themes. The files are generated, committed and used by the guide chart pages and the README image strip. Do not edit them by hand.
+Rendered images of the eleven native Lumagrid charts in both library themes. The files are generated, committed and used by the guide chart pages and the README image strip. Do not edit them by hand.
 
 ## Regenerate
 
 ```bash
-npm run visuals          # build the site, capture all 14 PNG and 10 SVG, assert the site layout
+npm run visuals          # build the site, capture all 22 PNG and 18 SVG, assert the site layout
 npm run visuals:check    # validate the committed files (no browser needed)
 ```
 
@@ -32,6 +32,10 @@ Names are `<chart>-<theme>.png` and, for the SVG charts, `<chart>-<theme>.svg`. 
 | `choropleth` | `Choropleth` | `choropleth` | light, dark | yes | yes |
 | `table` | `DataTable` | `table` | light, dark | yes | no |
 | `tree` | `TreeView` | `tree` | light, dark | yes | no |
+| `scatter` | `ScatterChart` | `scatter` | light, dark | yes | yes |
+| `area` | `AreaChart` | `area` | light, dark | yes | yes |
+| `column` | `ColumnChart` | `column` | light, dark | yes | yes |
+| `heatmap` | `Heatmap` | `heatmap` | light, dark | yes | yes |
 
 `DataTable` and `TreeView` are HTML, not SVG, so they are PNG only. They are deliberately not wrapped in a `foreignObject`, which renders unreliably outside browsers and would add active-content surface to a committed SVG.
 

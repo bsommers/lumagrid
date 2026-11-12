@@ -1,6 +1,6 @@
 // Deterministic chart image renderer (D-14, D-19). Builds the site, serves site/dist with Vite's
 // preview API on 127.0.0.1, drives a headless browser through scripts/lib/browser.mjs and writes
-// docs/assets/charts/<chart>-<theme>.png (all charts) and .svg (the five SVG charts). A second
+// docs/assets/charts/<chart>-<theme>.png (all charts) and .svg (the SVG charts). A second
 // phase asserts the built landing page layout in a real browser (D-13).
 //
 //   node scripts/render-visuals.mjs [--only <chart>[:<theme>]] [--no-build] [--no-site-checks]

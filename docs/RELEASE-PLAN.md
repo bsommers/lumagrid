@@ -1,6 +1,6 @@
 # Release plan: 0.1.0 to 1.0
 
-Status at 0.1.0: four layers (theme, transforms, registry/core, viz/plugins), seven native charts, D3/Recharts/Nivo adapters, ~140 tests with a coverage gate, lint, and an `examples/` app.
+Status at 0.1.0: four layers (theme, transforms, registry/core, viz/plugins), eleven native charts, D3/Recharts/Nivo adapters, ~140 tests with a coverage gate, lint, and an `examples/` app.
 
 ## Versioning policy
 
