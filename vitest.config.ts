@@ -25,6 +25,8 @@ export default defineConfig({
       // Regression gate, set just below measured coverage (97.8/91.8/94.5/97.8
       // lines/branches/functions/statements on 2026-11-07). Ratchet upward.
       include: ['src/**'],
+      // vitest 4 also reports loaded files outside the library; the gate is for src/ only.
+      exclude: ['site/**', 'scripts/**', 'docs/**', 'brand/**', '**/__tests__/**'],
       thresholds: { lines: 97, statements: 97, branches: 91, functions: 94 },
     },
   },
