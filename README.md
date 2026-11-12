@@ -54,6 +54,16 @@ export const Example = () => (
 | <img src="docs/assets/charts/bar-dark.png" alt="Bar chart" width="190"><br>Bar | <img src="docs/assets/charts/line-dark.png" alt="Line chart" width="190"><br>Line | <img src="docs/assets/charts/pie-dark.png" alt="Pie chart" width="190"><br>Pie | <img src="docs/assets/charts/table-dark.png" alt="Data table" width="190"><br>Data table |
 | <img src="docs/assets/charts/tree-dark.png" alt="Tree view" width="190"><br>Tree view | <img src="docs/assets/charts/choropleth-dark.png" alt="Choropleth map" width="190"><br>Choropleth | <img src="docs/assets/charts/force-dark.png" alt="Force graph" width="190"><br>Force graph | |
 
+## Screenshots
+
+The live gallery switches between the Neon, Dark and Light themes.
+
+| Neon | Dark | Light |
+|:-:|:-:|:-:|
+| <img src="docs/assets/screenshots/gallery-neon.png" alt="Gallery in the Neon theme" width="260"> | <img src="docs/assets/screenshots/gallery-dark.png" alt="Gallery in the Dark theme" width="260"> | <img src="docs/assets/screenshots/gallery-light.png" alt="Gallery in the Light theme" width="260"> |
+
+<img src="docs/assets/screenshots/hero.png" alt="Lumagrid landing page hero with install command and usage example" width="640">
+
 ## How it fits together
 
 Data flows through the transform layer, a plugin turns it into a renderer's shape, and the theme layer styles the result. Each layer imports only from the layers below it.

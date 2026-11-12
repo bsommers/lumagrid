@@ -57,6 +57,7 @@
     "docs:check": "node scripts/check-docs.mjs",
     "visuals": "node scripts/render-visuals.mjs",
     "visuals:check": "node scripts/check-visuals.mjs",
+    "screenshots": "node scripts/render-screenshots.mjs",
     "brand": "node scripts/brand/compose.mjs && node scripts/build-brand.mjs",
     "brand:check": "node scripts/check-brand.mjs"
   },
