@@ -15,6 +15,8 @@ export function Choropleth(input: ChoroplethProps): React_2.ReactElement;
 export interface ChoroplethProps extends NativeChartProps {
     // @beta
     projectedPaths?: Record<string, string>;
+    showLabels?: boolean;
+    showLegend?: boolean;
     valueProperty?: string;
 }
 
@@ -28,6 +30,10 @@ export function ForceGraph(input: ForceGraphProps): React_2.ReactElement;
 export interface ForceGraphProps extends NativeChartProps {
     // @beta
     iterations?: number;
+    onSelect?: (node: {
+        id: string;
+        label: string;
+    }) => void;
     // @beta
     relayout?: boolean;
     // @beta
@@ -38,7 +44,9 @@ export interface ForceGraphProps extends NativeChartProps {
 export function HorizontalBarChart(input: NativeChartProps): React_2.ReactElement;
 
 // @public
-export function LineChart(input: NativeChartProps): React_2.ReactElement;
+export function LineChart(input: NativeChartProps & {
+    showLegend?: boolean;
+}): React_2.ReactElement;
 
 // Warning: (ae-forgotten-export) The symbol "ChartPlugin" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "TransformedData" needs to be exported by the entry point index.d.ts
@@ -72,6 +80,7 @@ export function PieChart(input: PieChartProps): React_2.ReactElement;
 // @public
 export interface PieChartProps extends NativeChartProps {
     donut?: boolean;
+    showLegend?: boolean;
 }
 
 // @public

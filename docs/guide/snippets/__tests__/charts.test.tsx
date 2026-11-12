@@ -27,7 +27,7 @@ describe('chart page snippets render', () => {
     expect(chart.tagName.toLowerCase()).toBe('svg');
     expect(chart.getAttribute('aria-label')).toBe('Monthly revenue by region');
     expect(container.querySelectorAll('svg path')).toHaveLength(2);
-    expect(screen.getByText('Jan')).toBeInTheDocument();
+    expect(screen.getAllByText('Jan').length).toBeGreaterThan(0);
     expect(lineView.config.colorField).toBe('region');
   });
 
@@ -47,14 +47,14 @@ describe('chart page snippets render', () => {
     expect(container.querySelectorAll('tbody tr')).toHaveLength(4);
     fireEvent.click(screen.getByText('Revenue'));
     expect(container.querySelector('tbody tr td')!.textContent).toBe('North');
-    expect(screen.getByText(/Revenue ↑/)).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /Revenue/ })).toHaveAttribute('aria-sort', 'ascending');
     expect(tableView.id).toBe('table');
   });
 
   it('force draws a circle per node and a line per edge', async () => {
     const { container } = render(<Force />);
-    const chart = screen.getByRole('img');
-    expect(chart.getAttribute('aria-label')).toBe('Module dependency graph');
+    const chart = screen.getByRole('group', { name: 'Module dependency graph' });
+    expect(chart.tagName.toLowerCase()).toBe('svg');
     await waitFor(() => expect(container.querySelectorAll('circle')).toHaveLength(4));
     expect(container.querySelectorAll('line')).toHaveLength(4);
     expect(forceView.config.seed).toBe(1);

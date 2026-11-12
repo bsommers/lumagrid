@@ -160,3 +160,14 @@ describe('HorizontalBarChart', () => {
     });
   });
 });
+
+describe('HorizontalBarChart accessible bars', () => {
+  it('gives each bar an aria-label of "label: value"', () => {
+    const data: TransformedData = {
+      rows: [{ region: 'North', sales: 1500 }],
+      fields: [{ key: 'region', type: 'string' }, { key: 'sales', type: 'number' }],
+    };
+    const { container } = render(<HorizontalBarChart data={data} width={400} height={100} theme={lightTheme} />);
+    expect(container.querySelector('rect')!.getAttribute('aria-label')).toBe('North: 1,500');
+  });
+});

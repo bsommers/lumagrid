@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { categoricalColor } from '../theme/color-scale.js';
 import type { NativeChartProps } from '../registry/native-plugin.js';
 
@@ -94,6 +94,8 @@ function seededUnit(seed: number, key: string): number {
  * @public
  */
 export interface ForceGraphProps extends NativeChartProps {
+  /** Called with the node id and label when a node is clicked or activated with Enter/Space. */
+  onSelect?: (node: { id: string; label: string }) => void;
   /**
    * Re-run the layout simulation when the graph's nodes or edges change.
    * Default `true`. When `false`, the layout is computed once; on later data
@@ -130,7 +132,7 @@ export interface ForceGraphProps extends NativeChartProps {
  */
 export function ForceGraph({
   data, width, height, idField, labelField, xField, yField, ariaLabel, theme,
-  relayout = true, seed = 1, iterations = 60,
+  relayout = true, seed = 1, iterations = 60, onSelect,
 }: ForceGraphProps): React.ReactElement {
   // Expect data.rows to have: id, label, [group], and optionally source/target for edges
   const nodeRows = data.rows.filter((r) => r['source'] === undefined || r['source'] === null);
@@ -194,6 +196,7 @@ export function ForceGraph({
   const meta = new Map(baseNodes.map((n) => [n.id, n]));
   const nodes: Node[] = positioned.map((n) => ({ ...n, ...meta.get(n.id) }));
 
+  const [focusedId, setFocusedId] = useState<string | null>(null);
   const groups = [...new Set(nodes.map((n) => n.group ?? 'default'))];
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
@@ -216,15 +219,30 @@ export function ForceGraph({
   const scaleX = (x: number) => offX + (x - minX) * k;
   const scaleY = (y: number) => offY + (y - minY) * k;
 
+  const liveEdges = edges.filter((e) => nodeMap.has(e.source) && nodeMap.has(e.target));
+  const edgeLabel = (e: Edge) => {
+    const base = `${nodeMap.get(e.source)!.label} to ${nodeMap.get(e.target)!.label}`;
+    return e.weight !== undefined ? `${base} (${e.weight})` : base;
+  };
+  const summary = `${nodes.length} node${nodes.length === 1 ? '' : 's'}, ${liveEdges.length} edge${liveEdges.length === 1 ? '' : 's'}`;
+  const uid = React.useId();
+  const titleId = `${uid}-title`;
+  const descId = `${uid}-desc`;
+  const label = ariaLabel ?? 'Force-directed graph';
+  const focusColor = theme.colors.categorical[0] ?? 'currentColor';
+
   return (
-    <svg width={width} height={height} aria-label={ariaLabel ?? 'Force-directed graph'} role="img"
+    <svg width={width} height={height} aria-label={label} role="group"
+      aria-labelledby={titleId} aria-describedby={descId}
       style={{ fontFamily: theme.typography.fontFamily }}>
+      <title id={titleId}>{label}</title>
+      <desc id={descId}>{summary}. {liveEdges.map(edgeLabel).join('; ')}</desc>
       {edges.map((edge, i) => {
         const s = nodeMap.get(edge.source);
         const t = nodeMap.get(edge.target);
         if (!s || !t) return null;
         return (
-          <line key={i}
+          <line key={i} role="img" aria-label={edgeLabel(edge)}
             x1={scaleX(s.x)} y1={scaleY(s.y)}
             x2={scaleX(t.x)} y2={scaleY(t.y)}
             stroke={theme.surface.border} strokeWidth={edge.weight ? Math.max(1, edge.weight) : 1.5}
@@ -233,13 +251,26 @@ export function ForceGraph({
       })}
       {nodes.map((node) => {
         const gIdx = groups.indexOf(node.group ?? 'default');
+        const focused = focusedId === node.id;
         return (
-          <g key={node.id} transform={`translate(${scaleX(node.x)},${scaleY(node.y)})`}>
+          <g key={node.id} transform={`translate(${scaleX(node.x)},${scaleY(node.y)})`}
+            role="button" tabIndex={0} aria-label={node.label}
+            style={{ outline: 'none', cursor: onSelect ? 'pointer' : 'default' }}
+            onFocus={() => setFocusedId(node.id)}
+            onBlur={() => setFocusedId((c) => (c === node.id ? null : c))}
+            onClick={() => onSelect?.({ id: node.id, label: node.label })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect?.({ id: node.id, label: node.label });
+              }
+            }}>
             <circle r={10} fill={categoricalColor(theme, gIdx)} stroke={theme.surface.background} strokeWidth={2} opacity={0.9}>
               <title>{node.label}</title>
             </circle>
+            {focused && <circle r={14} fill="none" stroke={focusColor} strokeWidth={2} />}
             <text y={18} textAnchor="middle" fontSize={theme.typography.fontSizeSm}
-              fill={theme.text.secondary}>{node.label.slice(0, 12)}</text>
+              fill={theme.text.secondary} aria-hidden="true">{node.label.slice(0, 12)}</text>
           </g>
         );
       })}

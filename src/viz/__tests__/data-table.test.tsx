@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, act } from '@testing-library/react';
 import { DataTable } from '../data-table.js';
 import { lightTheme } from '../../theme/light.js';
 import type { TransformedData } from '../../transforms/types.js';
@@ -44,16 +44,17 @@ describe('DataTable edge cases', () => {
     fireEvent.click(region);
     fireEvent.click(region);
     fireEvent.click(region);
-    expect(screen.getByText(/region ↑/)).toBeInTheDocument();
+    const sortOf = (n: string) => screen.getByRole('columnheader', { name: new RegExp(n) }).getAttribute('aria-sort');
+    expect(sortOf('region')).toBe('ascending');
     fireEvent.click(screen.getByText('sales'));
-    expect(screen.getByText(/sales ↑/)).toBeInTheDocument();
-    expect(screen.queryByText(/region [↑↓]/)).not.toBeInTheDocument();
+    expect(sortOf('sales')).toBe('ascending');
+    expect(sortOf('region')).toBe('none');
   });
 
   it('goes back a page with the previous-page button and disables next on the last page', () => {
     const rows = Array.from({ length: 30 }, (_, i) => ({ n: i }));
     renderTable({ rows, fields: [{ key: 'n', type: 'number' }] });
-    const [prev, next] = screen.getAllByRole('button');
+    const [prev, next] = screen.getAllByRole('button', { name: /^[←→]$/ });
     fireEvent.click(next!);
     expect(screen.getByText('Page 2 of 2')).toBeInTheDocument();
     expect(next).toBeDisabled();
@@ -118,7 +119,23 @@ describe('DataTable sorting', () => {
   it('shows an up arrow next to the active ascending sort column', () => {
     renderTable(basicData);
     fireEvent.click(screen.getByText('region'));
-    expect(screen.getByText('region ↑')).toBeInTheDocument();
+    expect(screen.getByText('region').parentElement!.textContent).toBe('region ↑');
+  });
+});
+
+describe('DataTable accessibility', () => {
+  it('renders sortable headers as focusable buttons with aria-sort, toggled by keyboard', () => {
+    renderTable(basicData);
+    const th = screen.getByRole('columnheader', { name: /region/ });
+    expect(th).toHaveAttribute('aria-sort', 'none');
+    const btn = within(th).getByRole('button');
+    act(() => btn.focus());
+    expect(btn).toHaveFocus();
+    expect(btn.style.outline).toContain('solid');
+    fireEvent.click(btn); // native buttons turn Enter/Space into click
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    fireEvent.click(btn);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
   });
 });
 

@@ -15,6 +15,7 @@ export function DataTable({ data, height, theme }: NativeChartProps): React.Reac
   const [page, setPage] = useState(0);
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>('asc');
+  const [focusedKey, setFocusedKey] = useState<string | null>(null);
 
   const fields: FieldMeta[] = data.fields.length > 0
     ? data.fields
@@ -43,7 +44,6 @@ export function DataTable({ data, height, theme }: NativeChartProps): React.Reac
     fontSize: theme.typography.fontSizeSm,
     color: theme.text.secondary,
     borderBottom: `2px solid ${theme.surface.border}`,
-    cursor: 'pointer',
     whiteSpace: 'nowrap',
     userSelect: 'none',
   };
@@ -66,9 +66,29 @@ export function DataTable({ data, height, theme }: NativeChartProps): React.Reac
           <thead>
             <tr>
               {fields.map((f) => (
-                <th key={f.key} style={th} onClick={() => handleSort(f.key)}>
-                  {f.label ?? f.key}
-                  {sortField === f.key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}
+                <th
+                  key={f.key}
+                  style={th}
+                  scope="col"
+                  aria-sort={sortField === f.key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+                >
+                  <button
+                    type="button"
+                    onClick={() => handleSort(f.key)}
+                    onFocus={() => setFocusedKey(f.key)}
+                    onBlur={() => setFocusedKey((k) => (k === f.key ? null : k))}
+                    style={{
+                      all: 'unset',
+                      cursor: 'pointer',
+                      font: 'inherit',
+                      color: 'inherit',
+                      outline: focusedKey === f.key ? `2px solid ${theme.colors.categorical[0] ?? 'currentColor'}` : 'none',
+                      outlineOffset: 2,
+                    }}
+                  >
+                    {f.label ?? f.key}
+                    <span aria-hidden="true">{sortField === f.key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''}</span>
+                  </button>
                 </th>
               ))}
             </tr>

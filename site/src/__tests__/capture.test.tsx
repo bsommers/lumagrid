@@ -21,7 +21,7 @@ describe('CaptureApp', () => {
         expect(capture).not.toBeNull();
         if (chart === 'table') expect(capture!.querySelector('table')).not.toBeNull();
         else if (chart === 'tree') expect(capture!.querySelector('[role="tree"]')).not.toBeNull();
-        else expect(capture!.querySelector('svg[role="img"]')).not.toBeNull();
+        else expect(capture!.querySelector('svg[role="img"], svg[role="group"]')).not.toBeNull();
         await waitFor(() => expect(capture!.getAttribute('data-capture-ready')).toBe('1'));
       });
     }

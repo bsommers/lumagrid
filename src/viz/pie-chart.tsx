@@ -32,6 +32,8 @@ function slicePath(cx: number, cy: number, r: number, innerR: number, startAngle
 export interface PieChartProps extends NativeChartProps {
   /** If true, renders the pie as a donut with the total in the center. Default: false. */
   donut?: boolean;
+  /** Render a legend (swatch, label, value and percent) beside the pie. Default: true. */
+  showLegend?: boolean;
 }
 
 /**
@@ -51,6 +53,7 @@ export function PieChart({
   ariaLabel,
   theme,
   donut = false,
+  showLegend = true,
 }: PieChartProps): React.ReactElement {
   // Role name, then legacy alias, then inference from data.fields
   const valueKey = valueField ?? yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
@@ -62,7 +65,8 @@ export function PieChart({
   })).filter((s) => Number.isFinite(s.value) && s.value > 0);
 
   const total = slices.reduce((sum, s) => sum + s.value, 0);
-  const cx = width / 2;
+  const legendW = showLegend && slices.length > 0 ? Math.min(180, Math.floor(width * 0.4)) : 0;
+  const cx = (width - legendW) / 2;
   const cy = height / 2;
   const r = Math.min(cx, cy) * 0.82;
   const innerR = donut ? r * 0.5 : 0;
@@ -87,7 +91,8 @@ export function PieChart({
       style={{ fontFamily: theme.typography.fontFamily }}>
       {paths.map(({ slice, i, lp, pct, path }) => (
         <g key={i}>
-          <path d={path} fill={categoricalColor(theme, i)} stroke={theme.surface.background} strokeWidth={2}>
+          <path d={path} fill={categoricalColor(theme, i)} stroke={theme.surface.background} strokeWidth={2}
+            aria-label={`${slice.label}: ${slice.value.toLocaleString()} (${pct}%)`}>
             <title>{slice.label}: {slice.value.toLocaleString()} ({pct}%)</title>
           </path>
           {slice.value / total > 0.04 && (
@@ -98,6 +103,16 @@ export function PieChart({
           )}
         </g>
       ))}
+      {legendW > 0 && (
+        <g data-testid="pie-legend" fontSize={theme.typography.fontSizeSm} fill={theme.text.primary}>
+          {paths.map(({ slice, i, pct }) => (
+            <g key={i} transform={`translate(${width - legendW},${12 + i * 18})`}>
+              <rect width={10} height={10} y={-5} fill={categoricalColor(theme, i)} />
+              <text x={16} dominantBaseline="middle">{slice.label}: {slice.value.toLocaleString()} ({pct}%)</text>
+            </g>
+          ))}
+        </g>
+      )}
       {donut && (
         <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle"
           fontSize={theme.typography.fontSizeLg} fill={theme.text.primary} fontWeight={theme.typography.fontWeightBold}>

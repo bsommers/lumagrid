@@ -1,6 +1,6 @@
 import React from 'react';
-import { describe, it, expect } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { ForceGraph } from '../force-graph.js';
 import { lightTheme } from '../../theme/light.js';
 import type { TransformedData } from '../../transforms/types.js';
@@ -13,7 +13,7 @@ describe('ForceGraph', () => {
   it('has role img and default/custom aria-label', () => {
     const { container, rerender } = draw(mk([]));
     const svg = container.querySelector('svg')!;
-    expect(svg.getAttribute('role')).toBe('img');
+    expect(svg.getAttribute('role')).toBe('group');
     expect(svg.getAttribute('aria-label')).toBe('Force-directed graph');
     rerender(<ForceGraph data={mk([])} width={400} height={300} theme={lightTheme} ariaLabel="Net" />);
     expect(container.querySelector('svg')!.getAttribute('aria-label')).toBe('Net');
@@ -164,6 +164,29 @@ describe('ForceGraph', () => {
       relaid.rerender(el(next));
       // With relayout the a/b layout is re-simulated, so at least one position differs from the frozen run.
       expect(positions(relaid.container)).not.toEqual(positions(container));
+    });
+  });
+
+  describe('accessibility', () => {
+    const rows = [
+      { id: 'a', label: 'Alpha' }, { id: 'b', label: 'Beta' },
+      { source: 'a', target: 'b', weight: 3 },
+    ];
+
+    it('summarises counts in title/desc and labels edges', () => {
+      const { container } = draw(mk(rows));
+      expect(container.querySelector('svg > desc')!.textContent).toContain('2 nodes, 1 edge');
+      expect(container.querySelector('line')!.getAttribute('aria-label')).toBe('Alpha to Beta (3)');
+    });
+
+    it('makes nodes focusable, labelled, and activates onSelect with Enter', () => {
+      const onSelect = vi.fn();
+      const { container } = draw(mk(rows), { onSelect });
+      const node = container.querySelector('g[aria-label="Alpha"]') as SVGGElement;
+      expect(node.getAttribute('tabindex')).toBe('0');
+      node.focus();
+      fireEvent.keyDown(node, { key: 'Enter' });
+      expect(onSelect).toHaveBeenCalledWith({ id: 'a', label: 'Alpha' });
     });
   });
 });

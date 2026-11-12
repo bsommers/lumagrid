@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { Choropleth } from '../choropleth.js';
 import { lightTheme } from '../../theme/light.js';
+import { darkTheme } from '../../theme/dark.js';
 import type { GeoFeature, TransformedData } from '../../transforms/types.js';
 
 const feat = (id: string, props: GeoFeature['properties']): GeoFeature => ({
@@ -110,5 +111,44 @@ describe('Choropleth', () => {
       const [va, vb] = fills(viaValue.container);
       expect(va).not.toBe(vb);
     });
+  });
+
+describe('Choropleth labels and legend', () => {
+  const data = geo([feat('a', { value: 1, name: 'Alpha' }), feat('b', { value: 5, name: 'Beta' })]);
+  const paths = { a: 'M0,0L10,0L10,10Z', b: 'M20,0L30,0L30,10Z' };
+
+  it('labels tiles, sets aria-label and renders a legend with numeric ends by default', () => {
+    const { container, getByTestId } = draw(data, { projectedPaths: paths });
+    expect(container.querySelector('path')!.getAttribute('aria-label')).toBe('Alpha: 1');
+    expect(container.querySelectorAll('text tspan')).toHaveLength(4);
+    const legend = getByTestId('choropleth-legend');
+    expect(legend.textContent).toContain('1');
+    expect(legend.textContent).toContain('5');
+  });
+
+  it('can opt out of labels and legend', () => {
+    const { container, queryByTestId } = draw(data, { projectedPaths: paths, showLabels: false, showLegend: false });
+    expect(container.querySelectorAll('tspan')).toHaveLength(0);
+    expect(queryByTestId('choropleth-legend')).toBeNull();
+  });
+});
+
+  it('picks a readable label color for rgb() fills (dark tile gets light text, light tile gets dark text)', () => {
+    const data = geo([feat('a', { value: 1, name: 'Alpha' }), feat('b', { value: 5, name: 'Beta' })]);
+    const paths = { a: 'M0,0L10,0L10,10Z', b: 'M20,0L30,0L30,10Z' };
+    const { container } = draw(data, { projectedPaths: paths, theme: darkTheme });
+    const [low, high] = [...container.querySelectorAll('path')].map((p) => p.getAttribute('fill'));
+    expect(low).toMatch(/^rgb/);
+    const texts = [...container.querySelectorAll('text')];
+    const lum = (rgb: string) => {
+      const [r, g, b] = rgb.match(/\d+(?:\.\d+)?/g)!.slice(0, 3).map(Number) as [number, number, number];
+      const l = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; };
+      return 0.2126 * l(r) + 0.7152 * l(g) + 0.0722 * l(b);
+    };
+    const darkestIsFirst = lum(low!) < lum(high!);
+    const darkTileText = texts[darkestIsFirst ? 0 : 1]!.getAttribute('fill');
+    const lightTileText = texts[darkestIsFirst ? 1 : 0]!.getAttribute('fill');
+    expect(darkTileText).toBe(darkTheme.text.primary);
+    expect(lightTileText).toBe(darkTheme.text.inverse);
   });
 });

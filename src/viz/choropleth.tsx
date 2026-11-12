@@ -20,6 +20,45 @@ export interface ChoroplethProps extends NativeChartProps {
    * @experimental
    */
   projectedPaths?: Record<string, string>;
+  /** Render a text label (name and value) on each tile. Default: true. */
+  showLabels?: boolean;
+  /** Render a min..max color-scale legend. Default: true. */
+  showLegend?: boolean;
+}
+
+function luminance(color: string): number {
+  const c = color.trim();
+  let r: number, g: number, b: number;
+  const hex = /^#?([0-9a-f]{6})$/i.exec(c);
+  const rgb = /^rgba?\(\s*(\d+(?:\.\d+)?)[\s,]+(\d+(?:\.\d+)?)[\s,]+(\d+(?:\.\d+)?)/i.exec(c);
+  if (hex) {
+    const n = parseInt(hex[1]!, 16);
+    [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  } else if (rgb) {
+    [r, g, b] = [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])];
+  } else return 0.5;
+  const lin = (v: number) => { const x = v / 255; return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+function ratio(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** Picks whichever of the theme's text colors contrasts best with `fill`. */
+function contrastText(fill: string, a: string, b: string): string {
+  return ratio(fill, a) >= ratio(fill, b) ? a : b;
+}
+
+/** Center of the bounding box of all coordinates in an SVG path string. */
+function pathCenter(d: string): { x: number; y: number } | null {
+  const nums = d.match(/-?\d*\.?\d+(?:e[-+]?\d+)?/gi)?.map(Number) ?? [];
+  if (nums.length < 2) return null;
+  const xs: number[] = [];
+  const ys: number[] = [];
+  nums.forEach((n, i) => (i % 2 === 0 ? xs : ys).push(n));
+  return { x: (Math.min(...xs) + Math.max(...xs)) / 2, y: (Math.min(...ys) + Math.max(...ys)) / 2 };
 }
 
 /**
@@ -38,6 +77,8 @@ export function Choropleth({
   theme,
   valueProperty,
   projectedPaths,
+  showLabels = true,
+  showLegend = true,
 }: ChoroplethProps): React.ReactElement {
   if (!data.geo) {
     return (
@@ -73,13 +114,42 @@ export function Choropleth({
           if (!d) return null;
           const label = String(feature.properties['name'] ?? feature.id);
           const val = feature.properties[prop];
+          const valText = typeof val === 'number' && Number.isFinite(val) ? val.toLocaleString() : '—';
+          const fill = getColor(feature);
+          const c = showLabels ? pathCenter(d) : null;
           return (
-            <path key={feature.id} d={d} fill={getColor(feature)}
-              stroke={theme.surface.background} strokeWidth={0.5}>
-              <title>{label}: {typeof val === 'number' && Number.isFinite(val) ? val.toLocaleString() : '—'}</title>
-            </path>
+            <g key={feature.id}>
+              <path d={d} fill={fill} stroke={theme.surface.background} strokeWidth={0.5}
+                aria-label={`${label}: ${valText}`}>
+                <title>{label}: {valText}</title>
+              </path>
+              {c && (
+                <text x={c.x} y={c.y} textAnchor="middle" dominantBaseline="middle" pointerEvents="none"
+                  fontSize={theme.typography.fontSizeSm} fontFamily={theme.typography.fontFamily}
+                  fill={contrastText(fill, theme.text.primary, theme.text.inverse)}>
+                  <tspan x={c.x} dy="-0.5em">{label}</tspan>
+                  <tspan x={c.x} dy="1.1em">{valText}</tspan>
+                </text>
+              )}
+            </g>
           );
         })}
+        {showLegend && (
+          <g data-testid="choropleth-legend" fontSize={theme.typography.fontSizeSm}
+            fontFamily={theme.typography.fontFamily} fill={theme.text.primary}>
+            <defs>
+              <linearGradient id="choropleth-legend-grad" x1="0" x2="1" y1="0" y2="0">
+                {theme.colors.sequential.map((c, i, a) => (
+                  <stop key={i} offset={`${(i / Math.max(a.length - 1, 1)) * 100}%`} stopColor={c} />
+                ))}
+              </linearGradient>
+            </defs>
+            <rect x={8} y={height - 22} width={Math.min(120, width / 3)} height={8}
+              fill="url(#choropleth-legend-grad)" stroke={theme.surface.border} />
+            <text x={8} y={height - 4}>{minVal.toLocaleString()}</text>
+            <text x={8 + Math.min(120, width / 3)} y={height - 4} textAnchor="end">{maxVal.toLocaleString()}</text>
+          </g>
+        )}
       </svg>
     );
   }

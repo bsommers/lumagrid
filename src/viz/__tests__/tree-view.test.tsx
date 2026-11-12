@@ -76,4 +76,40 @@ describe('TreeView', () => {
     const { container } = draw(withTree({ id: 'x', label: 'Z', value: 0 }));
     expect(container.textContent).toContain('0');
   });
+
+  describe('keyboard navigation', () => {
+    const items = (c: HTMLElement) => Array.from(c.querySelectorAll<HTMLElement>('[role="treeitem"]'));
+
+    it('uses roving tabindex with one tab stop', () => {
+      const { container } = draw(withTree(tree), ['root']);
+      expect(items(container).filter((e) => e.tabIndex === 0)).toHaveLength(1);
+    });
+
+    it('navigates with arrows, Home/End, expands/collapses, and selects', () => {
+      const onSelect = vi.fn();
+      const { container } = draw(withTree(tree), ['root'], onSelect);
+      const root = items(container)[0]!;
+      root.focus();
+      fireEvent.keyDown(root, { key: 'ArrowDown' });
+      expect(document.activeElement).toHaveTextContent('Alpha');
+      fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight' });
+      expect(items(container)).toHaveLength(4);
+      expect(items(container)[1]).toHaveAttribute('aria-expanded', 'true');
+      fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight' });
+      expect(document.activeElement).toHaveTextContent('Deep');
+      fireEvent.keyDown(document.activeElement!, { key: 'ArrowLeft' });
+      expect(document.activeElement).toHaveTextContent('Alpha');
+      fireEvent.keyDown(document.activeElement!, { key: 'ArrowLeft' });
+      expect(items(container)).toHaveLength(3);
+      fireEvent.keyDown(document.activeElement!, { key: 'End' });
+      expect(document.activeElement).toHaveTextContent('Beta');
+      fireEvent.keyDown(document.activeElement!, { key: 'Home' });
+      expect(document.activeElement).toHaveTextContent('Root');
+      fireEvent.keyDown(document.activeElement!, { key: 'ArrowUp' });
+      fireEvent.keyDown(document.activeElement!, { key: 'End' });
+      fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
+      expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 'b' }));
+      expect(document.activeElement).toHaveAttribute('aria-selected', 'true');
+    });
+  });
 });

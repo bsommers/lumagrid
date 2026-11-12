@@ -66,6 +66,7 @@ export function HorizontalBarChart({
                 height={barHeight}
                 fill={color}
                 rx={2}
+                aria-label={`${row.label}: ${row.value.toLocaleString()}`}
               >
                 <title>{row.label}: {row.value.toLocaleString()}</title>
               </rect>

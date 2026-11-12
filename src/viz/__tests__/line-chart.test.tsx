@@ -261,4 +261,45 @@ describe('LineChart role-named fields', () => {
     expect(ariaOf(container)).toBe('Line chart of value');
     expect(labels(container)).toContain('Mon');
   });
+
+  describe('ticks, legend, and text alternatives', () => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    const grouped: TransformedData = {
+      rows: months.flatMap((m, i) => [
+        { month: m, value: 1000 * (i + 1) + 200, region: 'North' },
+        { month: m, value: 500 * (i + 1), region: 'South' },
+      ]),
+      fields: [{ key: 'month', type: 'string' }, { key: 'value', type: 'number' }, { key: 'region', type: 'string' }],
+    };
+
+    it('shows every x label for 6 categories (no dropped Mar)', () => {
+      const { container } = renderChart(grouped, { labelField: 'month', valueField: 'value', colorField: 'region' });
+      const xs = Array.from(container.querySelectorAll('svg text')).map((t) => t.textContent).filter((t) => months.includes(t ?? ''));
+      expect(xs).toEqual(months);
+    });
+
+    it('renders a legend with one themed swatch per series, and can opt out', () => {
+      const props = { labelField: 'month', valueField: 'value', colorField: 'region' };
+      const { container } = renderChart(grouped, props);
+      const items = container.querySelectorAll('ul[aria-label="Legend"] li');
+      expect(items).toHaveLength(2);
+      expect(items[0].textContent).toBe('North');
+      const sw = items[1].querySelector('[data-legend-swatch]') as HTMLElement;
+      expect(sw.style.background).not.toBe('');
+      const off = renderChart(grouped, { ...props, showLegend: false });
+      expect(off.container.querySelector('ul')).toBeNull();
+    });
+
+    it('has no legend without colorField', () => {
+      expect(renderChart(singleSeriesData).container.querySelector('ul')).toBeNull();
+    });
+
+    it('exposes every data point in a hidden table', () => {
+      const { container } = renderChart(grouped, { labelField: 'month', valueField: 'value', colorField: 'region' });
+      const rows = Array.from(container.querySelectorAll('tbody tr')).map((r) =>
+        Array.from(r.querySelectorAll('td')).map((c) => c.textContent).join(','));
+      expect(rows).toHaveLength(12);
+      expect(rows).toContain('North,Mar,' + (3200).toLocaleString());
+    });
+  });
 });

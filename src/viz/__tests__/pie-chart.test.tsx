@@ -61,7 +61,7 @@ describe('PieChart', () => {
   });
 
   it('hides percentage labels on tiny slices', () => {
-    const { container } = draw(mk([{ name: 'a', amt: 1 }, { name: 'b', amt: 1000 }]));
+    const { container } = draw(mk([{ name: 'a', amt: 1 }, { name: 'b', amt: 1000 }]), { showLegend: false });
     expect(container.querySelectorAll('text')).toHaveLength(1);
   });
 
@@ -113,4 +113,22 @@ describe('PieChart role-named fields', () => {
     expect(titles(container)).toEqual(['a: 1 (50.0%)', 'b: 1 (50.0%)']);
     expect(container.querySelector('svg')?.getAttribute('aria-label')).toBe('Pie chart of amt');
   });
+
+describe('PieChart legend', () => {
+  const rows = [{ k: 'p', v: 4 }, { k: 'q', v: 12 }];
+  const data: TransformedData = {
+    rows, fields: [{ key: 'k', type: 'string' }, { key: 'v', type: 'number' }] as TransformedData['fields'],
+  };
+
+  it('renders a legend with label, value and percent by default, and slices keep aria-labels', () => {
+    const { container, getByTestId } = render(<PieChart data={data} width={400} height={300} theme={lightTheme} />);
+    expect(getByTestId('pie-legend').textContent).toContain('q: 12 (75.0%)');
+    expect(container.querySelector('path')!.getAttribute('aria-label')).toBe('p: 4 (25.0%)');
+  });
+
+  it('can opt out of the legend', () => {
+    const { queryByTestId } = render(<PieChart data={data} width={400} height={300} theme={lightTheme} showLegend={false} />);
+    expect(queryByTestId('pie-legend')).toBeNull();
+  });
+});
 });

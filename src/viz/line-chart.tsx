@@ -9,6 +9,9 @@ const MARGIN = { top: 24, right: 24, bottom: 40, left: 56 };
  * per distinct `colorField` value. Legacy `yField` (value) and `xField` (category) are
  * accepted; role names win when both are given.
  *
+ * A color legend (shown when `colorField` yields series; opt out with `showLegend={false}`)
+ * and a visually hidden data table give every series and data point a text alternative.
+ *
  * @public
  */
 export function LineChart({
@@ -22,7 +25,8 @@ export function LineChart({
   colorField,
   ariaLabel,
   theme,
-}: NativeChartProps): React.ReactElement {
+  showLegend = true,
+}: NativeChartProps & { showLegend?: boolean }): React.ReactElement {
   // Role name, then legacy alias, then inference from data.fields
   const numericField = valueField ?? yField ?? data.fields.find((f) => f.type === 'number')?.key ?? '';
   const categoryField = labelField ?? xField ?? data.fields.find((f) => f.type === 'string' || f.type === 'date')?.key ?? '';
@@ -68,7 +72,8 @@ export function LineChart({
       .map((p, i) => `${i === 0 ? 'M' : 'L'}${scaleX(p.x).toFixed(1)},${scaleY(p.y).toFixed(1)}`)
       .join(' ');
 
-  const tickCount = Math.min(5, allXLabels.length);
+  // Show every label when few (<= 6) so none is dropped by rounding; else 5 evenly spaced.
+  const tickCount = allXLabels.length <= 6 ? allXLabels.length : 5;
   const xTicks = tickCount <= 1
     ? (tickCount === 1 ? [0] : [])
     : Array.from({ length: tickCount }, (_, i) =>
@@ -76,7 +81,11 @@ export function LineChart({
       );
   const yTicks = 5;
 
+  const fmt = (v: number) => v.toLocaleString();
+  const hasLegend = showLegend && !!colorField && allSeries.length > 0;
+
   return (
+    <>
     <svg width={width} height={height} aria-label={ariaLabel ?? `Line chart of ${numericField}`} role="img"
       style={{ fontFamily: theme.typography.fontFamily }}>
       <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
@@ -111,5 +120,34 @@ export function LineChart({
         <line x1={0} y1={0} x2={0} y2={innerH} stroke={theme.surface.border} />
       </g>
     </svg>
+    {hasLegend && (
+      <ul aria-label="Legend" style={{
+        display: 'flex', flexWrap: 'wrap', gap: theme.spacing.md, listStyle: 'none', margin: 0,
+        padding: `${theme.spacing.xs} ${MARGIN.left}px`, fontFamily: theme.typography.fontFamily,
+        fontSize: theme.typography.fontSizeSm, color: theme.text.secondary,
+      }}>
+        {allSeries.map((series, si) => (
+          <li key={series.key} style={{ display: 'flex', alignItems: 'center', gap: theme.spacing.xs }}>
+            <span aria-hidden="true" data-legend-swatch="" style={{
+              width: 12, height: 12, borderRadius: 2, display: 'inline-block', background: categoricalColor(theme, si),
+            }} />
+            <span>{series.key}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <table data-line-chart-data="" style={{
+      position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)',
+      whiteSpace: 'nowrap', border: 0, padding: 0, margin: -1,
+    }}>
+      <caption>{ariaLabel ?? `Line chart of ${numericField}`} data</caption>
+      <thead><tr><th scope="col">Series</th><th scope="col">{categoryField}</th><th scope="col">{numericField}</th></tr></thead>
+      <tbody>
+        {allSeries.flatMap((series) => series.points.map((p, i) => (
+          <tr key={`${series.key}-${i}`}><td>{series.key}</td><td>{p.label}</td><td>{Number.isFinite(p.y) ? fmt(p.y) : 'n/a'}</td></tr>
+        )))}
+      </tbody>
+    </table>
+    </>
   );
 }
