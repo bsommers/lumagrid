@@ -39,7 +39,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "NOTICE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.esm.json && npm run build:cjs",
@@ -68,11 +70,20 @@
     "brand:check": "node scripts/check-brand.mjs"
   },
   "peerDependencies": {
+    "@nivo/bar": ">=0.99.0",
+    "d3": ">=7.0.0",
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "recharts": ">=3.0.0"
   },
   "peerDependenciesMeta": {
+    "@nivo/bar": {
+      "optional": true
+    },
     "d3": {
+      "optional": true
+    },
+    "recharts": {
       "optional": true
     }
   },

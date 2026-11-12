@@ -23,7 +23,7 @@ npm install lumagrid react react-dom
 npm install d3 recharts @nivo/bar
 ```
 
-> **Note:** this project is pre-release and the npm package is not yet published (REL-02 is pending), so `npm install lumagrid` does not resolve yet. See [docs/RELEASE-PLAN.md](docs/RELEASE-PLAN.md).
+> **Note:** Lumagrid is pre-1.0. Minor versions may change the API until 1.0; see [docs/STABILITY.md](docs/STABILITY.md) and [docs/RELEASE-PLAN.md](docs/RELEASE-PLAN.md).
 
 ## Quickstart
 
@@ -67,7 +67,7 @@ Lumagrid is not trying to out-chart anyone. Its angle is the seam: a chart is a 
 | Conformance kit | Yes: `lumagrid/testing`, 8 checks you can run on your own plugin | No | No | No |
 | Built-in keyboard and screen-reader support | Every native chart has an accessible name, and the interactive ones are keyboard navigable; checked by the kit | Partial (keyboard layer, labels mostly up to you) | Partial (varies by chart, mostly up to you) | None: you build it |
 | Number of charts | 11 native, plus anything you wrap | Far more, with many options per chart | Far more, a large catalog | Unlimited, but you write each one |
-| Maturity | Pre-release (0.x), not yet published to npm, small community | Mature, widely used, large community | Mature, widely used | The reference standard |
+| Maturity | Pre-1.0 (0.x), new, small community | Mature, widely used, large community | Mature, widely used | The reference standard |
 
 **Be honest about the trade:** Recharts, Nivo and D3 have far more chart types, richer options, much larger communities and years of production use. Lumagrid has 11 charts and is pre-release. Pick it when you want one theme, one data shape and one plugin contract across several engines, or when you need to check that a custom renderer meets an accessibility baseline. If one engine already covers your charts, use that engine.
 
