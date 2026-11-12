@@ -71,12 +71,16 @@ describe('Gallery native cards', () => {
     ['Choropleth', 'Choropleth', []],
     ['Data table', 'DataTable', []],
     ['Tree view', 'TreeView', []],
+    ['Scatter chart', 'ScatterChart', ['valueField', 'colorField']],
+    ['Area chart', 'AreaChart', ['valueField', 'labelField', 'colorField']],
+    ['Column chart', 'ColumnChart', ['valueField', 'labelField', 'colorField']],
+    ['Heatmap', 'Heatmap', ['valueField', 'columnField', 'rowField']],
   ] as const;
 
-  it('lists the seven native cards in catalog order', () => {
+  it('lists the eleven native cards in catalog order', () => {
     render(<Gallery />);
     const titles = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
-    expect(titles.slice(0, 7)).toEqual(NATIVE.map((n) => n[0]));
+    expect(titles.slice(0, 11)).toEqual(NATIVE.map((n) => n[0]));
   });
 
   it.each(NATIVE)('%s: code panel opens and names %s with role fields', (title, component, fields) => {
@@ -110,6 +114,28 @@ describe('Gallery native cards', () => {
     expect(positions()).not.toBe(before);
   });
 
+  it('toggles the area chart between overlaid and stacked', () => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: 'Area chart' });
+    const box = within(card).getByRole('checkbox', { name: 'Stacked' });
+    const paths = () => [...card.querySelectorAll('svg path')].map((p) => p.getAttribute('d')).join('|');
+    const before = paths();
+    expect(before).not.toBe('');
+    fireEvent.click(box);
+    expect(paths()).not.toBe(before);
+  });
+
+  it('toggles the column chart between grouped and stacked', () => {
+    render(<Gallery />);
+    const card = screen.getByRole('article', { name: 'Column chart' });
+    const rects = () => [...card.querySelectorAll('svg rect')].map((r) => r.getAttribute('y')).join('|');
+    const before = rects();
+    expect(within(card).getByText('Mode: grouped')).toBeInTheDocument();
+    fireEvent.click(within(card).getByRole('button', { name: 'Stack series' }));
+    expect(within(card).getByText('Mode: stacked')).toBeInTheDocument();
+    expect(rects()).not.toBe(before);
+  });
+
   it('shows the label of the selected tree node', () => {
     render(<Gallery />);
     const card = screen.getByRole('article', { name: 'Tree view' });
@@ -120,11 +146,11 @@ describe('Gallery native cards', () => {
 });
 
 describe('Gallery adapter cards', () => {
-  it('lists ten cards: seven native then three adapters', () => {
+  it('lists fourteen cards: eleven native then three adapters', () => {
     render(<Gallery />);
     const titles = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
-    expect(titles).toHaveLength(10);
-    expect(titles.slice(7)).toEqual(['D3 bars', 'Recharts bars', 'Nivo bars']);
+    expect(titles).toHaveLength(14);
+    expect(titles.slice(11)).toEqual(['D3 bars', 'Recharts bars', 'Nivo bars']);
   });
 
   it('marks exactly three catalog entries as lazy adapters whose loaders resolve to function components', async () => {

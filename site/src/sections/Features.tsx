@@ -48,7 +48,7 @@ export function Features(): React.ReactElement {
         <div className="lg-feature-copy">
           <h3>Plugins, not lock-in</h3>
           <p>
-            The ChartPlugin contract is the only seam. The seven native SVG charts use it, and so
+            The ChartPlugin contract is the only seam. The eleven native charts use it, and so
             do the D3, Recharts and Nivo adapters, so you can bring your own renderer.
           </p>
         </div>

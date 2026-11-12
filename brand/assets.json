@@ -107,6 +107,34 @@
       "width": 128,
       "height": 128,
       "background": null
+    },
+    {
+      "src": "brand/icons/chart-scatter.svg",
+      "out": "docs/assets/chart-icons/chart-scatter.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-area.svg",
+      "out": "docs/assets/chart-icons/chart-area.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-column.svg",
+      "out": "docs/assets/chart-icons/chart-column.png",
+      "width": 128,
+      "height": 128,
+      "background": null
+    },
+    {
+      "src": "brand/icons/chart-heatmap.svg",
+      "out": "docs/assets/chart-icons/chart-heatmap.png",
+      "width": 128,
+      "height": 128,
+      "background": null
     }
   ],
   "ico": {

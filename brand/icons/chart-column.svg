@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Column chart</title>
+  <g fill="none" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="8,8 8,56 56,56"/>
+  </g>
+  <g fill="#00E5FF" fill-opacity="0.2" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="14" y="36" width="8" height="16" rx="2"/>
+    <rect x="26" y="24" width="8" height="28" rx="2"/>
+    <rect x="38" y="12" width="8" height="40" rx="2" stroke="#7DF9FF"/>
+    <rect x="50" y="30" width="6" height="22" rx="2" stroke="#FF2BD6" fill="#FF2BD6"/>
+  </g>
+</svg>

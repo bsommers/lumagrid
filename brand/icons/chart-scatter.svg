@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Scatter chart</title>
+  <g fill="none" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="8,8 8,56 56,56"/>
+  </g>
+  <g fill="#00E5FF" fill-opacity="0.6" stroke="#7DF9FF" stroke-width="2">
+    <circle cx="16" cy="46" r="3"/>
+    <circle cx="26" cy="36" r="5"/>
+    <circle cx="34" cy="44" r="3"/>
+    <circle cx="42" cy="28" r="6"/>
+    <circle cx="50" cy="14" r="4" fill="#FF2BD6" fill-opacity="0.8" stroke="#FF2BD6"/>
+  </g>
+</svg>

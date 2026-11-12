@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+  <title>Area chart</title>
+  <g fill="none" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="8,8 8,56 56,56"/>
+  </g>
+  <polygon points="12,56 12,44 24,32 36,40 48,20 56,26 56,56" fill="#00E5FF" fill-opacity="0.25" stroke="none"/>
+  <polyline points="12,44 24,32 36,40 48,20 56,26" fill="none" stroke="#7DF9FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="12,52 24,46 36,50 48,40 56,44" fill="none" stroke="#FF2BD6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

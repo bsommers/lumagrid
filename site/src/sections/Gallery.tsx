@@ -14,7 +14,7 @@ const THEME_OPTIONS: ReadonlyArray<{ id: string; label: string; theme: ThemeDefi
   { id: 'light', label: 'Light', theme: lightTheme },
 ];
 
-/** Live, interactive charts: seven native chart types and three adapter demos. */
+/** Live, interactive charts: eleven native chart types and three adapter demos. */
 export function Gallery(): React.ReactElement {
   const [themeId, setThemeId] = useState('neon');
   const theme = (THEME_OPTIONS.find((o) => o.id === themeId) ?? THEME_OPTIONS[0]!).theme;

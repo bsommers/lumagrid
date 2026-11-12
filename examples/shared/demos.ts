@@ -174,6 +174,49 @@ export const tableRows: TransformedData = {
   ],
 };
 
+// Marketing channels: spend vs. revenue, bubble size = signups.
+const channelPoints: Array<[string, number, number, number]> = [
+  ['Search', 4.2, 18.5, 310], ['Search', 6.8, 27.1, 470],
+  ['Search', 9.5, 36.4, 620], ['Search', 12.1, 41.0, 705],
+  ['Search', 15.3, 52.8, 880], ['Social', 3.1, 6.2, 150],
+  ['Social', 5.6, 11.8, 260], ['Social', 8.4, 15.0, 340],
+  ['Social', 11.0, 19.7, 410], ['Social', 14.2, 21.3, 460],
+  ['Email', 1.2, 9.4, 120], ['Email', 2.0, 14.1, 175],
+  ['Email', 3.5, 22.6, 260], ['Email', 4.8, 26.9, 310],
+  ['Email', 6.1, 30.2, 365], ['Events', 7.5, 12.4, 90],
+  ['Events', 10.2, 24.8, 160], ['Events', 13.9, 38.5, 240],
+];
+
+/** Monthly marketing spend and revenue by channel (scatter: `xValueField: 'spend'`, `sizeField: 'signups'`). */
+export const channels: TransformedData = {
+  rows: channelPoints.map(([channel, spend, revenue, signups]) => ({ channel, spend, revenue, signups })),
+  fields: [
+    { key: 'channel', type: 'string' },
+    { key: 'spend', type: 'number' },
+    { key: 'revenue', type: 'number' },
+    { key: 'signups', type: 'number' },
+  ],
+};
+
+const supportDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const supportSlots = ['00-04', '04-08', '08-12', '12-16', '16-20', '20-24'];
+const supportCounts: number[][] = [
+  [4, 9, 52, 61, 38, 12], [5, 8, 58, 66, 41, 14], [3, 10, 55, 63, 44, 11],
+  [6, 11, 60, 70, 46, 15], [4, 9, 49, 57, 35, 13], [2, 4, 18, 22, 19, 9], [1, 3, 11, 15, 14, 6],
+];
+
+/** Support tickets opened per weekday and four-hour slot (heatmap: day rows by slot columns). */
+export const tickets: TransformedData = {
+  rows: supportDays.flatMap((day, di) =>
+    supportSlots.map((slot, si) => ({ day, slot, tickets: supportCounts[di]?.[si] ?? 0 })),
+  ),
+  fields: [
+    { key: 'day', type: 'string' },
+    { key: 'slot', type: 'string' },
+    { key: 'tickets', type: 'number' },
+  ],
+};
+
 /** Role-field config for one demo chart (role names only). */
 export interface DemoView {
   data: TransformedData;
@@ -183,11 +226,18 @@ export interface DemoView {
     idField?: string;
     colorField?: string;
     valueProperty?: string;
+    xValueField?: string;
+    sizeField?: string;
+    columnField?: string;
+    rowField?: string;
+    stacked?: boolean;
+    mode?: 'grouped' | 'stacked';
     seed?: number;
   };
 }
 
-export type DemoChartId = 'bar' | 'line' | 'pie' | 'force' | 'choropleth' | 'table' | 'tree';
+export type DemoChartId = 'bar' | 'line' | 'pie' | 'force' | 'choropleth' | 'table' | 'tree'
+  | 'scatter' | 'area' | 'column' | 'heatmap';
 
 /** Data and role-field config for each native chart, keyed by capture chart id. */
 export const demoViews: Record<DemoChartId, DemoView> = {
@@ -198,4 +248,11 @@ export const demoViews: Record<DemoChartId, DemoView> = {
   choropleth: { data: hexMap, config: { valueProperty: 'value' } },
   table: { data: tableRows, config: {} },
   tree: { data: sales, config: {} },
+  scatter: {
+    data: channels,
+    config: { xValueField: 'spend', valueField: 'revenue', colorField: 'channel', sizeField: 'signups' },
+  },
+  area: { data: trend, config: { valueField: 'revenue', labelField: 'month', colorField: 'region', stacked: true } },
+  column: { data: trend, config: { valueField: 'revenue', labelField: 'month', colorField: 'region', mode: 'grouped' } },
+  heatmap: { data: tickets, config: { valueField: 'tickets', columnField: 'slot', rowField: 'day' } },
 };

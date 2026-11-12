@@ -3,12 +3,14 @@ import { createRoot } from 'react-dom/client';
 import { CollapseManager, ThemeProvider, useTheme, lightTheme, darkTheme } from 'lumagrid';
 import {
   HorizontalBarChart, LineChart, PieChart, ForceGraph, Choropleth, DataTable, TreeView,
+  ScatterChart, AreaChart, ColumnChart, Heatmap,
 } from 'lumagrid/viz';
 import './capture.css';
 import { demoViews, hexProjectedPaths } from '../../examples/shared/demos';
 
 /** Charts the capture page can render, in display order. */
-export const CAPTURE_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree'] as const;
+export const CAPTURE_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree',
+  'scatter', 'area', 'column', 'heatmap'] as const;
 export type CaptureChart = (typeof CAPTURE_CHARTS)[number];
 
 const CAPTURE_THEMES = ['light', 'dark'] as const;
@@ -81,6 +83,14 @@ function Chart(
           <TreeView {...common} />
         </CollapseManager>
       );
+    case 'scatter':
+      return <ScatterChart {...common} />;
+    case 'area':
+      return <AreaChart {...common} />;
+    case 'column':
+      return <ColumnChart {...common} />;
+    case 'heatmap':
+      return <Heatmap {...common} />;
   }
 }
 

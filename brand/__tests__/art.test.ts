@@ -94,7 +94,7 @@ const GEOMETRY_ATTRS = ['x', 'y', 'cx', 'cy', 'r', 'x1', 'y1', 'x2', 'y2', 'widt
 
 describe('chart icons', () => {
   it('has exactly one icon per native chart plugin id', () => {
-    expect(pluginIds).toHaveLength(7);
+    expect(pluginIds).toHaveLength(11);
     expect(iconFiles).toEqual(pluginIds.map((id) => `chart-${id}.svg`).sort());
   });
 

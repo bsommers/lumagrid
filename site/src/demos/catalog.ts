@@ -14,6 +14,14 @@ import TableDemo from './TableDemo';
 import tableSource from './TableDemo.tsx?raw';
 import TreeDemo from './TreeDemo';
 import treeSource from './TreeDemo.tsx?raw';
+import ScatterDemo from './ScatterDemo';
+import scatterSource from './ScatterDemo.tsx?raw';
+import AreaDemo from './AreaDemo';
+import areaSource from './AreaDemo.tsx?raw';
+import ColumnDemo from './ColumnDemo';
+import columnSource from './ColumnDemo.tsx?raw';
+import HeatmapDemo from './HeatmapDemo';
+import heatmapSource from './HeatmapDemo.tsx?raw';
 import d3Source from './D3Demo.tsx?raw';
 import rechartsSource from './RechartsDemo.tsx?raw';
 import nivoSource from './NivoDemo.tsx?raw';
@@ -104,6 +112,38 @@ export const catalog: CatalogEntry[] = [
     kind: 'native',
     Component: TreeDemo,
     code: extractRegion(treeSource, 'code'),
+  },
+  {
+    id: 'scatter',
+    title: 'Scatter chart',
+    description: 'Marketing spend against revenue by channel; bubble size is signups.',
+    kind: 'native',
+    Component: ScatterDemo,
+    code: extractRegion(scatterSource, 'code'),
+  },
+  {
+    id: 'area',
+    title: 'Area chart',
+    description: 'Monthly revenue per region. The checkbox stacks the series.',
+    kind: 'native',
+    Component: AreaDemo,
+    code: extractRegion(areaSource, 'code'),
+  },
+  {
+    id: 'column',
+    title: 'Column chart',
+    description: 'Monthly revenue per region. The button switches grouped and stacked columns.',
+    kind: 'native',
+    Component: ColumnDemo,
+    code: extractRegion(columnSource, 'code'),
+  },
+  {
+    id: 'heatmap',
+    title: 'Heatmap',
+    description: 'Support tickets by weekday and four-hour slot; arrow keys move between cells.',
+    kind: 'native',
+    Component: HeatmapDemo,
+    code: extractRegion(heatmapSource, 'code'),
   },
   {
     id: 'd3',

@@ -7,8 +7,10 @@ import { hexMap } from '../../../examples/shared/demos';
 const themes = ['light', 'dark'];
 
 describe('CAPTURE_CHARTS', () => {
-  it('lists the seven native charts in order', () => {
-    expect([...CAPTURE_CHARTS]).toEqual(['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree']);
+  it('lists the eleven native charts in order', () => {
+    expect([...CAPTURE_CHARTS]).toEqual([
+      'bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree', 'scatter', 'area', 'column', 'heatmap',
+    ]);
   });
 });
 
@@ -21,7 +23,7 @@ describe('CaptureApp', () => {
         expect(capture).not.toBeNull();
         if (chart === 'table') expect(capture!.querySelector('table')).not.toBeNull();
         else if (chart === 'tree') expect(capture!.querySelector('[role="tree"]')).not.toBeNull();
-        else expect(capture!.querySelector('svg[role="img"], svg[role="group"]')).not.toBeNull();
+        else expect(capture!.querySelector('svg[role="img"], svg[role="group"], svg[role="grid"]')).not.toBeNull();
         await waitFor(() => expect(capture!.getAttribute('data-capture-ready')).toBe('1'));
       });
     }
