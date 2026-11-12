@@ -57,4 +57,4 @@ Apache-2.0. See [LICENSE](../LICENSE) and [NOTICE](../NOTICE).
 
 ## Status
 
-Pre-release (version 0.1.0). The stability policy in [STABILITY.md](STABILITY.md) says what is frozen for 1.0 and what may still change. Publishing to npm is pending: it is deferred by the owner and tracked in [RELEASE-PLAN.md](RELEASE-PLAN.md#publishing-to-npm).
+Pre-1.0 (version 0.1.1), published on npm as `lumagrid`. The stability policy in [STABILITY.md](STABILITY.md) says what is frozen for 1.0 and what may still change. Release steps are in [RELEASE-PLAN.md](RELEASE-PLAN.md#publishing-to-npm).

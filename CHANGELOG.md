@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-12
+
+### Changed
+
+- README: removed the "not yet published" note now that the package is on npm.
+- `d3`, `recharts` and `@nivo/bar` are declared as optional peer dependencies.
+- The package now ships `NOTICE` and `CHANGELOG.md`.
+
+The entries below were first published in 0.1.0.
+
 ### Added
 
 - Four native charts: `ScatterChart` (with bubble sizes), `AreaChart` (overlaid or stacked), `ColumnChart` (grouped or stacked) and `Heatmap` (keyboard-navigable ARIA grid), with the plugins `nativeScatterPlugin`, `nativeAreaPlugin`, `nativeColumnPlugin` and `nativeHeatmapPlugin` (ids `scatter`, `area`, `column`, `heatmap`). They are exported from `lumagrid` and `lumagrid/viz`, have guide pages, gallery demos, rendered light and dark images, and pass the conformance kit.

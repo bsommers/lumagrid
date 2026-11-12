@@ -28,7 +28,7 @@ The freeze scope is the stable (`@public`) list in [STABILITY.md](STABILITY.md).
 
 ## Publishing to npm
 
-> **TODO — deferred by owner (2026-11-07).** Not started; do not publish until explicitly requested.
+> **Published 2026-11-12.** `lumagrid` 0.1.0 is on npm under the `latest` tag. The steps below are the checklist for later releases; `sideEffects`, `engines`, `prepublishOnly` and provenance are still open.
 
 1. Confirm package name availability (`lumagrid`) or move to a scope.
 2. Finalise `package.json`: `repository`, `bugs`, `homepage`, `sideEffects: false`, `engines`, `peerDependencies` (react, react-dom; d3/recharts/nivo optional), `files`.

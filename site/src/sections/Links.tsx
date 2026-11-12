@@ -73,7 +73,7 @@ export function Links(): React.ReactElement {
       </ul>
       <footer className="lg-footer">
         <p>Licensed under the Apache License 2.0 (Apache-2.0). Copyright 2026 Bill Sommers.</p>
-        <p>Lumagrid is pre-release and the npm package is not yet published.</p>
+        <p>Lumagrid is pre-1.0. Install it with npm install lumagrid.</p>
       </footer>
     </section>
   );

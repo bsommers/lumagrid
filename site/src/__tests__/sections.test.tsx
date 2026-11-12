@@ -32,7 +32,7 @@ describe('Features', () => {
 });
 
 describe('Links', () => {
-  it('has the five links and the pre-release footer', () => {
+  it('has the five links and the pre-1.0 footer', () => {
     const { container } = render(<Links />);
     expect(container.querySelector('section#links')).not.toBeNull();
     for (const name of ['User guide', 'API reference', 'Architecture', 'Source', 'Changelog']) {
@@ -43,8 +43,8 @@ describe('Links', () => {
       'https://github.com/bsommers/lumagrid',
     );
     expect(container.querySelector('footer')?.textContent).toMatch(/Apache-2\.0/);
-    expect(container.querySelector('footer')?.textContent).toMatch(/pre-release/);
-    expect(container.querySelector('footer')?.textContent).toMatch(/not yet published/);
+    expect(container.querySelector('footer')?.textContent).toMatch(/pre-1\.0/);
+    expect(container.querySelector('footer')?.textContent).toMatch(/npm install lumagrid/);
   });
 
   it('gives every external anchor noopener and noreferrer, and the API link a relative api/ href', () => {

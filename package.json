@@ -1,6 +1,6 @@
 {
   "name": "lumagrid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Layered React + TypeScript UI library for data visualization widgets",
   "type": "module",
   "main": "./dist/cjs/index.js",
