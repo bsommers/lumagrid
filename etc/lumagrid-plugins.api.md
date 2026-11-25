@@ -11,8 +11,16 @@ import type { default as React_2 } from 'react';
 // @public
 export function createD3Plugin<TData, TConfig = Record<string, unknown>>(options: D3PluginOptions<TData, TConfig>): ChartPlugin<TData, D3Theme, TConfig>;
 
+// @beta
+export function createForceGraphPlugin(options: ForceGraphPluginOptions): ChartPlugin<RfgData, RfgTheme, RfgConfig>;
+
 // @public
 export function createNivoPlugin<TData, TConfig = Record<string, unknown>>(options: NivoPluginOptions<TData, TConfig>): ChartPlugin<TData, NivoTheme, TConfig>;
+
+// Warning: (ae-forgotten-export) The symbol "Graph" needs to be exported by the entry point index.d.ts
+//
+// @beta
+export function createReagraphPlugin(options: ReagraphPluginOptions): ChartPlugin<Graph, ReagraphTheme, ReagraphConfig>;
 
 // @public
 export function createRechartsPlugin(options: {
@@ -51,6 +59,20 @@ export interface D3Theme {
 }
 
 // @beta
+export interface ForceGraphPluginOptions {
+    id?: string;
+    // (undocumented)
+    label?: string;
+    Renderer: React_2.ComponentType<RendererProps<RfgData, RfgTheme, RfgConfig>>;
+    variant?: '2d' | '3d';
+}
+
+// Warning: (ae-forgotten-export) The symbol "ThemeDefinition" needs to be exported by the entry point index.d.ts
+//
+// @beta
+export function forceGraphThemeAdapter(theme: ThemeDefinition): RfgTheme;
+
+// @beta
 export interface GraphEvents {
     // (undocumented)
     onNodeClick?: (node: {
@@ -83,8 +105,6 @@ export interface GraphTheme {
     nodeDefault: string;
 }
 
-// Warning: (ae-forgotten-export) The symbol "ThemeDefinition" needs to be exported by the entry point index.d.ts
-//
 // @beta
 export function graphThemeAdapter(theme: ThemeDefinition): GraphTheme;
 
@@ -152,6 +172,150 @@ export interface NivoTheme {
 // @beta
 export function nivoThemeAdapter(theme: ThemeDefinition): NivoTheme;
 
+// Warning: (ae-forgotten-export) The symbol "ToGraphOptions" needs to be exported by the entry point index.d.ts
+//
+// @beta
+export interface ReagraphConfig extends GraphEvents, ToGraphOptions {
+    clusterAttribute?: string;
+    // (undocumented)
+    layoutType?: string;
+    // (undocumented)
+    mode?: '2d' | '3d';
+    // (undocumented)
+    pathSelectionType?: 'direct' | 'out' | 'in' | 'all';
+    // (undocumented)
+    selection?: 'single' | 'multi' | 'lasso';
+}
+
+// @beta
+export interface ReagraphData {
+    // (undocumented)
+    edges: ReagraphEdge[];
+    // (undocumented)
+    nodes: ReagraphNode[];
+}
+
+// @beta
+export interface ReagraphEdge {
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    label?: string;
+    // (undocumented)
+    size?: number;
+    // (undocumented)
+    source: string;
+    // (undocumented)
+    target: string;
+}
+
+// @beta
+export interface ReagraphNode {
+    data: {
+        group?: string;
+        degree: number;
+    };
+    // (undocumented)
+    fill: string;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    size: number;
+}
+
+// @beta
+export interface ReagraphPluginOptions {
+    id?: string;
+    // (undocumented)
+    label?: string;
+    preset?: keyof typeof reagraphPresets;
+    Renderer: React_2.ComponentType<RendererProps<ReagraphData, ReagraphTheme, ReagraphConfig>>;
+}
+
+// @beta
+export const reagraphPresets: {
+    readonly 'reagraph-2d': {
+        readonly mode: "2d";
+        readonly layoutType: "forceDirected2d";
+    };
+    readonly 'reagraph-3d': {
+        readonly mode: "3d";
+        readonly layoutType: "forceDirected3d";
+    };
+    readonly 'reagraph-clustered': {
+        readonly mode: "2d";
+        readonly layoutType: "forceDirected2d";
+        readonly clusterAttribute: "group";
+    };
+};
+
+// @beta
+export interface ReagraphTheme {
+    // (undocumented)
+    arrow: {
+        fill: string;
+        activeFill: string;
+    };
+    // (undocumented)
+    canvas: {
+        background: string;
+        fog?: string;
+    };
+    // (undocumented)
+    cluster?: {
+        stroke?: string;
+        fill?: string;
+        label?: {
+            color: string;
+            stroke?: string;
+        };
+    };
+    colors: string[];
+    // (undocumented)
+    edge: {
+        fill: string;
+        activeFill: string;
+        opacity: number;
+        selectedOpacity: number;
+        inactiveOpacity: number;
+        label: {
+            color: string;
+            stroke?: string;
+            activeColor: string;
+            fontSize?: number;
+        };
+    };
+    // (undocumented)
+    lasso: {
+        background: string;
+        border: string;
+    };
+    // (undocumented)
+    node: {
+        fill: string;
+        activeFill: string;
+        opacity: number;
+        selectedOpacity: number;
+        inactiveOpacity: number;
+        label: {
+            color: string;
+            stroke?: string;
+            activeColor: string;
+        };
+    };
+    nodeDefault: string;
+    // (undocumented)
+    ring: {
+        fill: string;
+        activeFill: string;
+    };
+}
+
+// @beta
+export function reagraphThemeAdapter(theme: ThemeDefinition): ReagraphTheme;
+
 // @beta
 export interface RechartsConfig {
     dataKey?: string;
@@ -179,6 +343,75 @@ export interface RechartsTheme {
 
 // @beta
 export function rechartsThemeAdapter(theme: ThemeDefinition): RechartsTheme;
+
+// @beta
+export interface RfgConfig extends GraphEvents {
+    chargeStrength?: number;
+    cooldownTicks?: number;
+    focusOnClick?: boolean;
+    linkDistance?: number;
+    maxNodes?: number;
+    particles?: boolean;
+    sizeBy?: 'degree' | 'weight';
+    variant?: '2d' | '3d';
+}
+
+// @beta
+export interface RfgData {
+    // (undocumented)
+    links: RfgLink[];
+    // (undocumented)
+    nodes: RfgNode[];
+}
+
+// @beta
+export interface RfgLink {
+    // (undocumented)
+    source: string;
+    // (undocumented)
+    target: string;
+    // (undocumented)
+    value: number;
+}
+
+// @beta
+export interface RfgNode {
+    color: string;
+    colorIndex: number;
+    // (undocumented)
+    group?: string;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    name: string;
+    val: number;
+}
+
+// @beta
+export interface RfgTheme {
+    backgroundColor: string;
+    // (undocumented)
+    fontFamily: string;
+    // (undocumented)
+    fontSize: number;
+    highlightColor: string;
+    linkActiveColor: string;
+    linkColor: string;
+    nodeColors: string[];
+    nodeDefaultColor: string;
+    // (undocumented)
+    nodeLabelBackground: string;
+    nodeLabelColor: string;
+}
+
+// @beta
+export function themeRfgData(data: RfgData, theme: RfgTheme): RfgData;
+
+// @beta
+export function toReagraphData(graph: Graph, theme: Pick<GraphTheme, 'nodeColors' | 'nodeDefault'>): ReagraphData;
+
+// @beta
+export function toRfgData(graph: Graph, theme?: RfgTheme, sizeBy?: 'degree' | 'weight'): RfgData;
 
 // Warnings were encountered during analysis:
 //
