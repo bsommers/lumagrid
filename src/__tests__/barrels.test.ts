@@ -37,10 +37,10 @@ const expected: Record<string, [Record<string, unknown>, string[]]> = {
     'nativeTreePlugin', 'nativeChoroplethPlugin', 'nativeForceGraphPlugin',
   ]],
   'lumagrid/plugins': [plugins, [
-    'createD3Plugin', 'createRechartsPlugin', 'rechartsThemeAdapter', 'createNivoPlugin', 'nivoThemeAdapter',
+    'createD3Plugin', 'createRechartsPlugin', 'rechartsThemeAdapter', 'createNivoPlugin', 'nivoThemeAdapter', 'graphThemeAdapter',
   ]],
   'lumagrid/theme': [theme, ['ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme']],
-  'lumagrid/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'TransformPipeline']],
+  'lumagrid/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'toGraph', 'TransformPipeline']],
 };
 
 describe('entry-point barrels', () => {

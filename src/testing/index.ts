@@ -7,7 +7,7 @@ import { emptyData, sampleData } from './fixtures.js';
 import { renderToMarkup } from './render.js';
 import type { RenderMode } from './render.js';
 
-export { sampleData, emptyData } from './fixtures.js';
+export { sampleData, emptyData, graphSampleData } from './fixtures.js';
 
 /**
  * Outcome of one conformance check.

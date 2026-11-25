@@ -58,3 +58,27 @@ export const emptyData: TransformedData = {
     { key: 'group', type: 'string', label: 'Group' },
   ],
 };
+
+/**
+ * Sample graph rows for graph plugins: node rows (`id`, `label`, `group`) then edge rows
+ * (`source`, `target`, `weight`), the same shape the native ForceGraph reads.
+ *
+ * @beta
+ * @experimental
+ */
+export const graphSampleData: TransformedData = {
+  rows: [
+    { id: 'a', label: 'Alpha', group: 'x' },
+    { id: 'b', label: 'Beta', group: 'x' },
+    { id: 'c', label: 'Gamma', group: 'y' },
+    { id: 'd', label: 'Delta', group: 'y' },
+    { source: 'a', target: 'b', weight: 2 },
+    { source: 'b', target: 'c', weight: 1 },
+    { source: 'c', target: 'd', weight: 3 },
+    { source: 'd', target: 'a', weight: 1 },
+  ],
+  fields: [
+    { key: 'id', type: 'string' }, { key: 'label', type: 'string' }, { key: 'group', type: 'string' },
+    { key: 'source', type: 'string' }, { key: 'target', type: 'string' }, { key: 'weight', type: 'number' },
+  ],
+};

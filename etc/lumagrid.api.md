@@ -247,6 +247,38 @@ export interface GeoNormalizeOptions {
 // @public
 export function getPlugin(id: string): ChartPlugin<unknown, unknown, unknown> | undefined;
 
+// @beta
+export interface Graph {
+    dropped: number;
+    // (undocumented)
+    links: GraphLink[];
+    // (undocumented)
+    nodes: GraphNode[];
+}
+
+// @beta
+export interface GraphLink {
+    id: string;
+    // (undocumented)
+    source: string;
+    // (undocumented)
+    target: string;
+    // (undocumented)
+    weight?: number;
+}
+
+// @beta
+export interface GraphNode {
+    data?: DataRow;
+    degree: number;
+    // (undocumented)
+    group?: string;
+    // (undocumented)
+    id: string;
+    // (undocumented)
+    label: string;
+}
+
 // @public
 export const groupBy: (field: string, valueField?: string) => ChainableTransform<GroupByOptions>;
 
@@ -553,6 +585,27 @@ export interface ThemeProviderProps {
 
 // @public
 export function thresholdScale(thresholds: number[], colors: string[]): (value: number) => string;
+
+// @beta
+export function toGraph(data: TransformedData, options?: ToGraphOptions): Graph;
+
+// @beta
+export interface ToGraphOptions {
+    // (undocumented)
+    groupField?: string;
+    // (undocumented)
+    idField?: string;
+    implicitNodes?: boolean;
+    // (undocumented)
+    labelField?: string;
+    maxNodes?: number;
+    // (undocumented)
+    sourceField?: string;
+    // (undocumented)
+    targetField?: string;
+    // (undocumented)
+    weightField?: string;
+}
 
 // @public
 export interface TransformedData {

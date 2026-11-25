@@ -18,6 +18,7 @@ export {
   pivot,
   groupBy,
   geoNormalize,
+  toGraph,
   TransformPipeline,
 } from './transforms/index.js';
 export type {
@@ -35,6 +36,10 @@ export type {
   PivotOptions,
   GroupByOptions,
   GeoNormalizeOptions,
+  Graph,
+  GraphNode,
+  GraphLink,
+  ToGraphOptions,
   PipelineStep,
 } from './transforms/index.js';
 

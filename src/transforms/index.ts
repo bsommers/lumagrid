@@ -26,3 +26,6 @@ export type { GeoNormalizeOptions } from './geo-normalize.js';
 
 export { TransformPipeline } from './pipeline.js';
 export type { PipelineStep } from './pipeline.js';
+
+export { toGraph } from './to-graph.js';
+export type { Graph, GraphNode, GraphLink, ToGraphOptions } from './to-graph.js';

@@ -6,3 +6,6 @@ export type { RechartsTheme, RechartsRow, RechartsConfig } from './recharts-adap
 
 export { createNivoPlugin, nivoThemeAdapter } from './nivo-adapter.js';
 export type { NivoTheme, NivoPluginOptions } from './nivo-adapter.js';
+
+export { graphThemeAdapter } from './graph-theme.js';
+export type { GraphTheme, GraphEvents } from './graph-theme.js';

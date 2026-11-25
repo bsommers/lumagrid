@@ -54,6 +54,9 @@ export type ConformanceStatus = 'pass' | 'fail' | 'skip';
 export const emptyData: TransformedData;
 
 // @beta
+export const graphSampleData: TransformedData;
+
+// @beta
 export const sampleData: TransformedData;
 
 // (No @packageDocumentation comment for this package)

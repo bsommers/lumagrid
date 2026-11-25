@@ -51,6 +51,44 @@ export interface D3Theme {
 }
 
 // @beta
+export interface GraphEvents {
+    // (undocumented)
+    onNodeClick?: (node: {
+        id: string;
+        label: string;
+    }) => void;
+    // (undocumented)
+    onSelectionChange?: (ids: string[]) => void;
+}
+
+// @beta
+export interface GraphTheme {
+    // (undocumented)
+    background: string;
+    // (undocumented)
+    edge: string;
+    // (undocumented)
+    edgeActive: string;
+    // (undocumented)
+    fontFamily: string;
+    // (undocumented)
+    fontSize: number;
+    highlight: string;
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    labelBackground: string;
+    nodeColors: string[];
+    // (undocumented)
+    nodeDefault: string;
+}
+
+// Warning: (ae-forgotten-export) The symbol "ThemeDefinition" needs to be exported by the entry point index.d.ts
+//
+// @beta
+export function graphThemeAdapter(theme: ThemeDefinition): GraphTheme;
+
+// @beta
 export interface NivoPluginOptions<TData, TConfig = Record<string, unknown>> {
     dataAdapter: (data: TransformedData, config?: TConfig) => TData;
     // (undocumented)
@@ -111,8 +149,6 @@ export interface NivoTheme {
     };
 }
 
-// Warning: (ae-forgotten-export) The symbol "ThemeDefinition" needs to be exported by the entry point index.d.ts
-//
 // @beta
 export function nivoThemeAdapter(theme: ThemeDefinition): NivoTheme;
 
