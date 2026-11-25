@@ -1,0 +1,13 @@
+{
+  "extends": "./api-extractor.base.json",
+  "mainEntryPointFilePath": "<projectFolder>/dist/esm/r3f/index.d.ts",
+  // /viz and /r3f legitimately reference shared types (ChartPlugin, RendererProps, NativeChartProps, NativeConfig,
+  // ThemeDefinition, TransformedData, HierarchyNode) that consumers import from the package root, so the
+  // unexported-type rule is relaxed here. The release-tag rule stays at "error".
+  "messages": {
+    "extractorMessageReporting": {
+      "ae-forgotten-export": { "logLevel": "none", "addToApiReportFile": true }
+    }
+  },
+  "apiReport": { "reportFileName": "lumagrid-r3f.api.md" }
+}

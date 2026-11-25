@@ -16,6 +16,7 @@ const expected = {
   './theme': 'lightTheme',
   './viz': 'ScatterChart',
   './plugins': 'createD3Plugin',
+  './r3f': 'createR3FGraphPlugin',
   './testing': 'checkPluginConformance',
 };
 

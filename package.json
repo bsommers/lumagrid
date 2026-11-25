@@ -32,6 +32,11 @@
       "import": "./dist/esm/plugins/index.js",
       "require": "./dist/cjs/plugins/index.js"
     },
+    "./r3f": {
+      "types": "./dist/esm/r3f/index.d.ts",
+      "import": "./dist/esm/r3f/index.js",
+      "require": "./dist/cjs/r3f/index.js"
+    },
     "./testing": {
       "types": "./dist/esm/testing/index.d.ts",
       "import": "./dist/esm/testing/index.js",
