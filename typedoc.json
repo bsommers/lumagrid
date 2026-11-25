@@ -6,6 +6,7 @@
     "src/theme/index.ts",
     "src/viz/index.ts",
     "src/plugins/index.ts",
+    "src/r3f/index.ts",
     "src/testing/index.ts"
   ],
   "tsconfig": "tsconfig.json",

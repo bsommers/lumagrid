@@ -3,6 +3,7 @@ import * as root from '../index.js';
 import * as core from '../core/index.js';
 import * as viz from '../viz/index.js';
 import * as plugins from '../plugins/index.js';
+import * as r3f from '../r3f/index.js';
 import * as theme from '../theme/index.js';
 import * as transforms from '../transforms/index.js';
 import {
@@ -40,6 +41,9 @@ const expected: Record<string, [Record<string, unknown>, string[]]> = {
     'createD3Plugin', 'createRechartsPlugin', 'rechartsThemeAdapter', 'createNivoPlugin', 'nivoThemeAdapter', 'graphThemeAdapter',
     'createReagraphPlugin', 'reagraphThemeAdapter', 'toReagraphData', 'reagraphPresets',
     'createForceGraphPlugin', 'forceGraphThemeAdapter', 'toRfgData', 'themeRfgData',
+  ]],
+  'lumagrid/r3f': [r3f, [
+    'useForceLayout3D', 'layoutGraph3D', 'InstancedNodes', 'EdgeLines', 'NodeLabels', 'CameraRig', 'createR3FGraphPlugin',
   ]],
   'lumagrid/theme': [theme, ['ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme']],
   'lumagrid/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'toGraph', 'TransformPipeline']],

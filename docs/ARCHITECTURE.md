@@ -153,6 +153,7 @@ classDiagram
 | `lumagrid/theme` | `./dist/esm/theme/index.js` | `./dist/cjs/theme/index.js` | `./dist/esm/theme/index.d.ts` |
 | `lumagrid/viz` | `./dist/esm/viz/index.js` | `./dist/cjs/viz/index.js` | `./dist/esm/viz/index.d.ts` |
 | `lumagrid/plugins` | `./dist/esm/plugins/index.js` | `./dist/cjs/plugins/index.js` | `./dist/esm/plugins/index.d.ts` |
+| `lumagrid/r3f` | `./dist/esm/r3f/index.js` | `./dist/cjs/r3f/index.js` | `./dist/esm/r3f/index.d.ts` |
 | `lumagrid/testing` | `./dist/esm/testing/index.js` | `./dist/cjs/testing/index.js` | `./dist/esm/testing/index.d.ts` |
 
 - `npm run build` compiles ESM (`tsconfig.esm.json`) and then CJS (`tsconfig.cjs.json`) into `dist/`. The package is `"type": "module"`, so `scripts/write-cjs-package.mjs` writes `dist/cjs/package.json` with `{"type": "commonjs"}`; that is what makes the CJS `.js` files load through `require`.
@@ -163,7 +164,7 @@ classDiagram
 ## Quality gates
 
 - **Local CI.** `scripts/ci.sh` runs typecheck, lint, tests under a coverage gate (thresholds in `vitest.config.ts`), the library build, the API report check and the examples build. `scripts/ci.sh --fast` runs typecheck, lint and tests only. The pre-push hook in `.githooks/` runs it; see [CONTRIBUTING.md](../CONTRIBUTING.md#local-ci-primary-gate).
-- **API reports.** api-extractor writes one report per entry point into `etc/` (`lumagrid.api.md`, `lumagrid-transforms.api.md`, `lumagrid-theme.api.md`, `lumagrid-viz.api.md`, `lumagrid-plugins.api.md`). `npm run api:check` fails when a report is stale or an export has no release tag; `npm run api:update` rewrites them after an intentional change.
+- **API reports.** api-extractor writes one report per entry point into `etc/` (`lumagrid.api.md`, `lumagrid-transforms.api.md`, `lumagrid-theme.api.md`, `lumagrid-viz.api.md`, `lumagrid-plugins.api.md`, `lumagrid-r3f.api.md`). `npm run api:check` fails when a report is stale or an export has no release tag; `npm run api:update` rewrites them after an intentional change.
 - **Stability tags.** Every export carries `@public` or `@experimental` (paired with `@beta`). What each tag promises is in [STABILITY.md](STABILITY.md).
 - **Registry test convention.** The registry is one shared module-level `Map`, so tests that call `registerPlugin` reset it in `beforeEach` with `__resetRegistryForTests`. See [CONTRIBUTING.md](../CONTRIBUTING.md#testing-conventions).
 
