@@ -39,6 +39,7 @@ const expected: Record<string, [Record<string, unknown>, string[]]> = {
   'lumagrid/plugins': [plugins, [
     'createD3Plugin', 'createRechartsPlugin', 'rechartsThemeAdapter', 'createNivoPlugin', 'nivoThemeAdapter', 'graphThemeAdapter',
     'createReagraphPlugin', 'reagraphThemeAdapter', 'toReagraphData', 'reagraphPresets',
+    'createForceGraphPlugin', 'forceGraphThemeAdapter', 'toRfgData', 'themeRfgData',
   ]],
   'lumagrid/theme': [theme, ['ThemeProvider', 'useTheme', 'lightTheme', 'darkTheme']],
   'lumagrid/transforms': [transforms, ['flatten', 'aggregate', 'pivot', 'groupBy', 'geoNormalize', 'toGraph', 'TransformPipeline']],

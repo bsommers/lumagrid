@@ -14,3 +14,7 @@ export { createReagraphPlugin, reagraphThemeAdapter, toReagraphData, reagraphPre
 export type {
   ReagraphTheme, ReagraphNode, ReagraphEdge, ReagraphData, ReagraphConfig, ReagraphPluginOptions,
 } from './reagraph-adapter.js';
+export { createForceGraphPlugin, forceGraphThemeAdapter, toRfgData, themeRfgData } from './force-graph-adapter.js';
+export type {
+  RfgTheme, RfgConfig, RfgData, RfgNode, RfgLink, ForceGraphPluginOptions,
+} from './force-graph-adapter.js';
