@@ -9,3 +9,8 @@ export type { NivoTheme, NivoPluginOptions } from './nivo-adapter.js';
 
 export { graphThemeAdapter } from './graph-theme.js';
 export type { GraphTheme, GraphEvents } from './graph-theme.js';
+
+export { createForceGraphPlugin, forceGraphThemeAdapter, toRfgData, themeRfgData } from './force-graph-adapter.js';
+export type {
+  RfgTheme, RfgConfig, RfgData, RfgNode, RfgLink, ForceGraphPluginOptions,
+} from './force-graph-adapter.js';
