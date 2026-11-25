@@ -20,7 +20,7 @@ Stability is expressed only through these TSDoc tags. There is no separate `luma
 - **Containers:** `WidgetContainer`, `ViewSwitcher`, `CollapseManager`, `useCollapse`, and their props types.
 - **Native charts:** the eleven chart components (`DataTable`, `HorizontalBarChart`, `LineChart`, `PieChart`, `Choropleth`, `ForceGraph`, `TreeView`, `ScatterChart`, `AreaChart`, `ColumnChart`, `Heatmap`) and their core props. The eleven `native*Plugin` presets are stable too.
 - **Adapter factories:** `createD3Plugin`, `createRechartsPlugin` and `createNivoPlugin`.
-- **Entry points:** `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz`, `lumagrid/plugins` and `lumagrid/testing`.
+- **Entry points:** `lumagrid`, `lumagrid/transforms`, `lumagrid/theme`, `lumagrid/viz`, `lumagrid/plugins` and `lumagrid/testing`. `lumagrid/r3f` is an entry point too, but every export on it is experimental (see below).
 
 ## Experimental (`@experimental`, also `@beta`)
 
@@ -29,6 +29,9 @@ These may change in a minor release.
 - **Adapter config and theme shapes:** `D3Theme`, `D3PluginOptions`, `RechartsTheme`, `RechartsRow`, `RechartsConfig`, `NivoTheme` and `NivoPluginOptions`, plus the helpers `rechartsThemeAdapter` and `nivoThemeAdapter`.
 - **Choropleth projection:** the `projectedPaths` prop.
 - **ForceGraph extras:** the `relayout`, `seed` and `iterations` options.
+- **Network graph data and theme:** `toGraph` and the `Graph`, `GraphNode`, `GraphLink` and `ToGraphOptions` types (`lumagrid/transforms`), `graphThemeAdapter`, `GraphTheme` and `GraphEvents`, and the sample fixture `graphSampleData` (`lumagrid/testing`).
+- **Graph plugins:** `createReagraphPlugin`, `createForceGraphPlugin`, their option, config, data and theme types, `reagraphThemeAdapter`, `forceGraphThemeAdapter`, `toReagraphData`, `reagraphPresets`, `toRfgData` and `themeRfgData`.
+- **React Three Fiber toolkit (`lumagrid/r3f`):** every export: `layoutGraph3D`, `useForceLayout3D`, `InstancedNodes`, `EdgeLines`, `NodeLabels`, `CameraRig`, `createR3FGraphPlugin` and their types. The entry point itself is new in 0.2.0.
 
 ## Field props
 

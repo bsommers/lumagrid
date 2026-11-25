@@ -19,7 +19,7 @@ How Lumagrid is put together: the layers, the render data flow, the plugin contr
 
 Lumagrid is a layered React and TypeScript library for data widgets. Raw data of any shape goes through a chain of transforms and comes out as one uniform `TransformedData` value (`rows`, `fields`, and optional `hierarchy`, `geo` and `meta`). A plugin registry maps a view id to a `ChartPlugin`, whose adapters turn that data and the current theme into whatever a chart renderer expects. `WidgetContainer` and `ViewSwitcher` wire the pieces together at render time.
 
-The library draws its own SVG charts and also wraps D3, Recharts and Nivo through adapter factories. The adapter factories do not import those chart libraries: you import them in the `Renderer` you pass in, so the chart libraries stay your dependency.
+The library draws its own SVG charts and also wraps D3, Recharts, Nivo, Reagraph and react-force-graph through adapter factories, and ships a React Three Fiber toolkit (`lumagrid/r3f`) for custom 3D graphs. The adapter factories do not import those chart libraries: you import them in the `Renderer` you pass in, so the chart libraries stay your dependency. The R3F toolkit imports `three`, `@react-three/fiber`, `@react-three/drei` and `d3-force-3d` itself, but only from its own entry point, which is why they are optional peers.
 
 ## Pipeline
 
@@ -33,7 +33,7 @@ flowchart LR
     transforms --> td["TransformedData"]
     td --> registry["Plugin registry: ChartPlugin"]
     theme["Theme: ThemeProvider, ThemeDefinition"] -->|themeAdapter| registry
-    registry --> renderers["Renderers: native SVG, D3, Recharts, Nivo"]
+    registry --> renderers["Renderers: native SVG, D3, Recharts, Nivo, Reagraph, react-force-graph, R3F"]
 ```
 
 ## Layers
@@ -44,16 +44,19 @@ Each layer imports only from layers below it. The transform layer has no React d
 flowchart TB
     subgraph top["Plugin sources"]
         viz["viz: native charts and nativeXPlugin presets"]
-        plugins["plugins: createD3Plugin, createRechartsPlugin, createNivoPlugin"]
+        plugins["plugins: createD3Plugin, createRechartsPlugin, createNivoPlugin, createReagraphPlugin, createForceGraphPlugin"]
+        r3f["r3f: layout hook, scene primitives, createR3FGraphPlugin"]
     end
     core["core: WidgetContainer, ViewSwitcher, CollapseManager"]
     registry["registry: ChartPlugin, registerPlugin, getPlugin, createNativePlugin"]
     theme["theme: ThemeProvider, useTheme, color scales"]
-    transforms["transforms: flatten, aggregate, pivot, groupBy, geoNormalize, TransformPipeline"]
+    transforms["transforms: flatten, aggregate, pivot, groupBy, geoNormalize, toGraph, TransformPipeline"]
 
     viz --> core
     viz --> registry
     plugins --> registry
+    r3f --> plugins
+    r3f --> registry
     core --> registry
     core --> theme
     core --> transforms
@@ -63,13 +66,14 @@ flowchart TB
 
 | Directory | Role | Imports from |
 |-----------|------|--------------|
-| `src/transforms` | Data transforms and `TransformPipeline`. Pure functions, no React. | nothing else in `src` |
+| `src/transforms` | Data transforms (including `toGraph`) and `TransformPipeline`. Pure functions, no React. | nothing else in `src` |
 | `src/theme` | `ThemeDefinition` tokens, `lightTheme`, `darkTheme`, `ThemeProvider`, `useTheme` and the color scales. | nothing else in `src` |
 | `src/registry` | The `ChartPlugin` contract, the registry (`registerPlugin`, `getPlugin`, `listPlugins`) and `createNativePlugin`. | `theme`, `transforms` (types only) |
 | `src/core` | `WidgetContainer`, `ViewSwitcher`, `CollapseManager`, `useCollapse`. | `registry`, `theme`, `transforms` |
 | `src/viz` | The eleven native charts and their `native*Plugin` presets. | `registry`, `core`, `theme`, `transforms` |
-| `src/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`. | `registry`, `theme`, `transforms` (types only) |
-| `src/testing` | The conformance kit published as `lumagrid/testing`: `checkPluginConformance` and `assertPluginConformance`. Used by the library's own tests for every built-in plugin. | `registry`, `theme`, `transforms` (types only) |
+| `src/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`, `createReagraphPlugin`, `createForceGraphPlugin` and the theme adapters, including `graphThemeAdapter`. | `registry`, `theme`, `transforms` (`toGraph` and types) |
+| `src/r3f` | The `lumagrid/r3f` toolkit: `layoutGraph3D`, `useForceLayout3D`, `InstancedNodes`, `EdgeLines`, `NodeLabels`, `CameraRig` and `createR3FGraphPlugin`. The only layer that imports `three` and React Three Fiber. | `registry`, `theme`, `transforms`, `plugins` (`graphThemeAdapter`) |
+| `src/testing` | The conformance kit published as `lumagrid/testing`: `checkPluginConformance`, `assertPluginConformance` and the fixtures (`sampleData`, `emptyData`, `graphSampleData`). Used by the library's own tests for every built-in plugin. | `registry`, `theme`, `transforms` (types only) |
 
 The rule is checked against the real `import` statements in `src`: `src/transforms` and `src/theme` contain no import from a sibling layer, and `src/transforms` does not import React.
 
@@ -140,11 +144,11 @@ classDiagram
 - `ViewSpec` is what you pass to `ViewSwitcher`'s `views` prop: a registered plugin `id`, an optional `config` and an optional tab `label`. `label` on `ChartPlugin` defaults to the id.
 - `registerPlugin(plugin)` stores the plugin under its `id` and returns the id. Registering an id again replaces the earlier plugin (see [Registry semantics](STABILITY.md#registry-semantics)).
 - `createNativePlugin(id, Component, label)` wraps a native chart with identity adapters. The eleven presets in `lumagrid/viz` (`nativeTablePlugin`, `nativeBarPlugin`, `nativeLinePlugin`, `nativePiePlugin`, `nativeChoroplethPlugin`, `nativeForceGraphPlugin`, `nativeTreePlugin`, `nativeScatterPlugin`, `nativeAreaPlugin`, `nativeColumnPlugin`, `nativeHeatmapPlugin`) are built with it.
-- `createD3Plugin`, `createRechartsPlugin` and `createNivoPlugin` build a `ChartPlugin` around your own `Renderer`.
+- `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`, `createReagraphPlugin` and `createForceGraphPlugin` build a `ChartPlugin` around your own `Renderer`. `createR3FGraphPlugin` (from `lumagrid/r3f`) builds one that needs no `Renderer`.
 
 ## Entry points and build outputs
 
-`package.json` exposes six entry points. Each has an ESM build, a CJS build and type declarations.
+`package.json` exposes seven entry points. Each has an ESM build, a CJS build and type declarations.
 
 | Entry point | `import` | `require` | `types` |
 |-------------|----------|-----------|---------|
@@ -164,7 +168,7 @@ classDiagram
 ## Quality gates
 
 - **Local CI.** `scripts/ci.sh` runs typecheck, lint, tests under a coverage gate (thresholds in `vitest.config.ts`), the library build, the API report check and the examples build. `scripts/ci.sh --fast` runs typecheck, lint and tests only. The pre-push hook in `.githooks/` runs it; see [CONTRIBUTING.md](../CONTRIBUTING.md#local-ci-primary-gate).
-- **API reports.** api-extractor writes one report per entry point into `etc/` (`lumagrid.api.md`, `lumagrid-transforms.api.md`, `lumagrid-theme.api.md`, `lumagrid-viz.api.md`, `lumagrid-plugins.api.md`, `lumagrid-r3f.api.md`). `npm run api:check` fails when a report is stale or an export has no release tag; `npm run api:update` rewrites them after an intentional change.
+- **API reports.** api-extractor writes one report per entry point into `etc/` (`lumagrid.api.md`, `lumagrid-transforms.api.md`, `lumagrid-theme.api.md`, `lumagrid-viz.api.md`, `lumagrid-plugins.api.md`, `lumagrid-r3f.api.md`, `lumagrid-testing.api.md`). `npm run api:check` fails when a report is stale or an export has no release tag; `npm run api:update` rewrites them after an intentional change.
 - **Stability tags.** Every export carries `@public` or `@experimental` (paired with `@beta`). What each tag promises is in [STABILITY.md](STABILITY.md).
 - **Registry test convention.** The registry is one shared module-level `Map`, so tests that call `registerPlugin` reset it in `beforeEach` with `__resetRegistryForTests`. See [CONTRIBUTING.md](../CONTRIBUTING.md#testing-conventions).
 

@@ -2,7 +2,7 @@
 
 # Plugins and adapters
 
-Every chart in Lumagrid is a plugin. This chapter explains the plugin contract, how the registry hands plugins to `ViewSwitcher`, how to write your own, and how to bring D3, Recharts or Nivo charts in through the adapter factories.
+Every chart in Lumagrid is a plugin. This chapter explains the plugin contract, how the registry hands plugins to `ViewSwitcher`, how to write your own, and how to bring D3, Recharts, Nivo, Reagraph or react-force-graph in through the adapter factories.
 
 ## Contents
 
@@ -14,6 +14,8 @@ Every chart in Lumagrid is a plugin. This chapter explains the plugin contract, 
   - [D3](#d3)
   - [Recharts](#recharts)
   - [Nivo](#nivo)
+  - [Reagraph](#reagraph)
+  - [react-force-graph](#react-force-graph)
 
 ## The ChartPlugin contract
 
@@ -183,17 +185,19 @@ To see a plugin written for a new engine from scratch, and to check any plugin (
 
 ## Adapters
 
-Three factories turn an existing chart library into a plugin, so you write only the library-specific drawing code. Each factory supplies the theme adapter for you.
+Five factories turn an existing chart library into a plugin, so you write only the library-specific drawing code. Each factory supplies the theme adapter for you.
 
 | Factory | Library | You supply | Install in your app |
 |---------|---------|------------|---------------------|
 | `createD3Plugin` | D3 | `dataAdapter`, and the `mount`, `update` and `destroy` callbacks | `npm install d3` |
 | `createRechartsPlugin` | Recharts | a `Renderer` component (the `dataAdapter` is optional) | `npm install recharts` |
 | `createNivoPlugin` | Nivo | a `dataAdapter` and a `Renderer` component | `npm install @nivo/bar` (or another Nivo chart package) |
+| `createReagraphPlugin` | Reagraph | a `Renderer` component (data comes from `toGraph`) | `npm install reagraph` |
+| `createForceGraphPlugin` | react-force-graph | a `variant` (`'2d'` or `'3d'`) and a `Renderer` component | `npm install react-force-graph-2d` (or `-3d`) |
 
 The factories live in `lumagrid/plugins`. Lumagrid does not bundle d3, recharts or Nivo: install the ones you use in your own project. The examples below were written against d3 7.9.2, recharts 3.10.1 and @nivo/bar 0.99.0. The factories themselves do not import those libraries; your own drawing code does, so install a library only if you use its adapter.
 
-**Stability.** The three factory functions are stable. The adapter config and theme types are experimental and may change in a minor release: `D3Theme`, `D3PluginOptions`, `RechartsTheme`, `RechartsRow`, `RechartsConfig`, `NivoTheme` and `NivoPluginOptions`, plus the `rechartsThemeAdapter` and `nivoThemeAdapter` helpers. See [STABILITY](../STABILITY.md) for the full list.
+**Stability.** The three factory functions are stable. The adapter config and theme types are experimental and may change in a minor release: `D3Theme`, `D3PluginOptions`, `RechartsTheme`, `RechartsRow`, `RechartsConfig`, `NivoTheme` and `NivoPluginOptions`, plus the `rechartsThemeAdapter` and `nivoThemeAdapter` helpers. The Reagraph and react-force-graph factories, their adapters (`reagraphThemeAdapter`, `forceGraphThemeAdapter`, `toReagraphData`, `toRfgData`, `themeRfgData`) and `graphThemeAdapter` are experimental too. See [STABILITY](../STABILITY.md) for the full list.
 
 ### D3
 
@@ -411,3 +415,135 @@ export function Example() {
   );
 }
 ```
+
+### Reagraph
+
+`createReagraphPlugin` builds a Reagraph plugin. Its data adapter is `toGraph`, so the rows follow the native `ForceGraph` shape (node rows with `id`, `label` and `group`, edge rows with `source` and `target`). Your `Renderer` receives Reagraph-shaped `nodes` and `edges`, a Reagraph `theme` object from `reagraphThemeAdapter`, and the `config`. The presets `reagraph-2d`, `reagraph-3d` and `reagraph-clustered` only set config defaults.
+
+<!-- snippet: adapters-reagraph#reagraph-network -->
+
+```tsx
+import { GraphCanvas } from 'reagraph';
+import type { LayoutTypes } from 'reagraph';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
+import { createReagraphPlugin } from 'lumagrid/plugins';
+
+// Presets: 'reagraph-2d', 'reagraph-3d' and 'reagraph-clustered' only set config defaults.
+const reagraphPlugin = createReagraphPlugin({
+  id: 'reagraph-network',
+  label: 'Network (Reagraph)',
+  preset: 'reagraph-clustered',
+  Renderer: ({ data, theme, width, height, config }) => (
+    <div style={{ position: 'relative', width, height }}>
+      <GraphCanvas
+        nodes={data.nodes}
+        edges={data.edges}
+        theme={theme}
+        layoutType={(config?.layoutType ?? 'forceDirected2d') as LayoutTypes}
+        clusterAttribute={config?.clusterAttribute ?? 'group'}
+      />
+    </div>
+  ),
+});
+
+registerPlugin(reagraphPlugin);
+
+const network: TransformedData = {
+  rows: [
+    { id: 'a', label: 'Alpha', group: 'x' },
+    { id: 'b', label: 'Beta', group: 'x' },
+    { id: 'c', label: 'Gamma', group: 'y' },
+    { source: 'a', target: 'b' },
+    { source: 'b', target: 'c' },
+  ],
+  fields: [
+    { key: 'id', type: 'string' },
+    { key: 'label', type: 'string' },
+    { key: 'group', type: 'string' },
+    { key: 'source', type: 'string' },
+    { key: 'target', type: 'string' },
+  ],
+};
+
+export function Example() {
+  return (
+    <ThemeProvider theme="light">
+      <WidgetContainer data={network} title="Reagraph network" width={600} height={400}>
+        {(data, width, height) => (
+          <ViewSwitcher views={[{ id: 'reagraph-network' }]} data={data} width={width} height={height} />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
+  );
+}
+```
+
+### react-force-graph
+
+`createForceGraphPlugin` builds a react-force-graph plugin for `react-force-graph-2d` or `-3d` (plugin ids `rfg-2d` and `rfg-3d`). `themeRfgData` colors the nodes from the theme so the renderer can pass the result straight to `graphData`. The VR and AR packages take the same data; see [Network graphs](./network-graphs.md#react-force-graph) for that recipe and for choosing between the engines.
+
+<!-- snippet: adapters-force-graph#force-graph -->
+
+```tsx
+import { useMemo } from 'react';
+import ForceGraph2D from 'react-force-graph-2d';
+import { ThemeProvider, WidgetContainer, ViewSwitcher, registerPlugin } from 'lumagrid';
+import type { TransformedData } from 'lumagrid';
+import { createForceGraphPlugin, themeRfgData } from 'lumagrid/plugins';
+
+// The app owns the engine: Lumagrid supplies data, theme and size.
+registerPlugin(
+  createForceGraphPlugin({
+    variant: '2d',
+    Renderer: ({ data, theme, width, height, config }) => {
+      const graphData = useMemo(() => themeRfgData(data, theme), [data, theme]);
+      return (
+        <ForceGraph2D
+          graphData={graphData}
+          width={width}
+          height={height}
+          backgroundColor={theme.backgroundColor}
+          linkColor={() => theme.linkColor}
+          nodeLabel="name"
+          cooldownTicks={config?.cooldownTicks ?? 100}
+          linkDirectionalParticles={config?.particles ? 2 : 0}
+          linkDirectionalParticleColor={() => theme.linkActiveColor}
+        />
+      );
+    },
+  }),
+);
+
+const network: TransformedData = {
+  rows: [
+    { id: 'a', label: 'Alpha', group: 'x' },
+    { id: 'b', label: 'Beta', group: 'x' },
+    { id: 'c', label: 'Gamma', group: 'y' },
+    { source: 'a', target: 'b', weight: 2 },
+    { source: 'b', target: 'c', weight: 1 },
+  ],
+  fields: [
+    { key: 'id', type: 'string' },
+    { key: 'label', type: 'string' },
+    { key: 'group', type: 'string' },
+    { key: 'source', type: 'string' },
+    { key: 'target', type: 'string' },
+    { key: 'weight', type: 'number' },
+  ],
+};
+
+export function Example() {
+  return (
+    <ThemeProvider theme="dark">
+      <WidgetContainer data={network} title="Network" width={600} height={400}>
+        {(data, width, height) => (
+          <ViewSwitcher views={[{ id: 'rfg-2d', config: { particles: true } }]} data={data} width={width} height={height} />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
+  );
+}
+```
+
+For the shared data and theme layer behind both adapters, see [Network graphs](./network-graphs.md). The React Three Fiber toolkit is in [3D graphs with React Three Fiber](./r3f.md).

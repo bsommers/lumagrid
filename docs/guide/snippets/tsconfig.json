@@ -12,9 +12,10 @@
       "lumagrid/theme": ["../../../src/theme/index.ts"],
       "lumagrid/viz": ["../../../src/viz/index.ts"],
       "lumagrid/plugins": ["../../../src/plugins/index.ts"],
+      "lumagrid/r3f": ["../../../src/r3f/index.ts"],
       "lumagrid/testing": ["../../../src/testing/index.ts"]
     }
   },
-  "include": ["*.ts", "*.tsx"],
+  "include": ["*.ts", "*.tsx", "../../../src/r3f/d3-force-3d.d.ts"],
   "exclude": ["__tests__"]
 }

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
+Network graph support. All additions below are experimental (`@beta`, `@experimental`) and may change in a minor release. The `package.json` version is not bumped yet.
+
+### Added
+
+- `toGraph` in `lumagrid/transforms`: converts `TransformedData` rows (node rows plus rows with a `source`) into an engine-neutral `Graph`, with duplicate and dangling-edge handling and a `maxNodes` cap. Also exports the `Graph`, `GraphNode`, `GraphLink` and `ToGraphOptions` types.
+- `graphThemeAdapter`, `GraphTheme` and `GraphEvents` in `lumagrid/plugins`: one theme mapping shared by every graph engine.
+- Three graph plugins: `createReagraphPlugin` (with `reagraphThemeAdapter`, `toReagraphData` and the `reagraphPresets` `reagraph-2d`, `reagraph-3d` and `reagraph-clustered`), `createForceGraphPlugin` for react-force-graph 2D and 3D (with `forceGraphThemeAdapter`, `toRfgData` and `themeRfgData`), and `createR3FGraphPlugin`. The app supplies the engine in `Renderer` for the first two.
+- New entry point `lumagrid/r3f` (ESM, CJS, types and an API report): `layoutGraph3D`, `useForceLayout3D`, `InstancedNodes`, `EdgeLines`, `NodeLabels`, `CameraRig` and `createR3FGraphPlugin`.
+- `graphSampleData` in `lumagrid/testing`: sample graph rows for plugin tests and demos.
+- Guide chapters [Network graphs](docs/guide/network-graphs.md) and [3D graphs with React Three Fiber](docs/guide/r3f.md), with compile-checked snippets, plus a recipe for react-force-graph-vr and -ar.
+
+### Build
+
+- New optional peer dependencies: `reagraph`, `react-force-graph-2d`, `react-force-graph-3d`, `three`, `@react-three/fiber`, `@react-three/drei` and `d3-force-3d`. Use `@react-three/fiber` v8 with `@react-three/drei` v9 on React 18, and fiber v9 on React 19.
+
 ## [0.1.1] - 2026-11-12
 
 ### Changed

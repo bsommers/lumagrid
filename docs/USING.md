@@ -26,15 +26,19 @@ npm install lumagrid
 npm install react react-dom
 ```
 
-The adapter factories (`createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`) do not import the chart libraries themselves. You import the chart library in the `Renderer` you hand to the factory, so install it only when your own renderer uses it:
+The adapter factories (`createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`, `createReagraphPlugin`, `createForceGraphPlugin`) do not import the chart libraries themselves. You import the chart library in the `Renderer` you hand to the factory, so install it only when your own renderer uses it:
 
 ```bash
 npm install d3          # for a D3 renderer
 npm install recharts    # for a Recharts renderer
 npm install @nivo/bar   # for a Nivo renderer
+npm install reagraph    # for a Reagraph renderer
+npm install react-force-graph-2d   # or react-force-graph-3d, for a react-force-graph renderer
 ```
 
-`package.json` currently marks only `d3` in `peerDependenciesMeta`. Finalising the peer dependency list is part of the publishing checklist in [RELEASE-PLAN.md](RELEASE-PLAN.md#publishing-to-npm); npm publishing is still pending.
+The `lumagrid/r3f` toolkit imports its engine itself, so install its peers when you use that entry point: `npm install three @react-three/fiber @react-three/drei d3-force-3d`. Use `@react-three/fiber` v8 with `@react-three/drei` v9 on React 18, and fiber v9 on React 19. See [3D graphs with React Three Fiber](guide/r3f.md).
+
+`package.json` marks every engine peer as optional in `peerDependenciesMeta`: `d3`, `recharts`, `@nivo/bar`, `reagraph`, `react-force-graph-2d`, `react-force-graph-3d`, `three`, `@react-three/fiber`, `@react-three/drei` and `d3-force-3d`. Finalising the peer dependency list is part of the publishing checklist in [RELEASE-PLAN.md](RELEASE-PLAN.md#publishing-to-npm); npm publishing is still pending.
 
 To work on the repository itself:
 
@@ -48,11 +52,12 @@ bash scripts/ci.sh   # typecheck, lint, tests with coverage, build, API report c
 | Import | What it gives you |
 |--------|-------------------|
 | `lumagrid` | The main API: theme, transforms, registry, containers, native charts and adapter factories. |
-| `lumagrid/transforms` | The transform layer on its own: `flatten`, `aggregate`, `pivot`, `groupBy`, `geoNormalize`, `TransformPipeline`. No React. |
+| `lumagrid/transforms` | The transform layer on its own: `flatten`, `aggregate`, `pivot`, `groupBy`, `geoNormalize`, `toGraph`, `TransformPipeline`. No React. |
 | `lumagrid/theme` | `ThemeProvider`, `useTheme`, `lightTheme`, `darkTheme`, the `ThemeDefinition` tokens and the color scales. |
 | `lumagrid/viz` | The eleven native charts (bar, line, pie, scatter, area, column, heatmap, table, tree, choropleth, force graph) and the `native*Plugin` presets that register them. |
-| `lumagrid/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin` and the Recharts and Nivo theme adapters. |
-| `lumagrid/testing` | The plugin conformance kit: `checkPluginConformance` and `assertPluginConformance` run eight checks (render, accessible name, theme, resize, server render and more) against any `ChartPlugin`. Use it in your own test runner. |
+| `lumagrid/plugins` | `createD3Plugin`, `createRechartsPlugin`, `createNivoPlugin`, `createReagraphPlugin`, `createForceGraphPlugin` and the theme adapters (Recharts, Nivo, Reagraph, react-force-graph and `graphThemeAdapter`). |
+| `lumagrid/r3f` | The React Three Fiber graph toolkit: `layoutGraph3D`, `useForceLayout3D`, `InstancedNodes`, `EdgeLines`, `NodeLabels`, `CameraRig` and `createR3FGraphPlugin`. Needs the optional R3F peers. |
+| `lumagrid/testing` | The plugin conformance kit: `checkPluginConformance` and `assertPluginConformance` run eight checks (render, accessible name, theme, resize, server render and more) against any `ChartPlugin`. Use it in your own test runner. It also exports the fixtures `sampleData`, `emptyData` and `graphSampleData`. |
 
 How the layers fit together is in [ARCHITECTURE.md](ARCHITECTURE.md#entry-points-and-build-outputs).
 

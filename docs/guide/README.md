@@ -16,8 +16,10 @@ The guide takes you from installing the library to writing your own chart plugin
 2. [Transforms](./transforms.md): reshape raw data with `flatten`, `aggregate`, `pivot`, `groupBy` and `geoNormalize`.
 3. [Theming](./theming.md): `ThemeProvider`, `ThemeDefinition` and the color scale helpers.
 4. [Plugins and adapters](./plugins-and-adapters.md): the `ChartPlugin` contract, the registry, custom plugins, and the D3, Recharts and Nivo adapters.
-5. [Bring your own engine](./bring-your-own-engine.md): write a plugin for a new engine from scratch and prove it with the `lumagrid/testing` conformance kit.
-6. [Troubleshooting](./troubleshooting.md): symptoms, causes and fixes for the problems readers hit most.
+5. [Network graphs](./network-graphs.md): `toGraph`, `graphThemeAdapter` and the Reagraph and react-force-graph plugins.
+6. [3D graphs with React Three Fiber](./r3f.md): the `lumagrid/r3f` toolkit and a worked scene.
+7. [Bring your own engine](./bring-your-own-engine.md): write a plugin for a new engine from scratch and prove it with the `lumagrid/testing` conformance kit.
+8. [Troubleshooting](./troubleshooting.md): symptoms, causes and fixes for the problems readers hit most.
 
 ## Charts
 

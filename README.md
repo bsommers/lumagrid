@@ -10,6 +10,7 @@ Lumagrid is a layered React + TypeScript library for data visualization widgets 
 
 - Eleven native chart types: bar, line, pie, scatter, area, column, heatmap, data table, tree view, choropleth and force graph
 - D3, Recharts and Nivo adapters that turn any of those libraries into a view
+- Network graphs: Reagraph and react-force-graph adapters, a `lumagrid/r3f` React Three Fiber toolkit, and one `toGraph` transform behind all three ([guide](docs/guide/network-graphs.md))
 - A transform layer (`flatten`, `aggregate`, `pivot`, `groupBy`, `geoNormalize`) with no React dependency
 - Light and dark themes, plus your own through `ThemeProvider`
 - The `ChartPlugin` contract for writing a renderer from scratch, and a conformance kit (`lumagrid/testing`) that checks it
@@ -21,6 +22,8 @@ Lumagrid is a layered React + TypeScript library for data visualization widgets 
 npm install lumagrid react react-dom
 # optional adapter peers, only for the libraries you use
 npm install d3 recharts @nivo/bar
+# network graphs: reagraph, react-force-graph-2d or -3d, and for lumagrid/r3f:
+# three @react-three/fiber @react-three/drei d3-force-3d
 ```
 
 > **Note:** Lumagrid is pre-1.0. Minor versions may change the API until 1.0; see [docs/STABILITY.md](docs/STABILITY.md) and [docs/RELEASE-PLAN.md](docs/RELEASE-PLAN.md).
@@ -63,10 +66,11 @@ Lumagrid is not trying to out-chart anyone. Its angle is the seam: a chart is a 
 
 | | Lumagrid | Recharts | Nivo | Raw D3 |
 |---|---|---|---|---|
-| Engine-swappable plugins | Yes: one `ChartPlugin` contract; native, D3, Recharts and Nivo renderers all plug in | No: it is the engine | No: it is the engine | No: it is the engine |
+| Engine-swappable plugins | Yes: one `ChartPlugin` contract; native, D3, Recharts, Nivo, Reagraph, react-force-graph and R3F renderers all plug in | No: it is the engine | No: it is the engine | No: it is the engine |
 | Conformance kit | Yes: `lumagrid/testing`, 8 checks you can run on your own plugin | No | No | No |
 | Built-in keyboard and screen-reader support | Every native chart has an accessible name, and the interactive ones are keyboard navigable; checked by the kit | Partial (keyboard layer, labels mostly up to you) | Partial (varies by chart, mostly up to you) | None: you build it |
 | Number of charts | 11 native, plus anything you wrap | Far more, with many options per chart | Far more, a large catalog | Unlimited, but you write each one |
+| Network graphs (node-link, WebGL) | Native SVG force graph, plus Reagraph, react-force-graph and R3F adapters with shared data and theme (experimental, optional peers) | No | No | Build it yourself |
 | Maturity | Pre-1.0 (0.x), new, small community | Mature, widely used, large community | Mature, widely used | The reference standard |
 
 **Be honest about the trade:** Recharts, Nivo and D3 have far more chart types, richer options, much larger communities and years of production use. Lumagrid has 11 charts and is pre-release. Pick it when you want one theme, one data shape and one plugin contract across several engines, or when you need to check that a custom renderer meets an accessibility baseline. If one engine already covers your charts, use that engine.
