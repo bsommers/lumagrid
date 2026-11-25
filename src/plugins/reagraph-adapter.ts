@@ -124,7 +124,7 @@ export interface ReagraphData {
 
 /**
  * Configuration for the Reagraph plugin, mapped to `GraphCanvas` props, plus {@link GraphEvents}
- * and the {@link ToGraphOptions} field names.
+ * and the `ToGraphOptions` field names.
  *
  * @beta
  * @experimental
@@ -142,7 +142,7 @@ const MIN_SIZE = 4;
 const MAX_SIZE = 20;
 
 /**
- * Maps a {@link Graph} to Reagraph input. Node color comes from the node's group (by order of first
+ * Maps a `Graph` to Reagraph input. Node color comes from the node's group (by order of first
  * appearance, cycling through `theme.nodeColors`); size grows with degree. Pure.
  *
  * @beta

@@ -130,7 +130,7 @@ export interface RfgConfig extends GraphEvents {
 }
 
 /**
- * Converts a {@link Graph} to react-force-graph data. Nodes get a categorical color per group
+ * Converts a `Graph` to react-force-graph data. Nodes get a categorical color per group
  * (order of first appearance) and fall back to the theme's default color.
  *
  * @beta

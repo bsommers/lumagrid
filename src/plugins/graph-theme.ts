@@ -23,7 +23,7 @@ export interface GraphTheme {
 }
 
 /**
- * Maps a {@link ThemeDefinition} to {@link GraphTheme}.
+ * Maps a `ThemeDefinition` to {@link GraphTheme}.
  *
  * @beta
  * @experimental
