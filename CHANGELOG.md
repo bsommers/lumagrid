@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2026-11-24
 
-Network graph support. All additions below are experimental (`@beta`, `@experimental`) and may change in a minor release. The `package.json` version is not bumped yet.
+Network graph support. All additions below are experimental (`@beta`, `@experimental`) and may change in a minor release.
 
 ### Added
 
