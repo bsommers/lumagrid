@@ -1,8 +1,11 @@
 import React from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { extractRegion } from '../lib/region';
 import { Gallery } from '../sections/Gallery';
+
+// reagraph bundles its own three/fiber, which cannot load in jsdom; the demos gate on WebGL anyway.
+vi.mock('reagraph', () => ({ GraphCanvas: () => null }));
 
 describe('extractRegion', () => {
   const raw = [
@@ -146,17 +149,17 @@ describe('Gallery native cards', () => {
 });
 
 describe('Gallery adapter cards', () => {
-  it('lists fourteen cards: eleven native then three adapters', () => {
+  it('lists seventeen cards: eleven native, three adapters, three network engines', () => {
     render(<Gallery />);
     const titles = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent);
-    expect(titles).toHaveLength(14);
-    expect(titles.slice(11)).toEqual(['D3 bars', 'Recharts bars', 'Nivo bars']);
+    expect(titles).toHaveLength(17);
+    expect(titles.slice(11)).toEqual(['D3 bars', 'Recharts bars', 'Nivo bars', 'Network (Reagraph)', 'Network (force-graph)', 'Network (3D, R3F)']);
   });
 
-  it('marks exactly three catalog entries as lazy adapters whose loaders resolve to function components', async () => {
+  it('marks exactly six catalog entries as lazy adapters whose loaders resolve to function components', async () => {
     const { catalog } = await import('../demos/catalog');
     const adapters = catalog.filter((e) => e.kind === 'adapter');
-    expect(adapters.map((a) => a.id)).toEqual(['d3', 'recharts', 'nivo']);
+    expect(adapters.map((a) => a.id)).toEqual(['d3', 'recharts', 'nivo', 'reagraph', 'force-graph-engine', 'r3f-graph']);
     for (const entry of adapters) {
       if (entry.kind !== 'adapter') continue;
       const mod = await entry.load();
@@ -175,7 +178,7 @@ describe('Gallery adapter cards', () => {
 
   it('shows the adapter source in the code panel', async () => {
     render(<Gallery />);
-    for (const [title, needle] of [['D3 bars', 'createD3Plugin'], ['Recharts bars', 'createRechartsPlugin'], ['Nivo bars', 'createNivoPlugin']] as const) {
+    for (const [title, needle] of [['D3 bars', 'createD3Plugin'], ['Recharts bars', 'createRechartsPlugin'], ['Nivo bars', 'createNivoPlugin'], ['Network (Reagraph)', 'createReagraphPlugin'], ['Network (force-graph)', 'createForceGraphPlugin'], ['Network (3D, R3F)', 'createR3FGraphPlugin']] as const) {
       const card = screen.getByRole('article', { name: title });
       fireEvent.click(within(card).getByRole('button', { name: 'Show code' }));
       expect(card.querySelector('pre code')?.textContent).toContain(needle);

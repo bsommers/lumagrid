@@ -1,9 +1,12 @@
 import React from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { Examples } from '../sections/Examples';
 import { parseCsv } from '../lib/csv';
 import { contrastRatio, wcagLevel } from '../lib/contrast';
+
+// reagraph bundles its own three/fiber, which cannot load in jsdom; the demos gate on WebGL anyway.
+vi.mock('reagraph', () => ({ GraphCanvas: () => null }));
 
 describe('lib helpers', () => {
   it('parses csv and infers types', () => {
@@ -24,10 +27,10 @@ describe('lib helpers', () => {
 });
 
 describe('Examples', () => {
-  it('renders four panels with the examples id', () => {
+  it('renders five panels with the examples id', () => {
     const { container } = render(<Examples />);
     expect(container.querySelector('section#examples')).not.toBeNull();
-    expect(screen.getAllByRole('article')).toHaveLength(4);
+    expect(screen.getAllByRole('article')).toHaveLength(5);
   });
 
   it('swaps the engine live', async () => {

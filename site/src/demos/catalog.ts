@@ -25,6 +25,9 @@ import heatmapSource from './HeatmapDemo.tsx?raw';
 import d3Source from './D3Demo.tsx?raw';
 import rechartsSource from './RechartsDemo.tsx?raw';
 import nivoSource from './NivoDemo.tsx?raw';
+import reagraphSource from './ReagraphDemo.tsx?raw';
+import forceGraphEngineSource from './ForceGraphEngineDemo.tsx?raw';
+import r3fSource from './R3FGraphDemo.tsx?raw';
 import { extractRegion } from '../lib/region';
 import type { DemoProps } from './types';
 
@@ -54,6 +57,9 @@ export type CatalogEntry = NativeEntry | AdapterEntry;
 const loadD3 = () => import('./D3Demo');
 const loadRecharts = () => import('./RechartsDemo');
 const loadNivo = () => import('./NivoDemo');
+const loadReagraph = () => import('./ReagraphDemo');
+const loadForceGraphEngine = () => import('./ForceGraphEngineDemo');
+const loadR3F = () => import('./R3FGraphDemo');
 
 /** Gallery entries in display order. */
 export const catalog: CatalogEntry[] = [
@@ -171,5 +177,32 @@ export const catalog: CatalogEntry[] = [
     load: loadNivo,
     Component: lazy(loadNivo),
     code: extractRegion(nivoSource, 'code'),
+  },
+  {
+    id: 'reagraph',
+    title: 'Network (Reagraph)',
+    description: 'A Reagraph WebGL network clustered by group; drag to pan, scroll to zoom.',
+    kind: 'adapter',
+    load: loadReagraph,
+    Component: lazy(loadReagraph),
+    code: extractRegion(reagraphSource, 'code'),
+  },
+  {
+    id: 'force-graph-engine',
+    title: 'Network (force-graph)',
+    description: 'A react-force-graph canvas with moving link particles (off under reduced motion).',
+    kind: 'adapter',
+    load: loadForceGraphEngine,
+    Component: lazy(loadForceGraphEngine),
+    code: extractRegion(forceGraphEngineSource, 'code'),
+  },
+  {
+    id: 'r3f-graph',
+    title: 'Network (3D, R3F)',
+    description: 'A seeded 3D force layout in React Three Fiber; click a node to fly to it.',
+    kind: 'adapter',
+    load: loadR3F,
+    Component: lazy(loadR3F),
+    code: extractRegion(r3fSource, 'code'),
   },
 ];

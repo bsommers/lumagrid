@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
+      { find: /^lumagrid\/plugins$/, replacement: here('../src/plugins/index.ts') },
       { find: /^lumagrid\/viz$/, replacement: here('../src/viz/index.ts') },
       { find: /^lumagrid$/, replacement: here('../src/index.ts') },
     ],
