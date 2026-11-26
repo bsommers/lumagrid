@@ -217,6 +217,9 @@ export interface ReagraphPluginOptions {
  * }));
  * ```
  *
+ * Reagraph 4.x bundles `@react-three/fiber` 9, which needs React 19; under React 18 its canvas
+ * throws at render time, so wrap it in an error boundary if you cannot upgrade.
+ *
  * @beta
  * @experimental
  */

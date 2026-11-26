@@ -72,6 +72,8 @@ Like the D3, Recharts and Nivo adapters, the factories do not import the engine.
 
 ### Reagraph
 
+> **Reagraph requires React 19.** Reagraph 4.x bundles `@react-three/fiber` 9, which needs React 19. Under React 18 the canvas throws in the browser (for example "Cannot read properties of undefined (reading 'S')"). Use react-force-graph or the R3F toolkit on React 18, or wrap the `GraphCanvas` in an error boundary so the rest of the page survives. The Lumagrid gallery does this in `site/src/demos/ReagraphDemo.tsx`.
+
 `createReagraphPlugin` takes a `Renderer` and an optional `preset`. The `Renderer` receives `data` shaped for Reagraph (`nodes` with `fill` and `size`, `edges`), a Reagraph-shaped `theme`, and `config`. The presets only set config defaults, which your own `config` overrides:
 
 | Preset | Defaults |

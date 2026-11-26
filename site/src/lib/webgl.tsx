@@ -49,3 +49,31 @@ export function WebGLGate({ width, height, kind = 'webgl', children }: {
     </div>
   );
 }
+
+/**
+ * Catches a render error from a third-party graph engine and shows a readable notice instead of
+ * unmounting the whole page. Reagraph 4.32 bundles React Three Fiber 9, which needs React 19 and
+ * throws under React 18.
+ */
+export class EngineErrorBoundary extends React.Component<
+  { engine: string; requirement?: string; children: React.ReactNode },
+  { error: Error | null }
+> {
+  override state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error): { error: Error } {
+    return { error };
+  }
+
+  override render(): React.ReactNode {
+    const { error } = this.state;
+    if (!error) return this.props.children;
+    return (
+      <div role="alert" style={{ padding: 16, textAlign: 'center' }}>
+        {this.props.engine} could not start in this browser.
+        {this.props.requirement ? ` ${this.props.requirement}` : ''}
+        {' '}Details: {error.message}
+      </div>
+    );
+  }
+}
