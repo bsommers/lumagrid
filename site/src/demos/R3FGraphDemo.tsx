@@ -1,15 +1,17 @@
 import React from 'react';
 import { ViewSwitcher, registerPlugin } from 'lumagrid';
 import { createR3FGraphPlugin } from 'lumagrid/r3f';
+import interFont from '@fontsource/inter/files/inter-latin-400-normal.woff?url';
 import { network } from '../../../examples/shared/demos';
 import { WebGLGate, usePrefersReducedMotion } from '../lib/webgl';
 import type { DemoProps } from './types';
 
 // #region code
 // A seeded 3D force layout drawn with React Three Fiber (instanced nodes, line edges, labels).
-registerPlugin(createR3FGraphPlugin({ id: 'gallery-r3f', layout: { seed: 7 } }));
+// labelFont points at a self-hosted font, so drei does not fetch its default font from a CDN.
+registerPlugin(createR3FGraphPlugin({ id: 'gallery-r3f', layout: { seed: 7 }, labelFont: interFont }));
 // With reduced motion the layout settles almost at once instead of animating.
-registerPlugin(createR3FGraphPlugin({ id: 'gallery-r3f-still', layout: { seed: 7, alphaDecay: 0.5, iterations: 60 } }));
+registerPlugin(createR3FGraphPlugin({ id: 'gallery-r3f-still', layout: { seed: 7, alphaDecay: 0.5, iterations: 60 }, labelFont: interFont }));
 
 export default function R3FGraphDemo({ width, height }: DemoProps): React.ReactElement {
   const reduced = usePrefersReducedMotion();

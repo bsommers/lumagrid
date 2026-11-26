@@ -150,9 +150,15 @@ export interface NodeLabelsProps {
   size?: number;
   /** Vertical offset above the node. Default 2. */
   offset?: number;
+  /**
+   * URL of a ttf, otf or woff font file for the labels (troika does not support woff2).
+   * Without it drei fetches a default font from a CDN at runtime, which fails offline or under a
+   * strict CSP and leaks a request to a third party. Self-host a font and pass its URL.
+   */
+  font?: string;
 }
 
-function Label({ id, text, positions, theme, size, offset }: { id: string; text: string; positions: Map<string, Vec3>; theme: GraphTheme; size: number; offset: number }): React.ReactElement {
+function Label({ id, text, positions, theme, size, offset, font }: { id: string; text: string; positions: Map<string, Vec3>; theme: GraphTheme; size: number; offset: number; font?: string | undefined }): React.ReactElement {
   const group = useRef<THREE.Group>(null);
   useFrame(({ camera }) => {
     const g = group.current;
@@ -163,7 +169,7 @@ function Label({ id, text, positions, theme, size, offset }: { id: string; text:
   });
   return (
     <group ref={group}>
-      <Text fontSize={size} color={theme.label} anchorX="center" anchorY="bottom">
+      <Text {...(font ? { font } : {})} fontSize={size} color={theme.label} anchorX="center" anchorY="bottom">
         {text}
       </Text>
     </group>
@@ -176,7 +182,7 @@ function Label({ id, text, positions, theme, size, offset }: { id: string; text:
  * @beta
  * @experimental
  */
-export function NodeLabels({ graph, positions, theme, maxLabels = 100, size = 1.5, offset = 2 }: NodeLabelsProps): React.ReactElement {
+export function NodeLabels({ graph, positions, theme, maxLabels = 100, size = 1.5, offset = 2, font }: NodeLabelsProps): React.ReactElement {
   const shown = useMemo(
     () => [...graph.nodes].sort((a, b) => b.degree - a.degree || (a.id < b.id ? -1 : 1)).slice(0, Math.max(0, maxLabels)),
     [graph, maxLabels],
@@ -184,7 +190,7 @@ export function NodeLabels({ graph, positions, theme, maxLabels = 100, size = 1.
   return (
     <>
       {shown.map((n) => (
-        <Label key={n.id} id={n.id} text={n.label} positions={positions} theme={theme} size={size} offset={offset} />
+        <Label key={n.id} id={n.id} text={n.label} positions={positions} theme={theme} size={size} offset={offset} font={font} />
       ))}
     </>
   );

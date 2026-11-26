@@ -194,6 +194,14 @@ describe('NodeLabels', () => {
     expect(h.texts[0]!.props).toMatchObject({ fontSize: 1.5, color: '#ffffff' });
   });
 
+  it('passes the font URL to drei Text, and leaves it undefined by default', () => {
+    render(<NodeLabels graph={graph} positions={positions} theme={theme} maxLabels={1} font="/fonts/inter.woff" />);
+    expect(h.texts[0]!.props['font']).toBe('/fonts/inter.woff');
+    h.texts.length = 0;
+    render(<NodeLabels graph={graph} positions={positions} theme={theme} maxLabels={1} />);
+    expect(h.texts[0]!.props['font']).toBeUndefined();
+  });
+
   it('renders nothing for maxLabels <= 0', () => {
     render(<NodeLabels graph={graph} positions={positions} theme={theme} maxLabels={-4} />);
     expect(h.texts).toHaveLength(0);

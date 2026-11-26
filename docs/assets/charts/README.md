@@ -39,7 +39,7 @@ Names are `<chart>-<theme>.png` and, for the SVG charts, `<chart>-<theme>.svg`. 
 | `rfg` | `createForceGraphPlugin` (react-force-graph 2D) | `gallery-rfg` | light, dark | yes | no |
 | `r3f` | `createR3FGraphPlugin` (React Three Fiber) | `capture-r3f` | light, dark | yes | no |
 
-`rfg` and `r3f` are canvas/WebGL, so they are PNG only. The script waits for their canvas, then lets the layout settle for three seconds. The R3F capture has no text labels, because drei `Text` fetches its default font from a CDN and captures block non-local requests. The layouts are seeded; byte-identical reruns of these two have not been verified. Reagraph is not captured: 4.32 bundles React Three Fiber 9, which needs React 19, and the repo runs React 18.
+`rfg` and `r3f` are canvas/WebGL, so they are PNG only. The script waits for their canvas, then lets the layout settle for three seconds. The R3F capture draws labels with a self-hosted Inter woff (`labelFont`), because drei `Text` would otherwise fetch its default font from a CDN and captures block non-local requests. The layouts are seeded; byte-identical reruns of these two have not been verified. Reagraph is not captured: 4.32 bundles React Three Fiber 9, which needs React 19, and the repo runs React 18.
 
 `DataTable` and `TreeView` are HTML, not SVG, so they are PNG only. They are deliberately not wrapped in a `foreignObject`, which renders unreliably outside browsers and would add active-content surface to a committed SVG.
 

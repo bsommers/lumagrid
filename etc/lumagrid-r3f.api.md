@@ -84,6 +84,7 @@ export function NodeLabels(input: NodeLabelsProps): React_2.ReactElement;
 
 // @beta
 export interface NodeLabelsProps {
+    font?: string;
     // (undocumented)
     graph: Graph;
     maxLabels?: number;
@@ -106,6 +107,7 @@ export interface R3FGraphPluginOptions extends GraphEvents {
     graph?: ToGraphOptions;
     id?: string;
     label?: string;
+    labelFont?: string;
     // (undocumented)
     labels?: React_2.ComponentType<NodeLabelsProps>;
     layout?: ForceLayout3DOptions;

@@ -91,6 +91,11 @@ describe('R3F plugin Renderer', () => {
     expect(JSON.stringify([...pos])).not.toBe(before);
   });
 
+  it('forwards labelFont to the labels component as font', () => {
+    mount({ nodes: Nodes, edges: Edges, labels: Labels, rig: Rig, labelFont: '/fonts/inter.woff' });
+    expect(seen.labels[0]!.font).toBe('/fonts/inter.woff');
+  });
+
   it('node click selects, fires callbacks and focuses the camera', () => {
     const onNodeClick = vi.fn();
     const onSelectionChange = vi.fn();

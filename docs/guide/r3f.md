@@ -9,6 +9,7 @@
 - [Install](#install)
 - [What is in the toolkit](#whats-in-the-toolkit)
 - [The ready-made plugin](#the-ready-made-plugin)
+- [Fonts](#fonts)
 - [A worked scene](#a-worked-scene)
 - [Layout without React](#layout-without-react)
 - [Stability and limits](#stability-and-limits)
@@ -87,6 +88,19 @@ export function Example() {
   );
 }
 ```
+
+## Fonts
+
+By default drei's `Text` loads a default font from a CDN at runtime. That request fails offline or under a strict Content Security Policy, and it tells a third party that your page was opened. Lumagrid does not bundle a font, so self-host one and pass its URL:
+
+```tsx
+import interUrl from '@fontsource/inter/files/inter-latin-400-normal.woff?url'; // Vite
+
+registerPlugin(createR3FGraphPlugin({ labelFont: interUrl }));
+// or, with your own scene: <NodeLabels font={interUrl} ... />
+```
+
+`labelFont` (plugin option) and `font` (`NodeLabels` prop) take the URL of a ttf, otf or woff file. woff2 is not supported by troika, the text engine behind drei `Text`. Inter is licensed under the SIL Open Font License 1.1, which allows bundling and redistribution in your app; check the license of any font you choose.
 
 ## A worked scene
 

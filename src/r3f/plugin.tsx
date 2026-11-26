@@ -30,6 +30,11 @@ export interface R3FGraphPluginOptions extends GraphEvents {
   layout?: ForceLayout3DOptions;
   /** Draw labels. Default true. */
   showLabels?: boolean;
+  /**
+   * URL of a self-hosted ttf, otf or woff font for labels (not woff2). Without it drei fetches a
+   * default font from a CDN at runtime (a problem offline, under a strict CSP, or for privacy).
+   */
+  labelFont?: string;
   /** Node to fly the camera to. */
   focusId?: string | null;
   /** Replacement primitives. */
@@ -65,7 +70,7 @@ function Scene({ graph, theme, options }: { graph: Graph; theme: GraphTheme; opt
       <pointLight position={[50, 50, 50]} intensity={1.2} />
       <Edges {...shared} />
       <Nodes {...shared} selectedId={selected} onNodeClick={onNodeClick} />
-      {options.showLabels === false ? null : <Labels {...shared} />}
+      {options.showLabels === false ? null : <Labels {...shared} {...(options.labelFont ? { font: options.labelFont } : {})} />}
       <Rig positions={positions} focusId={options.focusId ?? selected} />
     </>
   );
