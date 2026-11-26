@@ -92,12 +92,12 @@ Plans:
 **Wave 10** *(blocked on Wave 9 completion)*
 - [ ] 05-16-PLAN.md — Wave 10: human checkpoints: enable Pages, push; verify the live site
 
-## Milestone v1.1 - Network graph integrations (proposed)
+## Milestone v1.1 - Network graph integrations (shipped in 0.2.0)
 
 Plan: docs/superpowers/plans/network-graph-integrations.md
 
-- [ ] **M0: Graph foundation** - `toGraph` transform, `graphThemeAdapter`, shared types, WebGL-aware conformance mode
-- [ ] **M1: Reagraph plugin** - `createReagraphPlugin`, 2D/3D, clustering, lasso, path finding
-- [ ] **M2: react-force-graph plugin** - `createForceGraphPlugin` 2D/3D, VR/AR recipe
-- [ ] **M3: R3F toolkit** - `lumagrid/r3f` with `d3-force-3d` layout, instanced primitives, camera rig
-- [ ] **M4: Showcase, docs, release 0.2.0** - site Network section, WebGL visuals, API reports
+- [x] **M0: Graph foundation** - `toGraph` transform, `graphThemeAdapter`, shared types, WebGL-aware conformance mode
+- [x] **M1: Reagraph plugin** - `createReagraphPlugin`, 2D/3D, clustering, lasso, path finding
+- [x] **M2: react-force-graph plugin** - `createForceGraphPlugin` 2D/3D, VR/AR recipe
+- [x] **M3: R3F toolkit** - `lumagrid/r3f` with `d3-force-3d` layout, instanced primitives, camera rig
+- [x] **M4: Showcase, docs, release 0.2.0** - site Network section, WebGL visuals, API reports

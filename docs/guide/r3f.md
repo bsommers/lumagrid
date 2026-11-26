@@ -26,7 +26,7 @@ Pick the React Three Fiber major that matches your React:
 | React | `@react-three/fiber` | `@react-three/drei` |
 |-------|----------------------|---------------------|
 | 18 | v8 | v9 |
-| 19 | v9 | the release that targets fiber v9 |
+| 19 | v9 | v10 |
 
 Lumagrid's peer ranges (`@react-three/fiber >=8`, `@react-three/drei >=9`) accept both. The library's own tests run against fiber 8 and drei 9. Check the installed versions' peer requirements, because fiber v9 does not support React 18.
 
