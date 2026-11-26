@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CollapseManager, ThemeProvider, useTheme, lightTheme, darkTheme } from 'lumagrid';
 import {
@@ -8,9 +8,16 @@ import {
 import './capture.css';
 import { demoViews, hexProjectedPaths } from '../../examples/shared/demos';
 
+/** WebGL / canvas network engines; PNG only, captured after a settle delay. */
+export const NETWORK_CAPTURE_CHARTS = ['rfg', 'r3f'] as const;
+const NETWORK_SETTLE_MS = 3000;
+const ForceGraphEngineDemo = lazy(() => import('./demos/ForceGraphEngineDemo'));
+// Labels are off for the capture: drei Text fetches its default font from a CDN, and captures block
+// every non-local request so the output stays reproducible.
+const R3FCaptureDemo = lazy(() => import('./demos/R3FCaptureDemo'));
 /** Charts the capture page can render, in display order. */
 export const CAPTURE_CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree',
-  'scatter', 'area', 'column', 'heatmap'] as const;
+  'scatter', 'area', 'column', 'heatmap', ...NETWORK_CAPTURE_CHARTS] as const;
 export type CaptureChart = (typeof CAPTURE_CHARTS)[number];
 
 const CAPTURE_THEMES = ['light', 'dark'] as const;
@@ -37,24 +44,28 @@ export function parseCaptureParams(search: string): CaptureParams {
   return { ok: true, chart: chart as CaptureChart, theme: theme as CaptureTheme, seed: Number(seedText) };
 }
 
-function useCaptureReady(): boolean {
+function useCaptureReady(settleMs: number): boolean {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     let cancelled = false;
     let frame = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const fonts = typeof document !== 'undefined' ? document.fonts : undefined;
     const fontsReady: Promise<unknown> = fonts?.ready ?? Promise.resolve();
     void fontsReady.then(() => {
       if (cancelled) return;
       frame = requestAnimationFrame(() => {
-        if (!cancelled) setReady(true);
+        if (cancelled) return;
+        if (settleMs > 0) timer = setTimeout(() => { if (!cancelled) setReady(true); }, settleMs);
+        else setReady(true);
       });
     });
     return () => {
       cancelled = true;
       if (frame) cancelAnimationFrame(frame);
+      if (timer) clearTimeout(timer);
     };
-  }, []);
+  }, [settleMs]);
   return ready;
 }
 
@@ -62,6 +73,8 @@ function Chart(
   { chart, seed, width, height }: { chart: CaptureChart; seed: number; width: number; height: number },
 ): React.ReactElement {
   const theme = useTheme();
+  if (chart === 'rfg') return <Suspense fallback={null}><ForceGraphEngineDemo width={width} height={height} theme={theme} /></Suspense>;
+  if (chart === 'r3f') return <Suspense fallback={null}><R3FCaptureDemo width={width} height={height} theme={theme} /></Suspense>;
   const { data, config } = demoViews[chart];
   const common = { data, width, height, theme, ...config };
   switch (chart) {
@@ -97,7 +110,8 @@ function Chart(
 /** Renders one chart (or a fixed error message) for the given query string. */
 export function CaptureApp({ search }: { search: string }): React.ReactElement {
   const params = parseCaptureParams(search);
-  const ready = useCaptureReady();
+  const isNetwork = params.ok && (NETWORK_CAPTURE_CHARTS as readonly string[]).includes(params.chart);
+  const ready = useCaptureReady(isNetwork ? NETWORK_SETTLE_MS : 0);
   if (!params.ok) {
     return <p role="alert">Invalid capture request.</p>;
   }

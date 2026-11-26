@@ -14,9 +14,9 @@ describe('committed chart images', () => {
     expect(check({ root })).toEqual([]);
   });
 
-  it('hold exactly 22 PNG and 18 SVG files', () => {
+  it('hold exactly 26 PNG and 18 SVG files', () => {
     const files = readdirSync(dir);
-    expect(files.filter((f) => f.endsWith('.png'))).toHaveLength(22);
+    expect(files.filter((f) => f.endsWith('.png'))).toHaveLength(26);
     expect(files.filter((f) => f.endsWith('.svg'))).toHaveLength(18);
   });
 

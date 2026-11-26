@@ -1,21 +1,22 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
-import { CaptureApp, CAPTURE_CHARTS, parseCaptureParams } from '../capture';
+import { CaptureApp, CAPTURE_CHARTS, NETWORK_CAPTURE_CHARTS, parseCaptureParams } from '../capture';
 import { hexMap } from '../../../examples/shared/demos';
 
 const themes = ['light', 'dark'];
 
 describe('CAPTURE_CHARTS', () => {
-  it('lists the eleven native charts in order', () => {
+  it('lists the eleven native charts, then the network engines, in order', () => {
     expect([...CAPTURE_CHARTS]).toEqual([
       'bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree', 'scatter', 'area', 'column', 'heatmap',
+      'rfg', 'r3f',
     ]);
   });
 });
 
 describe('CaptureApp', () => {
-  for (const chart of CAPTURE_CHARTS) {
+  for (const chart of CAPTURE_CHARTS.filter((c) => !(NETWORK_CAPTURE_CHARTS as readonly string[]).includes(c))) {
     for (const theme of themes) {
       it(`draws ${chart} in the ${theme} theme and signals ready`, async () => {
         const { container } = render(<CaptureApp search={`?chart=${chart}&theme=${theme}`} />);
@@ -27,6 +28,16 @@ describe('CaptureApp', () => {
         await waitFor(() => expect(capture!.getAttribute('data-capture-ready')).toBe('1'));
       });
     }
+  }
+
+  for (const chart of NETWORK_CAPTURE_CHARTS) {
+    it(`mounts ${chart} and signals ready after the settle delay`, async () => {
+      const { container } = render(<CaptureApp search={`?chart=${chart}&theme=dark`} />);
+      const capture = container.querySelector('#capture');
+      expect(capture).not.toBeNull();
+      expect(capture!.getAttribute('data-capture-ready')).toBeNull();
+      await waitFor(() => expect(capture!.getAttribute('data-capture-ready')).toBe('1'), { timeout: 6000 });
+    }, 10000);
   }
 
   it('is a fixed 640 by 400 box', () => {

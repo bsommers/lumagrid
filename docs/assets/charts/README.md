@@ -7,7 +7,7 @@ Rendered images of the eleven native Lumagrid charts in both library themes. The
 ## Regenerate
 
 ```bash
-npm run visuals          # build the site, capture all 22 PNG and 18 SVG, assert the site layout
+npm run visuals          # build the site, capture all 26 PNG and 18 SVG, assert the site layout
 npm run visuals:check    # validate the committed files (no browser needed)
 ```
 
@@ -36,6 +36,10 @@ Names are `<chart>-<theme>.png` and, for the SVG charts, `<chart>-<theme>.svg`. 
 | `area` | `AreaChart` | `area` | light, dark | yes | yes |
 | `column` | `ColumnChart` | `column` | light, dark | yes | yes |
 | `heatmap` | `Heatmap` | `heatmap` | light, dark | yes | yes |
+| `rfg` | `createForceGraphPlugin` (react-force-graph 2D) | `gallery-rfg` | light, dark | yes | no |
+| `r3f` | `createR3FGraphPlugin` (React Three Fiber) | `capture-r3f` | light, dark | yes | no |
+
+`rfg` and `r3f` are canvas/WebGL, so they are PNG only. The script waits for their canvas, then lets the layout settle for three seconds. The R3F capture has no text labels, because drei `Text` fetches its default font from a CDN and captures block non-local requests. The layouts are seeded; byte-identical reruns of these two have not been verified. Reagraph is not captured: 4.32 bundles React Three Fiber 9, which needs React 19, and the repo runs React 18.
 
 `DataTable` and `TreeView` are HTML, not SVG, so they are PNG only. They are deliberately not wrapped in a `foreignObject`, which renders unreliably outside browsers and would add active-content surface to a committed SVG.
 

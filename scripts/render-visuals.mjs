@@ -12,7 +12,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build, preview } from 'vite';
 import { launchBrowser } from './lib/browser.mjs';
-import { CAPTURE_BOX, OUT_DIR, SCALE, SVG_CHARTS, parseOnly, selectedPairs } from './lib/visuals-matrix.mjs';
+import { CAPTURE_BOX, NETWORK_CHARTS, OUT_DIR, SCALE, SVG_CHARTS, parseOnly, selectedPairs } from './lib/visuals-matrix.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(root);
@@ -81,6 +81,11 @@ async function captureAll(browser, origin, pairs) {
       try {
         await page.goto(`${origin}${BASE}capture.html?chart=${chart}&theme=${theme}&seed=1`, { waitUntil: 'load' });
         await page.waitForSelector('#capture[data-capture-ready="1"]', { timeout: 30000 });
+        if (NETWORK_CHARTS.includes(chart)) {
+          // The engine chunk loads lazily; wait for its canvas, then let the layout settle.
+          await page.waitForSelector('#capture canvas', { state: 'attached', timeout: 30000 });
+          await page.waitForTimeout(3000);
+        }
         // Fonts load lazily on first use; request Inter explicitly, then let layout settle.
         await page.evaluate(async () => {
           await document.fonts.load('400 14px Inter');

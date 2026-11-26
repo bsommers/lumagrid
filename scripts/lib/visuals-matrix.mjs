@@ -2,7 +2,10 @@
 // check-visuals.mjs (D-14). Plain data plus one helper; no side effects.
 
 /** Chart ids in capture order (they match site/src/capture.tsx). */
-export const CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree', 'scatter', 'area', 'column', 'heatmap'];
+export const CHARTS = ['bar', 'line', 'pie', 'force', 'choropleth', 'table', 'tree', 'scatter', 'area', 'column', 'heatmap', 'rfg', 'r3f'];
+
+/** Canvas/WebGL network engines: PNG only, captured after the canvas appears and settles. */
+export const NETWORK_CHARTS = ['rfg', 'r3f'];
 
 /** Library themes captured for every chart. */
 export const THEMES = ['light', 'dark'];
